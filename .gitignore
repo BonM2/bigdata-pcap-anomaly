@@ -1,0 +1,34 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Môi trường ảo (Virtual Environments)
+venv/
+.venv/
+env/
+
+# DỮ LIỆU LỚN - TUYỆT ĐỐI KHÔNG PUSH LÊN GITHUB
+*.pcap
+*.pcapng
+*.cap
+*.csv
+*.tsv
+*.parquet
+*.json
+
+# Ngoại lệ: Cho phép push các file schema mẫu hoặc dữ liệu test nhỏ trong data/sample
+!data/sample/*.csv
+!data/sample/*.pcap
+!data/schemas/*.json
+
+# Dữ liệu Docker & MinIO mount
+minio_data/
+.minio.sys/
+
+# File nhật ký thực thi & IDE
+*.log
+.vscode/
+.idea/
+.DS_Store

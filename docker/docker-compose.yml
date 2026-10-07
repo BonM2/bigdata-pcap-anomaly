@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # ----------------- TẦNG LƯU TRỮ: MINIO -----------------
+  minio:
+    image: minio/minio:latest
+    container_name: bigdata-minio
+    ports:
+      - "9000:9000"   # API S3 Endpoint
+      - "9001:9001"   # MinIO Web Console UI
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password123
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+
+  # ----------------- TẦNG XỬ LÝ: SPARK MASTER -----------------
+  spark-master:
+    image: bitnami/spark:3.5.0
+    container_name: spark-master
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+    ports:
+      - "8080:8080"   # Spark Master Web UI
+      - "7077:7077"   # Spark Master RPC port
+    volumes:
+      - ../processing:/opt/bitnami/spark/apps
+
+  # ----------------- TẦNG XỬ LÝ: SPARK WORKER -----------------
+  spark-worker-1:
+    image: bitnami/spark:3.5.0
+    container_name: spark-worker-1
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_MEMORY=2G
+      - SPARK_WORKER_CORES=2
+    ports:
+      - "8081:8081"   # Spark Worker 1 Web UI
+    depends_on:
+      - spark-master
+    volumes:
+      - ../processing:/opt/bitnami/spark/apps
+
+  spark-worker-2:
+    image: bitnami/spark:3.5.0
+    container_name: spark-worker-2
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_MEMORY=2G
+      - SPARK_WORKER_CORES=2
+    ports:
+      - "8082:8081"   # Spark Worker 2 Web UI
+    depends_on:
+      - spark-master
+    volumes:
+      - ../processing:/opt/bitnami/spark/apps
+
+volumes:
+  minio_data:
