@@ -1,283 +1,252 @@
 # DATA CONTRACT
 
-## Network Flow Feature Dictionary
+## Network Flow Feature Dictionary — Storage → Processing
 
-**Mục đích:** Chuẩn hóa schema và ngữ nghĩa của các đặc trưng luồng mạng được trích xuất từ PCAP, làm đầu vào thống nhất cho tầng **Storage → Processing → Security Analysis** trên Apache Spark.
+**Mục đích:** Chuẩn hóa **schema, ngữ nghĩa, chất lượng và đầu ra xử lý** của dữ liệu network flow từ **8 tệp CSV CICIDS2017**. Contract là thỏa thuận đầu vào/đầu ra giữa **Storage (MinIO/Data Lake)** và **Processing (Apache Spark/PySpark)** trong **đồ án học phần Nhập môn Dữ liệu lớn**.
 
-| Thuộc tính                  | Quy định                                                        |
-| --------------------------- | --------------------------------------------------------------- |
-| **Tên tài liệu**            | Network Flow Feature Dictionary                                 |
-| **Phiên bản**               | v1.0                                                            |
-| **Nguồn dữ liệu**           | PCAP thuộc CICIDS2017, được trích xuất bằng CICFlowMeter        |
-| **Dạng dữ liệu trung gian** | Network Flow                                                    |
-| **Định dạng lưu trữ**       | Apache Parquet                                                  |
-| **Compression**             | Snappy                                                          |
-| **Quy ước tên cột**         | `snake_case`, chữ thường, không khoảng trắng                    |
-| **Đối tượng sử dụng**       | Apache Spark, Data Engineering, SOC Analysis, Anomaly Detection |
-| **Ground Truth**            | `label`                                                         |
-| **Số trường chuẩn hóa**     | 22 trường: 21 feature + 1 ground-truth label                    |
+| Thuộc tính | Quy định |
+|---|---|
+| **Tên tài liệu** | Network Flow Feature Dictionary — Storage → Processing |
+| **Phiên bản** | **v2.3.0** |
+| **Phạm vi học phần** | **Storage → Processing** (không bao gồm Analytics, Machine Learning hay Decision/Action) |
+| **Nguồn dữ liệu** | 8 CSV dạng `*.pcap_ISCX.csv` của CICIDS2017, đã được trích xuất flow từ PCAP |
+| **Phạm vi lưu lượng** | Dữ liệu CICIDS2017 phục vụ bài toán lưu lượng IPv4; các CSV **không có trường `ip_version`** để xác minh từng flow |
+| **Storage đầu vào** | MinIO (giao diện tương thích S3), đối tượng raw CSV không chỉnh sửa |
+| **Processing** | Apache Spark / PySpark, **batch ETL** và Spark SQL |
+| **Storage đầu ra** | **Apache Parquet**, nén **Snappy**, trên MinIO |
+| **Quy ước tên cột** | Chữ thường, `snake_case`, ánh xạ tường minh theo header/vị trí gốc |
+| **Nhãn gốc** | `label` (giữ nguyên dữ liệu từ cột `Label`; không sử dụng để sửa feature) |
+| **Schema chuẩn lõi** | **22 trường:** 21 feature mạng + 1 nhãn `label` |
+| **Trường kỹ thuật** | Metadata, trạng thái chất lượng và mã lỗi (ngoài 22 trường lõi) |
+| **Đầu ra tối thiểu** | Cleaned Parquet, quarantine/reject log, bảng tổng hợp, Data Quality Report, thời gian xử lý và log Spark |
+| **Tình trạng** | Đặc tả cần kiểm chứng bằng job và dữ liệu thực tế; **không phải xác nhận pipeline đã chạy** |
 
 ---
 
 # 1. Mục đích và phạm vi
 
-Data Contract này định nghĩa tập đặc trưng mạng được sử dụng thống nhất giữa các tầng của pipeline xử lý dữ liệu:
+## 1.1. Quy trình áp dụng
 
 ```text
-1. Dataset / PCAP
-   ↓
-2. Flow Extraction
-   CICFlowMeter: Packet → Flow
-   ↓
-3. Data Standardization
-   Chuẩn hóa theo Data Contract
-   ↓
-4. Storage
-   Apache Parquet
-   ↓
-5. Processing & Feature Engineering
-   Apache Spark
-   ↓
-6. Security Analysis
-   Feature → Aggregation → Indicator → Detection Rule
-   ↓
-7. Detection & Alerting
-   Phát hiện hoạt động bất thường → Sinh cảnh báo
-   ↓
-8. Evaluation
-   Đánh giá  Time / Throughput / Speedup / Scaling
-
+                  [PHẦN ĐẦU VÀO — STORAGE]
+MinIO raw/cicids2017/ (8 tệp CSV, read-only)
+                  |
+                  | S3A / Spark read CSV
+                  v
+             [PROCESSING — SPARK]
+1. Source audit / validate source headers (79 cột)
+                  |
+2. Standardization (positional mapping → snake_case → cast)
+                  |
+3. Data Quality (validate → clean / quarantine / reject)
+                  |
+4. Transformation (derived metrics có định nghĩa)
+                  |
+5. Aggregation (theo source_file và label)
+                  |
+6. Write Parquet/Snappy + technical reports
+                  |
+                  v
+              [ĐẦU RA — MINIO]
+cleaned/flows/       processed/aggregates/
+quality/quarantine/  reports/data_quality/
+reports/performance/
 ```
 
-Tài liệu nhằm đảm bảo:
+**Điểm kết thúc:** dữ liệu sau xử lý có schema xác định, có thể đọc lại bằng Spark; số record và sai lỗi được đối chiếu; thời gian chạy đo được.
 
-* Các thành viên sử dụng cùng một tên trường và kiểu dữ liệu.
-* Ngữ nghĩa của từng feature được hiểu thống nhất.
-* Dữ liệu có thể kiểm tra và truy vết giữa các bước xử lý.
-* Dataset sau khi chuẩn hóa có thể được sử dụng nhất quán trên Spark.
-* `label` được bảo toàn như ground truth và không bị sử dụng nhầm như một feature đầu vào.
+Contract bảo đảm: thống nhất ngữ nghĩa các trường, không ghi đè raw, truy vết về tệp nguồn, kiểm soát lỗi trước/sau và có bằng chứng thực thi theo yêu cầu đồ án.
 
+## 1.2. Nguồn dữ liệu đã cung cấp
+
+| Tệp nguồn CICIDS2017 | Số flow theo kiểm toán |
+|---|---:|
+| `Monday-WorkingHours.pcap_ISCX.csv` | 529.918 |
+| `Tuesday-WorkingHours.pcap_ISCX.csv` | 445.909 |
+| `Wednesday-workingHours.pcap_ISCX.csv` | 692.703 |
+| `Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv` | 170.366 |
+| `Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv` | 288.602 |
+| `Friday-WorkingHours-Morning.pcap_ISCX.csv` | 191.033 |
+| `Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv` | 286.467 |
+| `Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv` | 225.745 |
+| **Tổng** | **2.830.743** |
 ---
-
+f
 # 2. Quy ước dữ liệu
 
-## 2.1. Quy ước hướng của Flow
+## 2.1. Hướng flow
 
-Trong CICFlowMeter:
+- **Forward (`fwd`)**: hướng xuất phát do bộ trích xuất flow xác định.
+- **Backward (`bwd`)**: hướng ngược lại trong flow tương ứng.
 
-* **Forward (`fwd`)**: chiều được xác định là hướng chính của flow, từ source đến destination.
-* **Backward (`bwd`)**: chiều ngược lại của flow.
-
-> Không mặc định `forward = client → server` và `backward = server → client`. Việc xác định client/server phụ thuộc ngữ cảnh của phiên giao tiếp.
-
----
+Không đồng nhất cứng nhắc `fwd = client → server` hay `bwd = server → client`.
 
 ## 2.2. Đơn vị đo
 
-| Loại dữ liệu        | Đơn vị             |
-| ------------------- | ------------------ |
-| `flow_duration`     | microsecond (`µs`) |
-| `flow_iat_mean`     | microsecond (`µs`) |
-| `flow_iat_std`      | microsecond (`µs`) |
-| Packet length       | byte               |
-| Total packet length | byte               |
-| `flow_bytes_s`      | byte/second        |
-| `flow_packets_s`    | packet/second      |
-| Packet / flag count | count              |
-
----
+| Nhóm dữ liệu | Đơn vị |
+|---|---|
+| `flow_duration`, `flow_iat_mean`, `flow_iat_std` | microsecond (µs) |
+| Packet lengths / tổng byte payload | byte |
+| `flow_bytes_s` | byte/second |
+| `flow_packets_s` | packet/second |
+| Packet count | count (số gói) |
+| `destination_port` | số cổng, 0–65535 |
+| `init_win_bytes_forward`, `init_win_bytes_backward` | byte khi hợp lệ; `-1` biểu diễn giá trị không sẵn có trong bộ nguồn |
+| TCP flag columns trong CSV cung cấp | **0 hoặc 1** theo dữ liệu nguồn; **không suy ra số packet thực tế mang flag** |
 
 ## 2.3. Quy ước giá trị
 
-* Các trường đếm (`count`) không được âm.
-* Các trường thời lượng không được âm.
-* Các trường kích thước không được âm.
-* Các trường tốc độ không được âm.
-* `label` phải giữ nguyên giá trị gốc từ dataset.
-* `label` là **ground truth**, không phải feature đầu vào.
-* Giá trị `NaN`, `Infinity` và `-Infinity` phải được xử lý trước khi ghi vào tầng dữ liệu đã chuẩn hóa.
-* Không tự ý thay đổi hoặc gộp nhãn nếu chưa có bảng mapping được phê duyệt.
+- Giữ nguyên tệp CSV nguồn; mọi sửa đổi chỉ xảy ra ở các tầng đầu ra.
+- Các trường đếm/kích thước/thời lượng không được âm, ngoại trừ sentinel được xác nhận ở `init_win_bytes_*`.
+- `total_backward_packets = 0` có thể hợp lệ và **không được tự động loại**.
+- Không tự động thay `NaN`, `Infinity`, `-Infinity` bằng 0.
+- Phân biệt **lỗi chất lượng dữ liệu** với nhãn mạng `ATTACK`.
+- `label` là nhãn nguồn; không sửa hay phân nhóm ngầm trong 22 trường lõi.
+
+## 2.4. Header trùng
+
+Trong cả 8 CSV, tên `Fwd Header Length` xuất hiện **hai lần ở vị trí cột 35 và 56 (đánh số từ 1)**. Parser có thể tự thêm hậu tố `.1`, nhưng đó **không phải tên trong CSV gốc**.
+
+**Quy tắc đọc bắt buộc:** xác nhận đủ 79 cột và signature header trước khi xử lý; ánh xạ cột theo **vị trí gốc + tên dự kiến** (hoặc schema tường minh 79 cột tên duy nhất). Không sử dụng thao tác `toDF(snake_case(...))` trực tiếp trên header có tên lặp.
 
 ---
 
 # 3. Data Schema
 
+**Canonical cleaned schema lõi = 21 network-flow features + 1 nhãn `label`**; metadata và cờ chất lượng nằm ngoài số đếm này. Bộ 21 feature giữ tương thích với tài liệu mẫu của anh; không bắt buộc đưa tất cả 79 cột vào cleaned.
+
 ## 3.1. Flow & Traffic Volume
 
-| Tên đã được chuẩn hóa            | Cột CICFlowMeter           | Kiểu dữ liệu          | Đơn vị     | Mô tả                                                                                              |
-| ----------------------------- | ----------------------------- | ------------- | -------- | -------------------------------------------------------------------------------------------------------- |
-| `destination_port`            | `Destination Port`            | `Integer` | 0–65535  | Cổng đích của flow. Hữu ích cho phân tích dịch vụ và nhận diện hành vi quét cổng.                        |
-| `flow_duration`               | `Flow Duration`               | `Long`    | µs       | Tổng thời lượng của flow.                                                                                |
-| `total_fwd_packets`           | `Total Fwd Packets`           | `Long`    | gói    | Tổng số packet theo hướng forward.                                                                       |
-| `total_backward_packets`      | `Total Backward Packets`      | `Long`    | gói    | Tổng số packet theo hướng backward. Giá trị bằng 0 có thể xuất hiện ở các flow không nhận được phản hồi. |
-| `total_length_of_fwd_packets` | `Total Length of Fwd Packets` | `Long`    | byte     | Tổng kích thước packet theo hướng forward.                                                               |
-| `total_length_of_bwd_packets` | `Total Length of Bwd Packets` | `Long`    | byte     | Tổng kích thước packet theo hướng backward.                                                              |
-| `flow_bytes_s`                | `Flow Bytes/s`                | `Double`  | byte/s   | Tốc độ truyền dữ liệu của flow.                                                                          |
-| `flow_packets_s`              | `Flow Packets/s`              | `Double`  | packet/s | Tốc độ packet của flow; đặc biệt hữu ích cho phân tích flood/DoS.                                        |
-
----
+| Tên chuẩn hóa | Cột CICFlowMeter | Spark SQL type | Đơn vị | Ý nghĩa |
+|---|---|---|---|---|
+| `destination_port` | `Destination Port` | Integer | 0–65535 | Cổng đích |
+| `flow_duration` | `Flow Duration` | Long | µs | Thời lượng của flow |
+| `total_fwd_packets` | `Total Fwd Packets` | Long | gói | Số gói hướng forward |
+| `total_backward_packets` | `Total Backward Packets` | Long | gói | Số gói hướng backward |
+| `total_length_of_fwd_packets` | `Total Length of Fwd Packets` | Long | byte | Tổng độ dài payload packet forward theo định nghĩa nguồn |
+| `total_length_of_bwd_packets` | `Total Length of Bwd Packets` | Long | byte | Tổng độ dài payload packet backward theo định nghĩa nguồn |
+| `flow_bytes_s` | `Flow Bytes/s` | Double nullable | byte/s | Tốc độ byte của flow; có thể thiếu sau chuẩn hóa |
+| `flow_packets_s` | `Flow Packets/s` | Double nullable | gói/s | Tốc độ packet của flow; có thể thiếu sau chuẩn hóa |
 
 ## 3.2. Inter-Arrival Time (IAT)
 
-| Tên đã được chuẩn hóa | Cột CICFlowMeter | Kiểu dữ liệu         | Đơn vị | Mô tả                                             |
-| ----------------- | ------------------- | ------------ | ---- | ------------------------------------------------------- |
-| `flow_iat_mean`   | `Flow IAT Mean`     | `Double` | µs   | Khoảng thời gian trung bình giữa các packet trong flow. |
-| `flow_iat_std`    | `Flow IAT Std`      | `Double` | µs   | Độ lệch chuẩn của khoảng thời gian giữa các packet.     |
+| Tên chuẩn hóa | Cột CICFlowMeter | Spark SQL type | Đơn vị | Ý nghĩa |
+|---|---|---|---|---|
+| `flow_iat_mean` | `Flow IAT Mean` | Double | µs | IAT trung bình giữa các packet trong flow |
+| `flow_iat_std` | `Flow IAT Std` | Double | µs | Độ lệch chuẩn IAT |
 
-**Security relevance:**
+## 3.3. TCP Flags (giữ để kiểm toán, không diễn giải như packet count)
 
-IAT không nên được dùng như một dấu hiệu độc lập. Giá trị IAT cần được kết hợp với packet rate, packet count, flow duration và các đặc trưng khác để nhận diện hành vi bất thường.
+| Tên chuẩn hóa | Cột CICFlowMeter | Spark SQL type | Ngữ nghĩa áp dụng |
+|---|---|---|---|
+| `syn_flag_count` | `SYN Flag Count` | Integer | Chỉ báo 0/1 ghi trong dữ liệu nguồn |
+| `ack_flag_count` | `ACK Flag Count` | Integer | Chỉ báo 0/1 ghi trong dữ liệu nguồn |
+| `rst_flag_count` | `RST Flag Count` | Integer | Chỉ báo 0/1 ghi trong dữ liệu nguồn |
+| `fin_flag_count` | `FIN Flag Count` | Integer | Chỉ báo 0/1 ghi trong dữ liệu nguồn |
+| `psh_flag_count` | `PSH Flag Count` | Integer | Chỉ báo 0/1 ghi trong dữ liệu nguồn |
 
----
+**Giới hạn:** Bộ CSV đã kiểm toán có các cột này dạng 0/1. Không lấy tổng giá trị rồi công bố là **số SYN/ACK packet thực tế**. Không sử dụng cột này để kết luận kỹ thuật về đếm flag theo gói.
 
-## 3.3. TCP Flags
+## 3.4. Packet Size Statistics
 
-| Tên đã được chuẩn hóa | Cột CICFlowMeter | Kiểu dữ liệu          | Đơn vị  | Mô tả                     |
-| ----------------- | ------------------- | ------------- | ----- | ------------------------------- |
-| `syn_flag_count`  | `SYN Flag Count`    | `Integer` | gói | Số packet trong flow có cờ SYN. |
-| `ack_flag_count`  | `ACK Flag Count`    | `Integer` | gói | Số packet trong flow có cờ ACK. |
-| `rst_flag_count`  | `RST Flag Count`    | `Integer` | gói | Số packet trong flow có cờ RST. |
-| `fin_flag_count`  | `FIN Flag Count`    | `Integer` | gói | Số packet trong flow có cờ FIN. |
-| `psh_flag_count`  | `PSH Flag Count`    | `Integer` | gói | Số packet trong flow có cờ PSH. |
+| Tên chuẩn hóa | Cột CICFlowMeter | Spark SQL type | Đơn vị | Ý nghĩa |
+|---|---|---|---|---|
+| `packet_length_mean` | `Packet Length Mean` | Double | byte | Trung bình độ dài packet |
+| `packet_length_std` | `Packet Length Std` | Double | byte | Độ lệch chuẩn độ dài packet |
+| `min_packet_length` | `Min Packet Length` | Double | byte | Độ dài packet nhỏ nhất |
+| `max_packet_length` | `Max Packet Length` | Double | byte | Độ dài packet lớn nhất |
 
-**Security relevance:**
+## 3.5. TCP Initial Window
 
-Các TCP flag chỉ có ý nghĩa khi được phân tích theo **tổ hợp và tỷ lệ**, không nên kết luận tấn công chỉ dựa trên một flag.
+| Tên chuẩn hóa | Cột CICFlowMeter | Spark SQL type | Đơn vị | Ý nghĩa |
+|---|---|---|---|---|
+| `init_win_bytes_forward` | `Init_Win_bytes_forward` | Long nullable | byte | Initial window hướng forward; `-1` là sentinel nguồn |
+| `init_win_bytes_backward` | `Init_Win_bytes_backward` | Long nullable | byte | Initial window hướng backward; `-1` là sentinel nguồn |
 
-Ví dụ:
+Ở cleaned, `-1` được đổi thành `NULL` **kèm cờ chất lượng**, không đổi thành 0. Giá trị âm khác `-1` cần cách ly/xác minh.
 
-```text
-High SYN
-+ Low/Zero ACK
-+ Short Flow Duration
-+ High Flow Rate
-            ↓
-Potential SYN-based anomaly
-```
+## 3.6. Ground Truth
 
----
+| Tên chuẩn hóa | Cột CSV | Spark SQL type | Ý nghĩa |
+|---|---|---|---|
+| `label` | `Label` | String | Giữ nhãn nguồn từ CSV (không phân loại nhị phân trong contract này) |
 
-# 3.4. Packet Size Statistics
+Giữ `label` nguyên bản sau giải mã; nếu phục vụ tổng hợp cần chuẩn hóa khoảng trắng, tạo trường dẫn xuất **`label_group`** hoặc bảng mapping riêng thay vì ghi đè `label`.
 
-| Tên đã được chuẩn hóa   | Cột CICFlowMeter | Kiểu dữ liệu         | Đơn vị | Mô tả                              |
-| -------------------- | -------------------- | ------------ | ---- | ---------------------------------------- |
-| `packet_length_mean` | `Packet Length Mean` | `Double` | byte | Kích thước packet trung bình trong flow. |
-| `packet_length_std`  | `Packet Length Std`  | `Double` | byte | Độ lệch chuẩn kích thước packet.         |
-| `min_packet_length`  | `Min Packet Length`  | `Double` | byte | Kích thước packet nhỏ nhất.              |
-| `max_packet_length`  | `Max Packet Length`  | `Double` | byte | Kích thước packet lớn nhất.              |
+## 3.7. Technical Metadata (ngoài schema 22 trường)
 
-**Security relevance:**
+| Trường | Kiểu | Quy tắc |
+|---|---|---|
+| `source_file` | String | Tên file CSV đầu vào từ MinIO |
+| `source_dataset` | String | `CICIDS2017` |
+| `batch_id` | String | Định danh lần chạy ingest/ETL |
+| `pipeline_version` | String | Phiên bản mã xử lý hoặc Git commit |
+| `schema_version` | String | `v2.3.0` |
+| `processed_at` | Timestamp | Thời gian job xử lý; **không phải event_time** |
+| `quality_status` | String | `VALID` / `QUARANTINED` / `REJECTED` |
+| `quality_reason_codes` | Array<String> | Danh mục mã lỗi áp dụng |
+| `flow_bytes_s_invalid` | Boolean | Dữ liệu rate thiếu/không hữu hạn/âm |
+| `flow_packets_s_invalid` | Boolean | Dữ liệu rate thiếu/không hữu hạn/âm |
+| `init_win_fwd_missing`, `init_win_bwd_missing` | Boolean | Sentinel `-1` ở initial-window |
 
-Các thống kê về packet size có thể hỗ trợ phân biệt các kiểu traffic có đặc trưng kích thước bất thường hoặc tương đối đồng nhất.
-
-Không nên xem một giá trị `packet_length_mean` hoặc `packet_length_std` đơn lẻ là bằng chứng trực tiếp của một cuộc tấn công.
-
----
-
-# 3.5. TCP Initial Window
-
-| Tên đã được chuẩn hóa     | Cột CICFlowMeter       | Kiểu dữ liệu       | Đơn vị | Mô tả                               |
-| ------------------------- | ------------------------- | ---------- | ---- | ----------------------------------------- |
-| `init_win_bytes_forward`  | `Init_Win_bytes_forward`  | `Long` | byte | TCP initial window size ở hướng forward.  |
-| `init_win_bytes_backward` | `Init_Win_bytes_backward` | `Long` | byte | TCP initial window size ở hướng backward. |
-
-Các trường này có thể hỗ trợ **TCP fingerprinting** hoặc phân tích đặc điểm của hệ điều hành/công cụ mạng, nhưng không nên được sử dụng như một dấu hiệu độc lập để kết luận nguồn traffic là Nmap hoặc một hệ điều hành cụ thể.
-
----
-
-# 3.6. Ground Truth
-
-| Tên đã được chuẩn hóa | Cột CICFlowMeter | Kiểu dữ liệu         | Mô tả                                                                 |
-| ----------------- | ------------------- | ------------ | --------------------------------------------------------------------------- |
-| `label`           | `Label`             | `String` | Nhãn ground truth của flow, ví dụ `BENIGN`, `PortScan`, `DoS Hulk`, `DDoS`. |
-
-`label` được sử dụng cho:
-
-* đánh giá detection;
-* phân tích phân bố dữ liệu;
-* supervised learning nếu được sử dụng;
-* đối chiếu kết quả detection với ground truth.
-
-`label` **không được sử dụng làm feature đầu vào** cho bài toán unsupervised anomaly detection.
+**Quy ước batch-level lineage:** bắt buộc lưu SHA-256 của tệp và đếm dòng theo tệp. Không yêu cầu `source_row_number`/`record_id` toàn cục khi chưa có cách đánh số ổn định trên input đã phân tán; **không dùng `monotonically_increasing_id()` làm số thứ tự bản ghi gốc**.
 
 ---
 
 # 4. Feature Classification
 
-Để thuận tiện cho tầng Security Analysis, 21 feature được chia thành các nhóm sau:
-
-| Nhóm                   | Các đặc trưng chính                                                                                                                |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| **Flow / Volume**      | `flow_duration`, `total_fwd_packets`, `total_backward_packets`, `total_length_of_fwd_packets`, `total_length_of_bwd_packets` |
-| **Traffic Rate**       | `flow_bytes_s`, `flow_packets_s`                                                                                             |
-| **Timing**             | `flow_iat_mean`, `flow_iat_std`                                                                                              |
-| **TCP Behavior**       | `syn_flag_count`, `ack_flag_count`, `rst_flag_count`, `fin_flag_count`, `psh_flag_count`                                     |
-| **Packet Size**        | `packet_length_mean`, `packet_length_std`, `min_packet_length`, `max_packet_length`                                          |
-| **TCP Fingerprinting** | `init_win_bytes_forward`, `init_win_bytes_backward`                                                                          |
-| **Service Context**    | `destination_port`                                                                                                           |
-| **Ground Truth**       | `label`                                                                                                                      |
+| Nhóm | Các trường | Phép xử lý phù hợp trong giai đoạn này |
+|---|---|---|
+| **Flow / Volume** | `flow_duration`, `total_fwd_packets`, `total_backward_packets`, `total_length_of_fwd_packets`, `total_length_of_bwd_packets` | Kiểm tra miền giá trị; tổng hợp min/avg/max/sum phù hợp |
+| **Traffic Rate** | `flow_bytes_s`, `flow_packets_s` | Kiểm tra hữu hạn; thống kê NULL; avg/percentile trên tập hợp lệ |
+| **Timing** | `flow_iat_mean`, `flow_iat_std` | Chuẩn hóa kiểu, thống kê phân bố |
+| **TCP Behavior (source flags)** | `syn_flag_count`, `ack_flag_count`, `rst_flag_count`, `fin_flag_count`, `psh_flag_count` | Kiểm tra 0/1; không tổng hợp dưới nghĩa số packet thực tế |
+| **Packet Size** | `packet_length_mean`, `packet_length_std`, `min_packet_length`, `max_packet_length` | Kiểm tra miền và thống kê |
+| **TCP Initial Window** | `init_win_bytes_forward`, `init_win_bytes_backward` | Xử lý sentinel `-1`; đếm tỷ lệ thiếu |
+| **Service Context** | `destination_port` | Thống kê tần suất cổng đích; không suy ra host nguồn |
+| **Ground Truth** | `label` | Thống kê phân bố nhãn, theo file nguồn |
 
 ---
 
-# 5. Security Interpretation
+# 5. Processing Interpretation
 
-Feature không đồng nghĩa với Indicator.
-
-```text
-Raw Feature
-     ↓
-Aggregation / Ratio / Time Window
-     ↓
-Behavioral Pattern
-     ↓
-Security Indicator
-     ↓
-Detection Rule
-     ↓
-Alert
-```
-
-Ví dụ:
-
-### Port Scan
+**Mục tiêu xử lý không phải dự đoán.** Bốn nhóm thao tác của Storage → Processing:
 
 ```text
-destination_port
-syn_flag_count
-rst_flag_count
-flow_duration
+Raw CSV
+  ↓ Data Standardization
+Canonical schema (22 trường + metadata)
+  ↓ Data Cleaning / Validation
+Valid clean flows + Quarantine + Reject
+  ↓ Feature Transformation
+Well-defined derived statistics (không tự bịa trường thời gian/IP)
+  ↓ Aggregation (Spark SQL / DataFrame)
+Source-file statistics + Label statistics
+  ↓ Materialization
+Cleaned Parquet + Aggregated Parquet + QA report
 ```
 
-sau khi aggregation:
+## 5.1. Transformation được phép
 
-```text
-High number of unique destination ports
-+ High SYN rate
-+ Short time window
-            ↓
-Port Scan Indicator
-```
+Nếu cần minh họa feature transformation, có thể tạo trường **dẫn xuất** (không thay thế cột gốc):
 
-### DoS / Flood
+| Trường dẫn xuất | Định nghĩa | Điều kiện |
+|---|---|---|
+| `total_packets` | `total_fwd_packets + total_backward_packets` | Hai trường đầu vào hợp lệ |
+| `total_payload_bytes` | `total_length_of_fwd_packets + total_length_of_bwd_packets` | Hai trường hợp lệ; không gọi là toàn bộ wire bytes |
+| `fwd_packet_ratio` | `total_fwd_packets / total_packets` | Chỉ tính khi `total_packets > 0` |
+| `has_backward_traffic` | `total_backward_packets > 0` | Chỉ tính khi trường nguồn hợp lệ |
 
-```text
-flow_packets_s
-flow_bytes_s
-total_fwd_packets
-flow_iat_mean
-```
+Các trường dẫn xuất thuộc **processed layer**, không tính vào 22 trường canonical cleaned.
 
-kết hợp theo time window:
+## 5.2. Aggregation phù hợp với CSV hiện có
 
-```text
-Very high packet rate
-+ Very low IAT
-+ Abnormally high traffic volume
-            ↓
-Potential DoS/Flood Indicator
-```
+- **Theo `source_file`:** `flow_count`, `valid_count`, `quarantine_count`, tỷ lệ lỗi, thời lượng trung bình trên dòng hợp lệ.
+- **Theo `label`:** đếm số flow theo nhãn gốc và nguồn dữ liệu; không viết lại nhãn.
+- **Theo `source_file + label`:** `flow_count`, tổng packet, tổng payload bytes, thống kê tốc độ hữu hạn.
+- **Theo `destination_port`:** số flow theo cổng đích (nếu cần một phép tổng hợp bổ sung).
 
-Do đó, Data Contract này định nghĩa **feature layer**, không định nghĩa toàn bộ detection logic.
+Không tính `unique destination ports per source IP`, `flows per event-time window`, hay `SYN packet rate`: dữ liệu nguồn hiện tại không hỗ trợ các kết quả này một cách đáng tin cậy.
 
 ---
 
@@ -285,159 +254,105 @@ Do đó, Data Contract này định nghĩa **feature layer**, không định ngh
 
 ## 6.1. Column Name Validation
 
-Tên cột đầu ra phải:
+- Phải nhận dạng chính xác **79 cột nguồn** theo vị trí, so sánh header đã trim với danh sách kỳ vọng.
+- Ánh xạ tường minh từng trường canonical (không tự đổi tên tất cả rồi chấp nhận cột trùng).
+- Dữ liệu cleaned phải có **đúng 22 cột canonical** và các metadata/cờ chất lượng đã công bố (tách số lượng này khỏi metadata).
+- Không có duplicate canonical name.
 
-* sử dụng `snake_case`;
-* viết thường;
-* không chứa khoảng trắng;
-* không chứa ký tự đặc biệt ngoài `_`;
-* ánh xạ được rõ ràng về cột gốc của CICFlowMeter.
-
-Ví dụ:
-
-```text
-Destination Port
-        ↓
-destination_port
-```
-
-Có thể thực hiện chuẩn hóa trong Spark:
-
-```python
-import re
-
-def to_snake_case(name: str) -> str:
-    name = name.strip().lower()
-    name = re.sub(r"[^a-z0-9]+", "_", name)
-    return name.strip("_")
-
-df = raw_df.toDF(
-    *[to_snake_case(c) for c in raw_df.columns]
-)
-```
-
----
+**Ví dụ:** `" Flow Duration"` → `flow_duration`; `" Flow Bytes/s"` → `flow_bytes_s`.
 
 ## 6.2. Type Validation
 
-Trước khi ghi Parquet, các trường phải được ép về schema chuẩn:
+| Nhóm dữ liệu | Kiểu Spark |
+|---|---|
+| `destination_port`, TCP source flags | Integer |
+| Thời lượng, packet count, total length, initial window | Long |
+| Rate, IAT, packet size | Double |
+| `label`, `source_file`, `batch_id` | String |
+| `processed_at` | Timestamp |
+| Các cờ chất lượng | Boolean / Array<String> |
 
-```text
-destination_port          → Integer
-flow_duration             → Long
-packet counts             → Long / Integer
-traffic rates             → Double
-packet-length statistics  → Double
-initial window            → Long
-label                     → String
-```
-
----
+Dùng schema tường minh; lỗi cast được ghi nhận. Không dùng `inferSchema` làm hợp đồng đầu ra.
 
 ## 6.3. Range Validation
 
-Các điều kiện tối thiểu:
+| Kiểm tra | Chính sách |
+|---|---|
+| `destination_port` ngoài [0,65535] | QUARANTINED |
+| `flow_duration < 0` | QUARANTINED, không ép thành 0 |
+| Packet count / length âm | QUARANTINED |
+| IAT / packet size có giá trị âm hoặc không hữu hạn | QUARANTINED hoặc policy riêng có ghi lý do |
+| `flow_bytes_s` / `flow_packets_s` null, NaN, ±Infinity hoặc âm | Đánh dấu invalid; chuyển NULL ở cleaned; giữ lại row nếu các trường bắt buộc khác hợp lệ |
+| `init_win_bytes_* = -1` | Chuyển NULL + flag; không coi là packet/window bằng 0 |
+| Initial-window âm khác `-1` | QUARANTINED |
+| TCP flags ngoài 0/1 | Flag bất thường; xử lý theo policy QA, không cộng thành đếm packet |
+| `label` rỗng / không parse được | QUARANTINED; không tự gán `BENIGN` hay `ATTACK` |
+
+## 6.4. Phân loại trạng thái bản ghi
 
 ```text
-destination_port ∈ [0, 65535]
-
-flow_duration >= 0
-
-packet counts >= 0
-
-packet lengths >= 0
-
-flow_bytes_s >= 0
-
-flow_packets_s >= 0
-
-flow_iat_mean >= 0
-
-flow_iat_std >= 0
-
-TCP flag counts >= 0
-
-initial window >= 0
+Input row
+  ├─ REJECTED: malformed CSV / không thể khôi phục cấu trúc hàng
+  ├─ QUARANTINED: parse được nhưng vi phạm điều kiện cứng
+  └─ VALID: đạt chuẩn hoặc lỗi mềm đã xử lý và ghi nhận
 ```
 
-Bản ghi không thỏa điều kiện phải được:
-
-```text
-Rejected
-   hoặc
-Quarantined
-   hoặc
-Corrected
-```
-
-theo chính sách Data Quality của pipeline.
-
-Không tự động sửa dữ liệu gốc nếu chưa xác định nguyên nhân.
+Ba trạng thái **loại trừ nhau**. Mỗi hàng chỉ được tính vào đúng một trạng thái cuối. Record lỗi mềm vẫn là `VALID` nếu chính sách cho phép làm sạch; phải ghi lại flags và mã lỗi. `REJECTED` phải có bằng chứng/đếm được, không được bỏ qua âm thầm bằng chế độ parser tự loại dữ liệu.
 
 ---
 
 # 7. Null, NaN và Infinite Values
 
-Đối với các trường số thực:
+Các loại lỗi cần phân biệt: `NULL`, chuỗi rỗng, `NaN`, `+Infinity`, `-Infinity`, lỗi cast, giá trị âm không hợp lệ, sentinel `-1`.
 
-```text
-NULL
-NaN
-+Infinity
--Infinity
-```
+| Trường hợp | Raw | Cleaned | Data Quality Report |
+|---|---|---|---|
+| Rate null/NaN | Giữ text gốc | NULL + flag | Count theo trường/file |
+| Rate ±Infinity | Giữ text gốc | NULL + flag | Count theo trường/file |
+| Rate âm | Giữ text gốc | NULL + flag | Count theo trường/file |
+| Duration âm | Giữ text gốc | Quarantine | Count + ví dụ có kiểm soát |
+| TCP window `-1` | Giữ `-1` | NULL + flag | Count theo hướng |
+| Invalid label | Giữ raw | Quarantine | Count và giá trị gặp phải |
 
-phải được kiểm tra trước khi ghi vào tầng processed.
+**Số liệu audit của 8 tệp** (đếm giá trị theo từng cột, **không phải số record lỗi duy nhất**):
 
-Chính sách xử lý phải được xác định rõ cho từng pipeline:
+| Hiện tượng | Số lần quan sát |
+|---|---:|
+| `Flow Bytes/s` null/NaN | 1.358 |
+| `Flow Bytes/s` vô cực | 1.509 |
+| `Flow Bytes/s` âm | 85 |
+| `Flow Packets/s` vô cực | 2.867 |
+| `Flow Packets/s` âm | 115 |
+| `Flow Duration` âm | 115 |
+| `Init_Win_bytes_forward` âm | 1.001.189 |
+| `Init_Win_bytes_backward` âm | 1.441.552 |
 
-```text
-Invalid value
-      ↓
-Validate
-      ↓
-┌───────────────┐
-│ Valid         │ → Continue
-├───────────────┤
-│ Missing       │ → Impute / Preserve / Reject
-├───────────────┤
-│ Invalid       │ → Quarantine / Reject
-└───────────────┘
-```
+Hai số âm ở initial window là **số giá trị âm được kiểm toán**; cần xác minh khi chạy pipeline rằng từng trường hợp âm là `-1` trước khi áp dụng sentinel policy. Các nhóm lỗi có thể cùng xuất hiện trên một record.
 
-Việc loại bỏ bản ghi phải được ghi nhận trong Data Quality Report.
+Không tự động loại toàn bộ flow mang rate null/Infinity; nếu việc đổi sang NULL được chấp thuận, row vẫn có thể xuất ra cleaned và những phép aggregation phải dùng chính sách NULL tường minh.
 
 ---
 
 # 8. Label Governance
 
-`label` là trường ground truth và phải được bảo toàn trong quá trình ETL.
-
-### Nguyên tắc
-
-* Không tự ý đổi tên hoặc thay đổi giá trị nhãn gốc.
-* Nếu cần nhóm các label thành category lớn hơn, phải tạo **mapping table riêng**.
-* Không ghi đè label gốc bằng label đã mapping.
-* Phải lưu được mối quan hệ:
+`label` là nhãn gốc và **không bị ghi đè** trong cleaned.
 
 ```text
-Original Label
-      ↓
-Mapped Label
+CSV Label
+   ↓ (preserve as-is)
+label
+   ├──→ Data Quality / phân bố giá trị gốc
+   └──→ Optional, versioned mapping
+           label_group (chỉ nếu cần thống kê gộp)
 ```
 
-Ví dụ:
+Nguyên tắc:
 
-```text
-DoS Hulk
-DoS GoldenEye
-DoS Slowloris
-DoS Slowhttptest
-        ↓
-       DoS
-```
-
-Label gốc vẫn phải được giữ lại nếu cần phục vụ truy vết và đánh giá.
+- Không tự động thay nhãn lạ bằng `BENIGN` hoặc nhãn tấn công.
+- Không mặc định gộp các nhãn thành bài toán binary classification trong giai đoạn Storage → Processing.
+- Nếu cần chuẩn hóa hiển thị, dùng mapping tường minh, có version, lưu cả chuỗi gốc.
+- Một số nhãn Web Attack trong CSV quan sát có ký tự thay thế **`�`**; **giữ chuỗi gốc** và công bố vấn đề encoding thay vì ngầm sửa sai.
+- Báo cáo phân bố các nhãn **trước và sau cleaning**, đặc biệt số row bị quarantine theo nhãn.
 
 ---
 
@@ -445,279 +360,220 @@ Label gốc vẫn phải được giữ lại nếu cần phục vụ truy vết
 
 ## 9.1. File Format
 
-Dữ liệu chuẩn hóa phải được lưu dưới dạng:
-
 ```text
-Apache Parquet
-Compression: Snappy
+Source input : CSV (raw, immutable)
+Output flows: Apache Parquet + Snappy
+Output stats: Apache Parquet + Snappy (hoặc JSON/CSV cho báo cáo nhỏ)
+Reports     : JSON / CSV / log (có batch_id)
 ```
 
-Lý do sử dụng:
+Lý do: Parquet lưu theo cột; Spark đọc/ghi hiệu quả các trường thống kê; Snappy hỗ trợ nén/giải nén phù hợp với workload batch.
 
-* columnar storage;
-* phù hợp với Apache Spark;
-* hỗ trợ predicate pushdown;
-* giảm I/O khi chỉ truy vấn một số feature;
-* phù hợp với workload phân tích dữ liệu lớn.
-
----
-
-## 9.2. Data Layers
-
-Khuyến nghị tổ chức:
+## 9.2. Data Layers (bucket/prefix đề xuất)
 
 ```text
-MinIO
+MinIO: bigdata-network/
 │
 ├── raw/
-│   └── CICIDS2017 PCAP / source data
+│   └── cicids2017/
+│       └── [8 source CSV + manifest/checksum]
 │
 ├── cleaned/
-│   └── standardized network flow
+│   └── flows/                  [Parquet + Snappy, 22 fields + metadata]
 │
-└── processed/
-    ├── security_features/
-    ├── window_aggregates/
-    └── detection_results/
+├── processed/
+│   ├── derived_features/      [Parquet + Snappy, optional]
+│   └── aggregates/            [Parquet + Snappy]
+│
+├── quality/
+│   ├── quarantine/            [record lỗi có thể đọc và giải thích]
+│   └── rejected/              [record lỗi cấu trúc, nếu có]
+│
+└── reports/
+    ├── data_quality/          [báo cáo theo batch]
+    └── performance/           [thời gian, throughput, cấu hình Spark]
 ```
 
-### `raw/`
+MinIO **không tự xử lý dữ liệu**: Spark đọc từ prefix `raw/` và ghi sang prefix mới. Không ghi đè raw; `overwrite` chỉ được phép ở prefix output của batch đang chạy theo chính sách rõ ràng.
 
-Dữ liệu nguồn, không chỉnh sửa.
+## 9.3. Output Schema Contract
 
-### `cleaned/`
+| Output | Bắt buộc | Nội dung tối thiểu |
+|---|---|---|
+| `cleaned/flows/` | Có | 22 trường chuẩn + `source_file`, `batch_id`, `schema_version`, quality flags/status |
+| `processed/aggregates/` | Có | `source_file`, `label`, `flow_count`, `total_packets_sum` (nếu đủ nguồn hợp lệ), `avg_flow_duration`, `batch_id` |
+| `quality/quarantine/` | Có chính sách | Record cách ly + cột gốc cần truy vết + `quality_reason_codes` |
+| `quality/rejected/` | Có chính sách | Dòng hỏng/đếm lỗi cấu trúc + nguồn; không tự động mất dòng |
+| `reports/data_quality/` | Có | Số bản ghi, lỗi, chất lượng theo file và tổng |
+| `reports/performance/` | Có | Processing time, throughput, cấu hình test |
 
-Dữ liệu flow sau:
-
-* chuẩn hóa schema;
-* chuẩn hóa tên cột;
-* type casting;
-* data quality validation.
-
-### `processed/`
-
-Dữ liệu phục vụ:
-
-* feature engineering;
-* aggregation;
-* behavioral indicators;
-* detection;
-* evaluation.
+`total_packets_sum` phải được tính từ các packet count hợp lệ; báo cáo cần giải thích rõ liệu thống kê chỉ tính hàng `VALID`.
 
 ---
 
 # 10. Partitioning Strategy
 
-Partitioning không phải là một phần của **feature schema**, mà là quyết định ở tầng storage dựa trên workload truy vấn.
+Partitioning là cấu hình của Storage → Processing, **không phải feature của mạng**.
 
-Không nên mặc định partition toàn bộ dataset theo `label` chỉ vì đây là trường phân loại. Dataset IDS thường có phân bố label rất mất cân bằng, dễ dẫn tới partition không đồng đều hoặc tạo nhiều file nhỏ.
+- Khuyến nghị **partition cleaned theo `source_file` hoặc `source_subset` có mã ngắn** khi truy vấn thường lọc theo file; đánh giá file count/size thực tế trước khi chốt.
+- `processed/aggregates/` thường nhỏ: tránh tạo nhiều Parquet quá nhỏ; có thể gom số file đầu ra.
+- **Không mặc định partition theo `label`** do các lớp chênh lệch lớn và dễ tạo file nhỏ/skew.
+- **Không partition theo `event_date`** vì CSV không có timestamp sự kiện; `processed_at` là thời gian job chạy.
+- Số Spark shuffle partitions và output partitions là **tham số thí nghiệm**, không coi một số cố định là tối ưu.
 
-Khuyến nghị:
+Ví dụ đường dẫn (chỉ là quy ước đề xuất):
 
 ```text
-Primary consideration:
-    processing date / batch / time window
-
-Optional:
-    protocol
-    dataset subset
-
-Use label only when:
-    query workload thực sự cần lọc theo label
+cleaned/flows/source_subset=tuesday/part-*.snappy.parquet
+processed/aggregates/batch_id=<job-id>/part-*.snappy.parquet
 ```
-
-Trong trường hợp pipeline hiện tại chưa có trường thời gian hoặc metadata phù hợp, partition có thể được quyết định riêng ở tầng Storage và ghi rõ trong configuration của pipeline.
 
 ---
 
 # 11. Data Lineage & Traceability
 
-Mỗi lần xử lý dataset phải có metadata tối thiểu:
+Mỗi batch phải có metadata:
 
-| Metadata                | Mô tả                |
-| ----------------------- | -------------------------- |
-| `source_dataset`        | Tên dataset nguồn          |
-| `source_file`           | File PCAP / source file    |
-| `processing_date`       | Thời điểm xử lý            |
-| `pipeline_version`      | Phiên bản pipeline         |
-| `schema_version`        | Phiên bản Data Contract    |
-| `input_record_count`    | Số bản ghi đầu vào         |
-| `valid_record_count`    | Số bản ghi hợp lệ          |
-| `rejected_record_count` | Số bản ghi bị loại         |
-| `quality_report`        | Báo cáo chất lượng dữ liệu |
-
-Mục tiêu:
+| Trường | Ý nghĩa |
+|---|---|
+| `batch_id` | Định danh job chạy |
+| `source_dataset` | `CICIDS2017` |
+| `source_file` | File nguồn đầu vào |
+| `source_sha256` | Hash kiểm tra tính toàn vẹn từng file |
+| `schema_version` | Phiên bản hợp đồng |
+| `pipeline_version` | Phiên bản job/chương trình |
+| `processing_started_at`, `processing_finished_at` | Mốc thời gian đo xử lý |
+| `input_record_count` | Số record nguồn |
+| `valid_record_count` | Số record đi vào cleaned |
+| `quarantined_record_count` | Số record cách ly |
+| `rejected_record_count` | Số record lỗi cấu trúc |
+| `quality_report_path` | Đường dẫn báo cáo |
+| `output_path`, `output_record_count` | Đường dẫn và số record đầu ra |
 
 ```text
-Processed Record
-      ↓
-Pipeline Version
-      ↓
-Source Dataset
-      ↓
-Original Source
+Processed aggregate / Cleaned record
+          ↓ batch_id + source_file + schema_version
+Spark ETL job / execution log
+          ↓ source_file + sha256
+Original CSV in MinIO raw/
 ```
 
-để đảm bảo khả năng truy xuất nguồn gốc.
+**Mức bắt buộc:** truy vết theo batch/file. Nếu muốn truy vết chính xác từng dòng, cần cơ chế source row number ổn định được triển khai và kiểm chứng riêng; không tuyên bố có sẵn từ Spark CSV reader.
 
 ---
 
 # 12. Data Quality Report
 
-Mỗi batch xử lý phải tạo báo cáo tối thiểu gồm:
+Mỗi lần xử lý phải phát sinh báo cáo theo **từng tệp và toàn batch**, có ít nhất:
 
 ```text
-Input Records
-Valid Records
-Rejected Records
-Null Count
-NaN Count
-Infinite Count
-Invalid Range Count
-Label Distribution
-Schema Validation Status
-Processing Duration
+batch_id / schema_version / pipeline_version
+source_file / input_bytes / input_records
+parsed_records / valid_records / quarantined_records / rejected_records
+null_count_by_field / nan_count_by_field / infinity_count_by_field
+negative_invalid_count_by_field / sentinel_count_by_field
+cast_failure_count / invalid_label_count / duplicate_header_check
+label_distribution_before / label_distribution_after
+cleaned_output_records / aggregate_output_records
+processing_duration_seconds / throughput_flows_per_second
+spark_app_id / worker_count / cores / memory / shuffle_partitions
+status (PASS/FAIL) / report_timestamp
 ```
 
-Ví dụ:
+**Đối chiếu bắt buộc:**
 
 ```text
-Dataset: CICIDS2017
-Batch: 2026-10-08
-
-Input records       : 1,250,000
-Valid records       : 1,247,321
-Rejected records    : 2,679
-
-Null values         : 0
-NaN values          : 0
-Infinite values     : 0
-Invalid ranges      : 2,679
-
-Schema validation   : PASS
-Label validation    : PASS
+input_record_count = valid_record_count
+                   + quarantined_record_count
+                   + rejected_record_count
 ```
+
+Điều kiện này đúng khi một input row được gán chính xác một trạng thái; cần báo cáo riêng parser corrupt records mà Spark có thể tự xử lý/skip, tuyệt đối tránh im lặng bỏ dòng.
+
+**Lưu ý về benchmark:** `throughput_flows_per_second = input_records / processing_duration_seconds` và mô tả rõ thời gian có bao gồm đọc, làm sạch, aggregation, ghi output, khởi tạo Spark hay không. Dữ liệu demo/benchmark phải đo **từ lần chạy thực tế**, không điền số mẫu như số liệu đo.
 
 ---
 
 # 13. Acceptance Criteria
 
-Dataset được xem là **Ready for Processing** khi đáp ứng toàn bộ các điều kiện:
+Giai đoạn **Storage → Processing** chỉ được xem là **hoàn thành để nghiệm thu** khi thỏa đồng thời các nhóm sau.
 
-### Schema
+## 13.1. Schema
 
-* Đủ 22 trường theo Data Contract.
-* Tên cột sử dụng `snake_case`.
-* Không có khoảng trắng đầu/cuối.
-* Không có duplicate column.
-* Data type đúng schema.
+- [ ] Kiểm tra được 8 header CSV có 79 trường; xử lý tên `Fwd Header Length` lặp có kiểm soát.
+- [ ] Cleaned có 21 feature chuẩn + 1 `label` và metadata/cờ chất lượng đã khai báo.
+- [ ] Tên canonical dùng `snake_case`, kiểu Spark đúng contract, không trùng cột.
 
-### Data Quality
+## 13.2. Data Quality
 
-* Không tồn tại giá trị âm tại các trường không cho phép.
-* Không tồn tại `NaN` hoặc `Infinity` chưa được xử lý.
-* Null values được xử lý theo policy.
-* `destination_port` nằm trong miền hợp lệ.
-* `label` không bị thay đổi ngoài mapping được phê duyệt.
+- [ ] Có chính sách và báo cáo cho Null, NaN, Infinity, duration âm, sentinel `-1`, lỗi cast và nhãn lỗi encoding.
+- [ ] Không tự động sửa raw hoặc đổi nhãn gốc.
+- [ ] `input = valid + quarantined + rejected` được chứng minh bằng số liệu chạy thực.
+- [ ] Có báo cáo phân bố nhãn và lỗi theo **từng file** trước/sau xử lý.
 
-### Storage
+## 13.3. Storage / Processing
 
-* Định dạng Parquet.
-* Compression = Snappy.
-* Partition strategy được ghi nhận.
-* Có metadata và Data Quality Report.
+- [ ] Spark đọc trực tiếp từ MinIO/S3A, xử lý rồi ghi được **Parquet + Snappy** vào prefix đầu ra.
+- [ ] Có job chuẩn hóa, làm sạch và tổng hợp bằng Spark DataFrame/Spark SQL.
+- [ ] Đọc lại Parquet, kiểm tra schema và số bản ghi đúng với report.
+- [ ] Có các output bắt buộc trong mục 9.3 và đường dẫn trong manifest.
 
-### Traceability
+## 13.4. Thực nghiệm & khả năng mở rộng
 
-* Xác định được dataset nguồn.
-* Xác định được phiên bản schema.
-* Xác định được phiên bản pipeline.
-* Có thống kê số lượng record trước và sau xử lý.
+- [ ] Có log Spark và **thời gian xử lý** đo thực tế.
+- [ ] Benchmark ít nhất theo **kích thước đầu vào**, **partition** và **worker** (nếu môi trường cho phép worker phân tán); công bố cấu hình tương ứng.
+- [ ] Có thống kê throughput, so sánh và giải thích các trường hợp tăng/giảm hiệu năng.
+- [ ] Nếu dùng dữ liệu nhân bản để tạo tải, phải đánh dấu **synthetic benchmark load**, không xem là dữ liệu mới dùng phân tích an ninh.
+
+## 13.5. Demo & tái lập
+
+- [ ] Có README lệnh khởi chạy Docker, kết nối MinIO, chạy Spark job và xem output.
+- [ ] Có Data Contract, sơ đồ data-flow/architecture, log, kết quả trước/sau, báo cáo/biểu đồ.
+- [ ] Nộp source code, cấu hình và dữ liệu mẫu/đường dẫn nguồn theo yêu cầu giảng viên.
 
 ---
 
 # 14. Contract Boundary
 
-Data Contract này chịu trách nhiệm định nghĩa:
-
 ```text
-PCAP-derived Flow
-        ↓
-    Data Schema
-        ↓
- Feature Semantics
-        ↓
- Data Quality
-        ↓
- Storage Contract
+IN SCOPE:
+  MinIO raw CSV
+     ↓
+  Schema & Type Standardization
+     ↓
+  Data Quality / Cleaning / Quarantine
+     ↓
+  Feature Transformation / Aggregation
+     ↓
+  Parquet Output + Reports + Benchmarks
+
+OUT OF SCOPE (KHÔNG PHẢI NGHIỆM THU CONTRACT NÀY):
+  PCAP extraction / packet capture
+  Model training / classification / attack prediction
+  ML accuracy / Precision / Recall / F1
+  Streaming / Kafka / real-time alerting
+  SOC dashboard / Incident Response
+  NCKH-specific experimentation
 ```
 
-Data Contract **không chịu trách nhiệm trực tiếp** cho:
-
-* Detection Rule;
-* Security Alert;
-* Machine Learning Model;
-* SOC dashboard;
-* Incident Response.
-
-Các thành phần trên sử dụng dữ liệu từ Contract này làm đầu vào.
+**Ranh giới bắt đầu:** dữ liệu flow CSV được lưu và đọc từ MinIO. **Ranh giới kết thúc:** Spark hoàn tất chuẩn hóa–làm sạch–tổng hợp và ghi lại dữ liệu cùng báo cáo kỹ thuật.
 
 ---
 
 # 15. Downstream Usage
 
-Feature layer sau khi đạt chuẩn có thể được sử dụng bởi:
+Đầu ra có thể được các thành phần khác sử dụng, nhưng contract này **không định nghĩa cách thực hiện downstream**.
 
 ```text
-                     ┌── Rule-based Detection
-                     │
-Processed Features ──┼── Anomaly Detection
-                     │
-                     ├── Statistical Analysis
-                     │
-                     └── Machine Learning
+Cleaned Network Flows (Parquet)
+            |
+            ├──→ Spark SQL / descriptive statistics
+            |
+            ├──→ Aggregated datasets / quality dashboard
+            |
+            └──→ Other consumers (independent contracts)
 ```
 
-Ví dụ:
-
-```text
-Flow Features
-     ↓
-Time-window Aggregation
-     ↓
-Behavioral Indicators
-     ↓
-Detection Rules
-     ↓
-Alert
-     ↓
-Time / Throughput / Speedup / Scaling
-```
-
-Đây là ranh giới giữa **Data Engineering Layer** và **Security Detection Layer** của hệ thống.
-
----
-
-# 16. Versioning
-
-Mọi thay đổi ảnh hưởng tới schema hoặc semantics phải tăng phiên bản Data Contract.
-
-```text
-v1.0
-  ↓
-Initial standardized schema
-
-v1.1
-  ↓
-Non-breaking change
-  (documentation / validation refinement)
-
-v2.0
-  ↓
-Breaking change
-  (rename/remove/change type/add mandatory field)
-```
-
-Các pipeline sử dụng Data Contract phải ghi nhận `schema_version` tương ứng trong metadata.
+Thực tế trong đồ án này, **đầu ra đã xử lý** được chứng minh bằng truy vấn đọc lại Parquet và báo cáo chất lượng/hiệu năng, không bắt buộc có mô hình dự đoán.
 
 ---
