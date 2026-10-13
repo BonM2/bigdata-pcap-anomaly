@@ -1,64 +1,70 @@
-version: '3.8'
+﻿x-spark: &spark
+  image: bigdata-spark:3.5.0
+  build: ./spark
+  working_dir: /workspace
+  volumes:
+    - ..:/workspace:ro
+
+x-spark-env: &spark-env
+  SPARK_MASTER_URL: spark://spark-master:7077
+  MINIO_ENDPOINT: http://minio:9000
+  MINIO_BUCKET: ${MINIO_BUCKET:-bigdata-network}
+  MINIO_ACCESS_KEY: ${MINIO_ROOT_USER:?Set MINIO_ROOT_USER in docker/.env}
+  MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD:?Set MINIO_ROOT_PASSWORD in docker/.env}
+  SPARK_PACKAGES: ""
+  PYTHONPATH: /workspace:/opt/spark/python:/opt/spark/python/lib/py4j-0.10.9.7-src.zip
 
 services:
-  # ----------------- TẦNG LƯU TRỮ: MINIO -----------------
   minio:
-    image: minio/minio:latest
+    image: bigdata-minio:RELEASE.2025-10-15T17-29-55Z
+    build: ./minio
     container_name: bigdata-minio
     ports:
-      - "9000:9000"   # API S3 Endpoint
-      - "9001:9001"   # MinIO Web Console UI
+      - "9000:9000"
+      - "9001:9001"
     environment:
-      MINIO_ROOT_USER: admin
-      MINIO_ROOT_PASSWORD: password123
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?Set MINIO_ROOT_USER in docker/.env}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?Set MINIO_ROOT_PASSWORD in docker/.env}
     volumes:
       - minio_data:/data
-    command: server /data --console-address ":9001"
+    command: ["server", "/data", "--console-address", ":9001"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
 
-  # ----------------- TẦNG XỬ LÝ: SPARK MASTER -----------------
   spark-master:
-    image: bitnami/spark:3.5.0
+    <<: *spark
     container_name: spark-master
     environment:
-      - SPARK_MODE=master
-      - SPARK_RPC_AUTHENTICATION_ENABLED=no
-      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      <<: *spark-env
+    command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.master.Master", "--host", "spark-master", "--port", "7077", "--webui-port", "8080"]
     ports:
-      - "8080:8080"   # Spark Master Web UI
-      - "7077:7077"   # Spark Master RPC port
-    volumes:
-      - ../processing:/opt/bitnami/spark/apps
+      - "8080:8080"
+      - "7077:7077"
 
-  # ----------------- TẦNG XỬ LÝ: SPARK WORKER -----------------
   spark-worker-1:
-    image: bitnami/spark:3.5.0
+    <<: *spark
     container_name: spark-worker-1
     environment:
-      - SPARK_MODE=worker
-      - SPARK_MASTER_URL=spark://spark-master:7077
-      - SPARK_WORKER_MEMORY=2G
-      - SPARK_WORKER_CORES=2
+      <<: *spark-env
+    command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.worker.Worker", "--cores", "2", "--memory", "2g", "--webui-port", "8081", "spark://spark-master:7077"]
     ports:
-      - "8081:8081"   # Spark Worker 1 Web UI
+      - "8081:8081"
     depends_on:
       - spark-master
-    volumes:
-      - ../processing:/opt/bitnami/spark/apps
 
   spark-worker-2:
-    image: bitnami/spark:3.5.0
+    <<: *spark
     container_name: spark-worker-2
     environment:
-      - SPARK_MODE=worker
-      - SPARK_MASTER_URL=spark://spark-master:7077
-      - SPARK_WORKER_MEMORY=2G
-      - SPARK_WORKER_CORES=2
+      <<: *spark-env
+    command: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.worker.Worker", "--cores", "2", "--memory", "2g", "--webui-port", "8081", "spark://spark-master:7077"]
     ports:
-      - "8082:8081"   # Spark Worker 2 Web UI
+      - "8082:8081"
     depends_on:
       - spark-master
-    volumes:
-      - ../processing:/opt/bitnami/spark/apps
 
 volumes:
   minio_data:

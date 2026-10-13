@@ -7,7 +7,9 @@
 
 > **Phạm vi:** Repository tập trung vào đọc dữ liệu từ Storage, làm sạch, chuẩn hóa, chuyển đổi, tổng hợp bằng Spark và ghi kết quả trở lại Data Lake. Huấn luyện mô hình ML, dự đoán tấn công, cảnh báo, dashboard và hoạt động nghiên cứu khoa học **không phải sản phẩm bắt buộc của đồ án này**. Các script PCAP extraction và upload chỉ hỗ trợ việc chuẩn bị dữ liệu đầu vào.
 >
-> **Trạng thái tài liệu:** README mô tả kiến trúc và cách triển khai dự kiến theo cấu trúc repository. Vì chưa đối chiếu nội dung thực tế của các file Python, Docker Compose và schema, những lệnh phụ thuộc entry point/CLI được ghi rõ là **mẫu cần xác minh**, không được xem là log chạy thành công.
+> **Trạng thái triển khai:** Đã triển khai cấu hình Spark/MinIO, đọc CSV có kiểm toán, chuyển kiểu, validation và cleaning theo Data Contract v2.3.0. Xem [hướng dẫn processing và lệnh chạy thực tế](docs/processing.md). Các phần aggregation, orchestration trong `main.py` và báo cáo toàn pipeline bên dưới vẫn là thiết kế cần hoàn thiện; không coi số liệu baseline là kết quả job thực tế.
+>
+> **Kiểm chứng 12/10/2026:** Đã audit đủ 8 CSV thật, tổng 2.830.743 record; header 79 cột khớp, có các bất thường giá trị cần xử lý theo contract. Spark–MinIO smoke test thành công trên fixture riêng. Xem [báo cáo trước upload](docs/source-audit-report.md); dữ liệu thật chưa được upload hoặc chạy cleaning.
 
 ## 1. Mục tiêu
 
