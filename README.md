@@ -7,9 +7,15 @@
 
 > **Phạm vi:** Repository tập trung vào đọc dữ liệu từ Storage, làm sạch, chuẩn hóa, chuyển đổi, tổng hợp bằng Spark và ghi kết quả trở lại Data Lake. Huấn luyện mô hình ML, dự đoán tấn công, cảnh báo, dashboard và hoạt động nghiên cứu khoa học **không phải sản phẩm bắt buộc của đồ án này**. Các script PCAP extraction và upload chỉ hỗ trợ việc chuẩn bị dữ liệu đầu vào.
 >
-> **Trạng thái triển khai:** Đã triển khai cấu hình Spark/MinIO, đọc CSV có kiểm toán, chuyển kiểu, validation và cleaning theo Data Contract v2.3.0. Xem [hướng dẫn processing và lệnh chạy thực tế](docs/processing.md). Các phần aggregation, orchestration trong `main.py` và báo cáo toàn pipeline bên dưới vẫn là thiết kế cần hoàn thiện; không coi số liệu baseline là kết quả job thực tế.
+> **Trạng thái triển khai:** Đã có pipeline hoàn chỉnh theo Data Contract v2.3.0: ingestion, transformation, validation, cleaning, hậu kiểm, feature engineering, aggregation, Parquet Snappy/read-back và báo cáo JSON/CSV. Xem [hướng dẫn chạy thực tế](docs/processing.md) và [kết quả kiểm chứng](docs/pipeline-validation.md). CLI mặc định chỉ in kế hoạch; `--validate-only` chỉ đọc/xử lý, `--execute` mới ghi batch output riêng biệt.
 >
-> **Kiểm chứng 12/10/2026:** Đã audit đủ 8 CSV thật, tổng 2.830.743 record; header 79 cột khớp, có các bất thường giá trị cần xử lý theo contract. Spark–MinIO smoke test thành công trên fixture riêng. Xem [báo cáo trước upload](docs/source-audit-report.md); dữ liệu thật chưa được upload hoặc chạy cleaning.
+> **Kiểm chứng 20/10/2026:** Đã chạy pipeline chỉ đọc trên đủ 8 CSV thật: 2.830.743 input = 2.830.628 VALID + 115 QUARANTINED, hậu kiểm PASS. MinIO end-to-end đã kiểm chứng bằng fixture riêng. Chưa upload hay ghi Parquet dữ liệu thật lên MinIO. Xem [kết quả và giới hạn thực nghiệm](docs/pipeline-validation.md).
+
+> **Bổ sung 21/10/2026:** 36/36 tests PASS; benchmark synthetic scaling 12k/60k/120k,
+> 1/2 workers và 4/8/16/32 shuffle partitions đã chạy 18 lần đo + 4 warmup.
+> Có CSV/JSON, biểu đồ và 110 output Parquet read-back thành công trên MinIO.
+> Xem [báo cáo triển khai đầy đủ](docs/storage-processing-report.md) và
+> [biểu đồ benchmark](docs/benchmarks/20261021/benchmark.png).
 
 ## 1. Mục tiêu
 
@@ -269,7 +275,7 @@ Không commit access key/secret key. Các giá trị cần cấu hình (đặt q
 | Spark | Master URL, executor/worker cores, memory, số partitions |
 | Pipeline | Raw CSV prefix, cleaned prefix, aggregates prefix, batch ID |
 
-Nếu `processing/config.py` chưa hỗ trợ biến môi trường, cần bổ sung trước khi dùng một bộ lệnh chạy cố định. Tránh đưa khóa thật vào ảnh chụp và log nộp bài.
+`processing/config.py` đọc cấu hình từ biến môi trường; xem bảng cấu hình trong [hướng dẫn processing](docs/processing.md). Tránh đưa khóa thật vào ảnh chụp và log nộp bài.
 
 ## 7. Hướng dẫn chạy pipeline
 
@@ -281,14 +287,16 @@ Nếu `processing/config.py` chưa hỗ trợ biến môi trường, cần bổ 
 
 ### Bước 2 — Chạy Spark job Storage → Processing
 
-`processing/main.py` là entry point theo cấu trúc dự án. Lệnh Spark dưới đây chỉ là **khung tham khảo**, không bảo đảm chạy được nguyên văn nếu `main.py` đang dùng tham số/đường dẫn khác:
+`processing/main.py` là entry point. Xem kế hoạch trước, rồi kiểm tra chỉ đọc trên dữ liệu đã có:
 
-```bash
-# Ví dụ — thay URL master, package/JAR, path và tham số theo môi trường thật
-spark-submit \
-  --master spark://<spark-master-host>:<port> \
-  processing/main.py
+```powershell
+docker compose -f docker/docker-compose.yml exec -T spark-master python3 -m processing.main
+docker compose -f docker/docker-compose.yml exec -T spark-master python3 -m processing.main --validate-only
 ```
+
+Chỉ dùng `--execute` khi đã quyết định ghi kết quả. Dùng `--input <URI>` để chọn
+một CSV trước khi chạy cả 8 file. Các lệnh sample và output chi tiết nằm trong
+[hướng dẫn processing](docs/processing.md).
 
 Khi chạy bằng Docker, vị trí file Python phải tồn tại **trong container driver** (bind mount hoặc copy image); endpoint S3A phải dùng địa chỉ container truy cập được, không mặc định dùng `localhost`.
 
@@ -314,18 +322,23 @@ Cần thu thập bằng chứng rằng:
 - Có thời gian hoàn thành job và Spark application log.
 - Dữ liệu `raw/` không bị chỉnh sửa.
 
-Nếu pipeline chưa tự tạo báo cáo chất lượng và thời gian, các đầu ra đó vẫn là **hạng mục cần hoàn thiện** trước khi nghiệm thu, không phải mục đã thực hiện.
+Pipeline xuất báo cáo chất lượng trước/sau và thời gian đo thực tế. Chỉ marker
+`_SUCCESS.json` tại prefix báo cáo batch xác nhận toàn bộ job hoàn thành; các
+output dở dang của batch lỗi không được dùng làm kết quả nghiệm thu.
 
 ## 8. Thực nghiệm và benchmark
 
-Các script trong `experiments/` phục vụ kiểm chứng yêu cầu khả năng mở rộng; CLI của từng script cần được đọc trực tiếp trước khi chạy:
+Các script trong `experiments/` thực thi pipeline và lưu số đo từng trial. Lệnh chạy,
+warmup, topology và cách tạo biểu đồ nằm trong [hướng dẫn benchmark](docs/benchmark-guide.md).
+Xem [báo cáo triển khai](docs/storage-processing-report.md) để phân biệt số đo thực tế,
+synthetic scaling và phần chưa thực hiện trên CSV thật.
 
 | Script | Câu hỏi cần trả lời | Ví dụ cấu hình so sánh (mục tiêu) |
 |---|---|---|
-| `benchmark_size.py` | Thời gian/throughput thay đổi khi tăng input? | 1 GB, 3 GB, 5 GB *nếu tạo được tải tương ứng* |
+| `benchmark_size.py` | Thời gian/throughput thay đổi khi tăng input? | Synthetic scaling 12k / 60k / 120k records; không gán nhãn GB |
 | `benchmark_workers.py` | Có speedup khi tăng số worker không? | 1 worker so với 2 workers |
 | `benchmark_partitions.py` | Bao nhiêu partition phù hợp workload? | 4 / 8 / 16 / 32 |
-| `plot_results.py` | Kết quả đo thể hiện xu hướng nào? | Biểu đồ từ log/CSV thực nghiệm |
+| `plot_results.py` | Kết quả đo thể hiện xu hướng nào? | JSON → CSV min/median/max, throughput, speedup và PNG |
 
 Mỗi lần benchmark cần lưu **input size**, số record, worker count, cores, memory, số partition, phạm vi thời gian đo, duration và throughput. Chạy nhiều lần để tránh kết luận dựa vào một phép đo ngẫu nhiên. Nếu nhân bản flow chỉ nhằm tạo tải benchmark, phải ghi nhãn **synthetic benchmark load**; không dùng các bản sao đó như dữ liệu quan sát an ninh mạng mới.
 
@@ -342,12 +355,12 @@ Hai công thức chỉ có ý nghĩa khi cùng workload và định nghĩa thờ
 
 - [ ] Có mô tả rõ phạm vi **Storage → Processing**, 2 đặc trưng Big Data trở lên và sơ đồ architecture/data flow.
 - [ ] MinIO lưu raw CSV; Spark đọc input trực tiếp qua S3A.
-- [ ] Có Spark job thực thi làm sạch, chuẩn hóa, chuyển đổi và tổng hợp.
-- [ ] Có cleaned Parquet + Snappy, aggregate và cơ chế quarantine/reject.
-- [ ] Có thống kê chất lượng dữ liệu trước/sau xử lý và record reconciliation.
-- [ ] Có processing time, throughput và ít nhất một phép so sánh hiệu năng có giải thích; ưu tiên cả 3 hướng size/workers/partitions theo kế hoạch.
+- [x] Có Spark job thực thi làm sạch, chuẩn hóa, chuyển đổi và tổng hợp.
+- [x] Có cleaned Parquet + Snappy, aggregate và cơ chế quarantine/reject (đã kiểm chứng trên synthetic MinIO).
+- [x] Có thống kê chất lượng dữ liệu trước/sau xử lý và record reconciliation.
+- [x] Có processing time, throughput và cả 3 phép so sánh size/workers/partitions trên synthetic scaling.
 - [ ] Có Spark log/Spark UI screenshot, MinIO raw/output screenshot và bằng chứng đọc lại Parquet.
-- [ ] README ghi đủ môi trường, cấu hình và lệnh chạy thực tế sau khi kiểm chứng.
+- [x] README dẫn đến môi trường, cấu hình và lệnh chạy thực tế đã kiểm chứng.
 - [ ] Có `docs/report_draft.md` hoàn thiện thành báo cáo, phân công nhóm và tài liệu tham khảo.
 
 **Minh chứng cần nộp theo đề bài:** báo cáo PDF, source code/config, dữ liệu mẫu hoặc nguồn dữ liệu/script sinh dữ liệu, log/ảnh/video demo nếu cần, bảng phân công và đóng góp. Bài nộp phải phân biệt mô tả thiết kế với kết quả thật sự đã chạy.
@@ -376,4 +389,7 @@ Hai công thức chỉ có ý nghĩa khi cùng workload và định nghĩa thờ
 
 ### Ghi chú về khả năng tái lập
 
-Các cổng/host, biến môi trường, cú pháp CLI, tên bucket và thời gian benchmark sẽ chỉ được chốt sau khi kiểm tra `docker/docker-compose.yml`, `processing/config.py`, `processing/main.py`, `storage/upload_minio.py` và mã nguồn các script benchmark. Không coi những đoạn lệnh ví dụ trong README là bằng chứng pipeline đã chạy thành công.
+Cấu hình và CLI thực tế được ghi trong [docs/processing.md](docs/processing.md).
+[Kết quả kiểm chứng](docs/pipeline-validation.md) phân biệt test, sample MinIO và
+dữ liệu thật. Không coi lệnh ví dụ hoặc benchmark trên sample nhỏ là bằng chứng
+đã chạy toàn bộ dữ liệu hay chứng minh khả năng mở rộng.

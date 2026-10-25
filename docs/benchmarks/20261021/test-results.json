@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "tests": 36,
+  "duration_seconds": 88.041,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "native_exit_code": 0,
+  "command": "docker compose -f docker/docker-compose.yml exec -T spark-master python3 -m unittest discover -s tests -v",
+  "log": "docs/pipeline-tests-20261021.local.log",
+  "log_sha256": "5be7c7e9de13e9c7288d3c8b7749ececc93f00c16557403cd307b62b58b7e0de",
+  "warnings": "PySpark socket ResourceWarnings present; expected injected pipeline failures are asserted by tests"
+}

@@ -23,6 +23,10 @@ env/
 !data/sample/*.pcap
 !data/schemas/*.json
 
+# Small measured benchmark evidence (never raw data or Parquet).
+!docs/benchmarks/**/*.json
+!docs/benchmarks/**/*.csv
+
 # Dữ liệu Docker & MinIO mount
 minio_data/
 .minio.sys/

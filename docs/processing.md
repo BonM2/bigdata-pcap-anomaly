@@ -80,6 +80,8 @@ Script seed chỉ ghi `smoke/`, không ghi `raw/`, không ghi đè object khác 
 | `SPARK_MASTER_URL` | `local[2]`; Compose dùng `spark://spark-master:7077` |
 | `SPARK_APP_NAME` | `cicids2017-processing` |
 | `SPARK_SHUFFLE_PARTITIONS` | `4` |
+| `SPARK_CACHE_BATCH_SIZE` | `1000`; giảm đỉnh bộ nhớ khi cache raw evidence có 79 cột |
+| `SPARK_STORAGE_LEVEL` | `DISK_ONLY`; có thể chọn `MEMORY_AND_DISK` cho workload vừa bộ nhớ executor |
 | `SPARK_EXECUTOR_MEMORY`, `SPARK_EXECUTOR_CORES` | `1g`, `2` |
 | `SPARK_PACKAGES` | `org.apache.hadoop:hadoop-aws:3.3.4`; rỗng trong image đã cài JAR |
 | `MINIO_ENDPOINT` | `http://localhost:9000` khi chạy ngoài Docker |
@@ -89,6 +91,7 @@ Script seed chỉ ghi `smoke/`, không ghi `raw/`, không ghi đè object khác 
 | `INPUT_PATH` | `s3a://<bucket>/raw/cicids2017/*.csv` |
 | `CLEANED_PATH`, `QUARANTINE_PATH`, `REJECTED_PATH` | Prefix `cleaned/flows`, `quality/quarantine`, `quality/rejected` |
 | `AGGREGATES_PATH`, `REPORT_PATH` | Prefix `processed/aggregates`, `reports/data_quality` |
+| `FEATURES_PATH`, `PERFORMANCE_PATH` | Prefix `processed/derived_features`, `reports/performance` |
 | `BATCH_ID`, `PIPELINE_VERSION` | UUID sinh mỗi cấu hình, `0.1.0` |
 
 ## API và chính sách
@@ -124,9 +127,143 @@ result.counts()    # input = valid + quarantined + rejected
   `OUT_OF_RANGE:destination_port`, `INVALID_FLAG:field`, `INVALID_LABEL`,
   `LABEL_ENCODING_REPLACEMENT`, `MALFORMED_CSV`. Một record có thể có nhiều mã.
 
-`main.py`, aggregation và báo cáo đầy đủ theo batch/file vẫn là phần pipeline
-chưa triển khai; job smoke chỉ kiểm tra đọc và xử lý trong bộ nhớ. Parquet
-round-trip được kiểm tra trong unit tests, chưa phải xuất toàn bộ dataset thật.
+`main.py` thực hiện đầy đủ ingest → transform → validate → clean → post-validation
+→ features → aggregates → Parquet/read-back → report. `clean_flows()` vẫn tương
+thích API cũ; pipeline dùng `clean_classified_flows()` để không cast/validate lặp.
+
+## Chạy pipeline hoàn chỉnh
+
+Mặc định chỉ in kế hoạch, không đọc CSV hoặc ghi output:
+
+```powershell
+docker compose -f docker/docker-compose.yml exec -T spark-master python3 -m processing.main
+```
+
+Kiểm thử synthetic qua MinIO và Spark cluster; chỉ dùng `smoke/`, không dùng raw:
+
+```powershell
+docker compose -f docker/docker-compose.yml exec -T spark-master python3 -m tests.smoke_pipeline
+docker compose -f docker/docker-compose.yml exec -T spark-master python3 -m tests.smoke_pipeline --execute --report /tmp/pipeline-smoke.json
+docker cp spark-master:/tmp/pipeline-smoke.json docs/pipeline-smoke.local.json
+```
+
+Kiểm thử sample hoàn toàn local trong container tạm, không cần MinIO:
+
+```powershell
+docker compose -f docker/docker-compose.yml run --rm --no-deps -T spark-master python3 -m processing.main --local --input file:///workspace/data/sample/sample_flow.csv --local-output /tmp/pipeline-sample --execute
+```
+
+Với **một CSV thật đã có trên MinIO**, kiểm tra chỉ đọc trước:
+
+```powershell
+docker compose -f docker/docker-compose.yml exec -T spark-master python3 -m processing.main --input s3a://bigdata-network/raw/cicids2017/Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv --validate-only --local-report /tmp/one-file-validation.json
+```
+
+Nếu file chưa được upload, có thể kiểm tra bản local với `--local`,
+`--input file:///workspace/data/raw/cicids2017/<file>.csv`, và
+`--local-output /tmp/one-file-output-unused`. `--validate-only` không tạo output
+Parquet; `--local-report` chỉ ghi báo cáo đo đạc vào file mới.
+
+Sau khi được phép ghi kết quả dữ liệu thật, dùng cùng `--input` với `--execute`.
+Chỉ mở rộng sang glob 8 CSV khi kiểm tra một CSV đạt. Pipeline không tự upload
+input; `storage.upload_minio` vẫn là bước riêng cần quyết định rõ ràng.
+
+Với 8 CSV, dùng `SPARK_EXECUTOR_MEMORY=2g` và `SPARK_STORAGE_LEVEL=DISK_ONLY`
+(mỗi worker Compose đã cấp 2 GB). Mức executor 1 GB đã gặp OOM ở thử nghiệm
+toàn bộ input; lưu cache trên đĩa vẫn cần heap để tạo từng batch trung gian.
+
+```powershell
+docker compose -f docker/docker-compose.yml exec -T -e SPARK_EXECUTOR_MEMORY=2g -e SPARK_STORAGE_LEVEL=DISK_ONLY spark-master python3 -m processing.main --input "file:///workspace/data/raw/cicids2017/*.csv" --validate-only --local-report /tmp/eight-files-validation.json
+```
+
+### Chính sách output và hoàn thành
+
+- Mỗi prefix được nối thêm `/<BATCH_ID>`; UUID mới là mặc định. Không chạy hai
+  writer cùng batch ID. Batch đã tồn tại bị từ chối, không overwrite/append.
+- Chặn output vào `raw/`, root, đường dẫn traversal/glob và các prefix chồng lấn
+  nhau hoặc chồng lấn thư mục nguồn. Object nguồn phải bất biến suốt job.
+- Cleaned: 22 trường lõi + 12 metadata. Derived features nằm riêng ở
+  `processed/derived_features/<batch>`. Quarantine/reject giữ `_raw_values`,
+  `_raw_record`, lineage, mã lỗi và trạng thái trước cleaning.
+- Cả 5 output (cleaned, features, aggregates, quarantine, rejected) đều Parquet
+  Snappy; kiểm tra schema/types và count bằng Spark sau ghi, kể cả output rỗng.
+  Các bảng flow còn được kiểm tra phân bố label/source/status sau đọc lại.
+- Report có `quality.json`, `summary.csv`; performance có `performance.json`.
+  **Chỉ `_SUCCESS.json` trong thư mục quality report xác nhận batch hoàn thành.**
+  `_SUCCESS` do Spark tự tạo trong từng thư mục Parquet không đại diện toàn job.
+- Job lỗi trả exit code khác 0, cố ghi `_FAILED.json`, giữ output dở dang để
+  điều tra; chạy lại bằng batch ID mới. Không tự xóa hoặc tiếp tục batch lỗi.
+- `quality.json` dùng trạng thái `VERIFIED`; consumer phải kiểm tra marker cuối.
+  Chế độ chỉ đọc trả `VALIDATED_NO_OUTPUT`, không tuyên bố storage đã kiểm chứng.
+
+### Post-validation, features và số liệu báo cáo
+
+Post-validation kiểm tra schema/type, NULL hợp lệ có cờ, NaN/Infinity, miền giá
+trị, nhãn so với raw và cờ so với raw. Lỗi giá trị cứng còn trong quarantine hoặc
+reject là bằng chứng cần giữ; bất kỳ vi phạm ở tập VALID hoặc sai nhãn/cờ đều
+làm job thất bại. Không tự nâng trạng thái quarantine thành valid.
+
+Đối soát trước/sau kiểm tra `input = valid + quarantined + rejected`, bảng
+chuyển trạng thái và multiset raw evidence bằng `exceptAll` (giữ đúng số lần
+xuất hiện của duplicate). Pipeline persist tại các ranh giới để tránh tính lại
+và tránh biểu thức Spark lồng quá lớn; mặc định dùng `DISK_ONLY` để giảm áp lực
+heap; đủ 8 CSV đã chạy thành công với executor 2 GB. Caller của API hậu
+kiểm cũng nên materialize annotated input khi kết hợp nhiều bước.
+
+| Feature | Định nghĩa/chính sách |
+|---|---|
+| `total_packets` | forward + backward, Decimal(20,0) tránh overflow Long |
+| `total_bytes` | tổng payload bytes forward + backward, Decimal(20,0); không phải wire bytes |
+| `fwd_packet_ratio` | forward / total_packets; NULL nếu tổng = 0 hoặc nguồn lỗi |
+| `bwd_packet_ratio` | backward / total_packets; NULL nếu tổng = 0 hoặc nguồn lỗi |
+
+Aggregate table có `grouping` = `batch`, `label`, `source_file`,
+`source_file_label`. `flow_count` và tỷ lệ trạng thái dùng **tất cả** input;
+`total_packets_sum`, `total_bytes_sum`, `avg_flow_duration` chỉ dùng **VALID**.
+Duration giữ đơn vị microsecond. Tổng rỗng = 0, average và tỷ lệ có mẫu số 0 =
+NULL. Cột dimension NULL ở nhóm roll-up được phân biệt bằng `grouping`.
+Không dùng timestamp/IP hoặc cộng TCP flag thành số packet.
+
+Report trước/sau đếm cell của 22 trường lõi theo từng field/file, không cộng chúng thành số dòng
+lỗi duy nhất. `null_count` là NULL sau cast (bao gồm NULL do lỗi cast và NULL
+được phép sau cleaning). `cast_error_count` ở cả hai giai đoạn là lịch sử lỗi
+nguồn được giữ; `post_cleaning_validation.error_counts` mới là vi phạm hậu kiểm.
+`records_with_reason_codes` bao gồm cả lỗi mềm ở VALID. `invalid_range_count`
+đếm mỗi cell một lần dù cell vi phạm nhiều quy tắc miền. Label giữ nguyên,
+bao gồm khoảng trắng và ký tự thay thế Unicode.
+
+## Benchmark có số liệu thực
+
+Hướng dẫn mới cho **size, 1/2 workers và 4/8/16/32 partitions**, warmup, speedup,
+CSV/JSON và biểu đồ: [benchmark-guide.md](benchmark-guide.md). Kết quả đo và các
+giới hạn được tổng hợp trong [storage-processing-report.md](storage-processing-report.md).
+
+Các runner mặc định in kế hoạch, cần `--execute` để chạy; không thay đổi topology
+Docker hoặc upload input. Mỗi trial ghi batch mới và report riêng. Ví dụ nhỏ:
+
+```powershell
+docker compose -f docker/docker-compose.yml exec -T spark-master python3 -m experiments.benchmark_partitions --local --input file:///workspace/data/sample/sample_flow.csv --local-output /tmp/benchmark-output --dataset-kind synthetic --partitions 2 4 --repeats 2 --results /tmp/partitions.json --execute
+docker cp spark-master:/tmp/partitions.json docs/benchmark-partitions.local.json
+python -m experiments.plot_results docs/benchmark-partitions.local.json --csv docs/benchmark-summary.local.csv
+```
+
+- `experiments.benchmark_size`: truyền `--inputs <URI1> <URI2> ...`; dùng byte
+  size và SHA-256 đo được, không tự gọi workload là 1/3/5 GB.
+- `experiments.benchmark_workers`: truyền `--master-ui http://spark-master:8080`
+  và `--expected-workers 1` hoặc `2`; xác nhận worker ALIVE từ Master trước/sau
+  mỗi trial. Người vận hành cấu hình topology trước. Chạy cùng input, partitions,
+  cores/memory và số repeat ở hai topology, lưu vào hai result file khác nhau.
+- Runner tái sử dụng một Spark session; mặc định chạy một warmup lưu riêng và loại
+  khỏi thống kê, đảo thứ tự cấu hình giữa các lần lặp. Thời gian bao gồm đọc,
+  checksum, xử lý, tính QA, ghi/đọc Parquet; không bao gồm khởi tạo Spark và ghi
+  JSON/CSV cuối. Công bố thứ tự trial vì cache/JIT có thể ảnh hưởng sample nhỏ.
+- Báo cáo pipeline để `worker_count = null` nếu chưa có bằng chứng topology;
+  benchmark có `--master-ui` và `--expected-workers` điền số đã xác minh ở mọi dimension.
+  Không đồng nhất executor với worker.
+- Summarizer từ chối benchmark FAILED, tách nhóm theo checksum, kích thước,
+  cấu hình và phạm vi đo; xuất min/median/max, throughput và speedup nếu có baseline
+  tương thích. `--png` tùy chọn cần
+  matplotlib. Sample 12 dòng chỉ kiểm tra chức năng, không chứng minh scalability.
 
 ## Kiểm thử
 

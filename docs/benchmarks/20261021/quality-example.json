@@ -1,0 +1,2778 @@
+{
+  "run_status": "VERIFIED",
+  "batch_id": "bench-fb612f14128542ce908752b50444ed91",
+  "schema_version": "v2.3.0",
+  "pipeline_version": "0.1.0",
+  "input_records": 120000,
+  "valid_records": 40000,
+  "quarantined_records": 60000,
+  "rejected_records": 20000,
+  "files": [
+    {
+      "source_file": "synthetic.csv",
+      "source_path": "s3a://bigdata-network/smoke/benchmark-scaling/v1/copies-10000/synthetic.csv",
+      "input_bytes": 20341373,
+      "source_sha256": "c6cc0d71de23c8bb2a747f35fe5032daf11d7a3f4cc3b94aa10ccd7a9b6d61aa",
+      "header_columns": 79,
+      "header_valid": true,
+      "input_records": 120000
+    }
+  ],
+  "before_cleaning": {
+    "scope": "all classified records; 22 typed core fields; cell counts; cast errors retain source history",
+    "schema_validation": {
+      "status": "PASS",
+      "errors": [],
+      "core_field_count": 22
+    },
+    "totals": {
+      "input_records": 120000,
+      "valid_records": 40000,
+      "quarantined_records": 60000,
+      "rejected_records": 20000,
+      "records_with_reason_codes": 110000,
+      "invalid_label_count": 20000,
+      "parsed_records": 100000,
+      "null_count_by_field": {
+        "destination_port": 0,
+        "flow_duration": 0,
+        "total_fwd_packets": 10000,
+        "total_backward_packets": 0,
+        "total_length_of_fwd_packets": 0,
+        "total_length_of_bwd_packets": 0,
+        "flow_bytes_s": 0,
+        "flow_packets_s": 0,
+        "flow_iat_mean": 0,
+        "flow_iat_std": 0,
+        "min_packet_length": 0,
+        "max_packet_length": 0,
+        "packet_length_mean": 0,
+        "packet_length_std": 0,
+        "fin_flag_count": 0,
+        "syn_flag_count": 0,
+        "rst_flag_count": 0,
+        "psh_flag_count": 0,
+        "ack_flag_count": 0,
+        "init_win_bytes_forward": 0,
+        "init_win_bytes_backward": 0,
+        "label": 10000
+      },
+      "negative_invalid_count_by_field": {
+        "destination_port": 0,
+        "flow_duration": 10000,
+        "total_fwd_packets": 0,
+        "total_backward_packets": 0,
+        "total_length_of_fwd_packets": 0,
+        "total_length_of_bwd_packets": 0,
+        "flow_bytes_s": 0,
+        "flow_packets_s": 0,
+        "flow_iat_mean": 0,
+        "flow_iat_std": 0,
+        "min_packet_length": 0,
+        "max_packet_length": 0,
+        "packet_length_mean": 0,
+        "packet_length_std": 0,
+        "fin_flag_count": 0,
+        "syn_flag_count": 0,
+        "rst_flag_count": 0,
+        "psh_flag_count": 0,
+        "ack_flag_count": 0,
+        "init_win_bytes_forward": 0,
+        "init_win_bytes_backward": 10000
+      },
+      "invalid_range_count_by_field": {
+        "destination_port": 10000,
+        "flow_duration": 10000,
+        "total_fwd_packets": 0,
+        "total_backward_packets": 0,
+        "total_length_of_fwd_packets": 0,
+        "total_length_of_bwd_packets": 0,
+        "flow_bytes_s": 0,
+        "flow_packets_s": 0,
+        "flow_iat_mean": 0,
+        "flow_iat_std": 0,
+        "min_packet_length": 0,
+        "max_packet_length": 0,
+        "packet_length_mean": 0,
+        "packet_length_std": 0,
+        "fin_flag_count": 0,
+        "syn_flag_count": 10000,
+        "rst_flag_count": 0,
+        "psh_flag_count": 0,
+        "ack_flag_count": 0,
+        "init_win_bytes_forward": 0,
+        "init_win_bytes_backward": 10000
+      },
+      "cast_error_count_by_field": {
+        "destination_port": 0,
+        "flow_duration": 0,
+        "total_fwd_packets": 10000,
+        "total_backward_packets": 0,
+        "total_length_of_fwd_packets": 0,
+        "total_length_of_bwd_packets": 0,
+        "flow_bytes_s": 0,
+        "flow_packets_s": 0,
+        "flow_iat_mean": 0,
+        "flow_iat_std": 0,
+        "min_packet_length": 0,
+        "max_packet_length": 0,
+        "packet_length_mean": 0,
+        "packet_length_std": 0,
+        "fin_flag_count": 0,
+        "syn_flag_count": 0,
+        "rst_flag_count": 0,
+        "psh_flag_count": 0,
+        "ack_flag_count": 0,
+        "init_win_bytes_forward": 0,
+        "init_win_bytes_backward": 0
+      },
+      "nan_count_by_field": {
+        "flow_bytes_s": 10000,
+        "flow_packets_s": 0,
+        "flow_iat_mean": 0,
+        "flow_iat_std": 0,
+        "min_packet_length": 0,
+        "max_packet_length": 0,
+        "packet_length_mean": 0,
+        "packet_length_std": 0
+      },
+      "infinity_count_by_field": {
+        "flow_bytes_s": 10000,
+        "flow_packets_s": 0,
+        "flow_iat_mean": 0,
+        "flow_iat_std": 0,
+        "min_packet_length": 0,
+        "max_packet_length": 0,
+        "packet_length_mean": 0,
+        "packet_length_std": 0
+      },
+      "sentinel_count_by_field": {
+        "init_win_bytes_forward": 10000,
+        "init_win_bytes_backward": 0
+      },
+      "null_count": 20000,
+      "sentinel_count": 10000,
+      "cast_error_count": 10000,
+      "negative_invalid_count": 20000,
+      "invalid_range_count": 40000,
+      "nan_count": 10000,
+      "infinity_count": 10000
+    },
+    "files": [
+      {
+        "source_file": "synthetic.csv",
+        "input_records": 120000,
+        "valid_records": 40000,
+        "quarantined_records": 60000,
+        "rejected_records": 20000,
+        "records_with_reason_codes": 110000,
+        "invalid_label_count": 20000,
+        "parsed_records": 100000,
+        "null_count_by_field": {
+          "destination_port": 0,
+          "flow_duration": 0,
+          "total_fwd_packets": 10000,
+          "total_backward_packets": 0,
+          "total_length_of_fwd_packets": 0,
+          "total_length_of_bwd_packets": 0,
+          "flow_bytes_s": 0,
+          "flow_packets_s": 0,
+          "flow_iat_mean": 0,
+          "flow_iat_std": 0,
+          "min_packet_length": 0,
+          "max_packet_length": 0,
+          "packet_length_mean": 0,
+          "packet_length_std": 0,
+          "fin_flag_count": 0,
+          "syn_flag_count": 0,
+          "rst_flag_count": 0,
+          "psh_flag_count": 0,
+          "ack_flag_count": 0,
+          "init_win_bytes_forward": 0,
+          "init_win_bytes_backward": 0,
+          "label": 10000
+        },
+        "negative_invalid_count_by_field": {
+          "destination_port": 0,
+          "flow_duration": 10000,
+          "total_fwd_packets": 0,
+          "total_backward_packets": 0,
+          "total_length_of_fwd_packets": 0,
+          "total_length_of_bwd_packets": 0,
+          "flow_bytes_s": 0,
+          "flow_packets_s": 0,
+          "flow_iat_mean": 0,
+          "flow_iat_std": 0,
+          "min_packet_length": 0,
+          "max_packet_length": 0,
+          "packet_length_mean": 0,
+          "packet_length_std": 0,
+          "fin_flag_count": 0,
+          "syn_flag_count": 0,
+          "rst_flag_count": 0,
+          "psh_flag_count": 0,
+          "ack_flag_count": 0,
+          "init_win_bytes_forward": 0,
+          "init_win_bytes_backward": 10000
+        },
+        "invalid_range_count_by_field": {
+          "destination_port": 10000,
+          "flow_duration": 10000,
+          "total_fwd_packets": 0,
+          "total_backward_packets": 0,
+          "total_length_of_fwd_packets": 0,
+          "total_length_of_bwd_packets": 0,
+          "flow_bytes_s": 0,
+          "flow_packets_s": 0,
+          "flow_iat_mean": 0,
+          "flow_iat_std": 0,
+          "min_packet_length": 0,
+          "max_packet_length": 0,
+          "packet_length_mean": 0,
+          "packet_length_std": 0,
+          "fin_flag_count": 0,
+          "syn_flag_count": 10000,
+          "rst_flag_count": 0,
+          "psh_flag_count": 0,
+          "ack_flag_count": 0,
+          "init_win_bytes_forward": 0,
+          "init_win_bytes_backward": 10000
+        },
+        "cast_error_count_by_field": {
+          "destination_port": 0,
+          "flow_duration": 0,
+          "total_fwd_packets": 10000,
+          "total_backward_packets": 0,
+          "total_length_of_fwd_packets": 0,
+          "total_length_of_bwd_packets": 0,
+          "flow_bytes_s": 0,
+          "flow_packets_s": 0,
+          "flow_iat_mean": 0,
+          "flow_iat_std": 0,
+          "min_packet_length": 0,
+          "max_packet_length": 0,
+          "packet_length_mean": 0,
+          "packet_length_std": 0,
+          "fin_flag_count": 0,
+          "syn_flag_count": 0,
+          "rst_flag_count": 0,
+          "psh_flag_count": 0,
+          "ack_flag_count": 0,
+          "init_win_bytes_forward": 0,
+          "init_win_bytes_backward": 0
+        },
+        "nan_count_by_field": {
+          "flow_bytes_s": 10000,
+          "flow_packets_s": 0,
+          "flow_iat_mean": 0,
+          "flow_iat_std": 0,
+          "min_packet_length": 0,
+          "max_packet_length": 0,
+          "packet_length_mean": 0,
+          "packet_length_std": 0
+        },
+        "infinity_count_by_field": {
+          "flow_bytes_s": 10000,
+          "flow_packets_s": 0,
+          "flow_iat_mean": 0,
+          "flow_iat_std": 0,
+          "min_packet_length": 0,
+          "max_packet_length": 0,
+          "packet_length_mean": 0,
+          "packet_length_std": 0
+        },
+        "sentinel_count_by_field": {
+          "init_win_bytes_forward": 10000,
+          "init_win_bytes_backward": 0
+        },
+        "null_count": 20000,
+        "sentinel_count": 10000,
+        "cast_error_count": 10000,
+        "negative_invalid_count": 20000,
+        "invalid_range_count": 40000,
+        "nan_count": 10000,
+        "infinity_count": 10000
+      }
+    ],
+    "label_distribution": [
+      {
+        "source_file": "synthetic.csv",
+        "label": "SYNTHETIC_TEST",
+        "quality_status": "QUARANTINED",
+        "count": 50000
+      },
+      {
+        "source_file": "synthetic.csv",
+        "label": "",
+        "quality_status": "QUARANTINED",
+        "count": 10000
+      },
+      {
+        "source_file": "synthetic.csv",
+        "label": "SYNTHETIC_TEST",
+        "quality_status": "VALID",
+        "count": 40000
+      },
+      {
+        "source_file": "synthetic.csv",
+        "label": "0",
+        "quality_status": "REJECTED",
+        "count": 10000
+      },
+      {
+        "source_file": "synthetic.csv",
+        "label": null,
+        "quality_status": "REJECTED",
+        "count": 10000
+      }
+    ]
+  },
+  "after_cleaning": {
+    "scope": "all classified records; 22 typed core fields; cell counts; cast errors retain source history",
+    "schema_validation": {
+      "status": "PASS",
+      "errors": [],
+      "core_field_count": 22
+    },
+    "totals": {
+      "input_records": 120000,
+      "valid_records": 40000,
+      "quarantined_records": 60000,
+      "rejected_records": 20000,
+      "records_with_reason_codes": 110000,
+      "invalid_label_count": 20000,
+      "parsed_records": 100000,
+      "null_count_by_field": {
+        "destination_port": 0,
+        "flow_duration": 0,
+        "total_fwd_packets": 10000,
+        "total_backward_packets": 0,
+        "total_length_of_fwd_packets": 0,
+        "total_length_of_bwd_packets": 0,
+        "flow_bytes_s": 20000,
+        "flow_packets_s": 0,
+        "flow_iat_mean": 0,
+        "flow_iat_std": 0,
+        "min_packet_length": 0,
+        "max_packet_length": 0,
+        "packet_length_mean": 0,
+        "packet_length_std": 0,
+        "fin_flag_count": 0,
+        "syn_flag_count": 0,
+        "rst_flag_count": 0,
+        "psh_flag_count": 0,
+        "ack_flag_count": 0,
+        "init_win_bytes_forward": 10000,
+        "init_win_bytes_backward": 0,
+        "label": 10000
+      },
+      "negative_invalid_count_by_field": {
+        "destination_port": 0,
+        "flow_duration": 10000,
+        "total_fwd_packets": 0,
+        "total_backward_packets": 0,
+        "total_length_of_fwd_packets": 0,
+        "total_length_of_bwd_packets": 0,
+        "flow_bytes_s": 0,
+        "flow_packets_s": 0,
+        "flow_iat_mean": 0,
+        "flow_iat_std": 0,
+        "min_packet_length": 0,
+        "max_packet_length": 0,
+        "packet_length_mean": 0,
+        "packet_length_std": 0,
+        "fin_flag_count": 0,
+        "syn_flag_count": 0,
+        "rst_flag_count": 0,
+        "psh_flag_count": 0,
+        "ack_flag_count": 0,
+        "init_win_bytes_forward": 0,
+        "init_win_bytes_backward": 10000
+      },
+      "invalid_range_count_by_field": {
+        "destination_port": 10000,
+        "flow_duration": 10000,
+        "total_fwd_packets": 0,
+        "total_backward_packets": 0,
+        "total_length_of_fwd_packets": 0,
+        "total_length_of_bwd_packets": 0,
+        "flow_bytes_s": 0,
+        "flow_packets_s": 0,
+        "flow_iat_mean": 0,
+        "flow_iat_std": 0,
+        "min_packet_length": 0,
+        "max_packet_length": 0,
+        "packet_length_mean": 0,
+        "packet_length_std": 0,
+        "fin_flag_count": 0,
+        "syn_flag_count": 10000,
+        "rst_flag_count": 0,
+        "psh_flag_count": 0,
+        "ack_flag_count": 0,
+        "init_win_bytes_forward": 0,
+        "init_win_bytes_backward": 10000
+      },
+      "cast_error_count_by_field": {
+        "destination_port": 0,
+        "flow_duration": 0,
+        "total_fwd_packets": 10000,
+        "total_backward_packets": 0,
+        "total_length_of_fwd_packets": 0,
+        "total_length_of_bwd_packets": 0,
+        "flow_bytes_s": 0,
+        "flow_packets_s": 0,
+        "flow_iat_mean": 0,
+        "flow_iat_std": 0,
+        "min_packet_length": 0,
+        "max_packet_length": 0,
+        "packet_length_mean": 0,
+        "packet_length_std": 0,
+        "fin_flag_count": 0,
+        "syn_flag_count": 0,
+        "rst_flag_count": 0,
+        "psh_flag_count": 0,
+        "ack_flag_count": 0,
+        "init_win_bytes_forward": 0,
+        "init_win_bytes_backward": 0
+      },
+      "nan_count_by_field": {
+        "flow_bytes_s": 0,
+        "flow_packets_s": 0,
+        "flow_iat_mean": 0,
+        "flow_iat_std": 0,
+        "min_packet_length": 0,
+        "max_packet_length": 0,
+        "packet_length_mean": 0,
+        "packet_length_std": 0
+      },
+      "infinity_count_by_field": {
+        "flow_bytes_s": 0,
+        "flow_packets_s": 0,
+        "flow_iat_mean": 0,
+        "flow_iat_std": 0,
+        "min_packet_length": 0,
+        "max_packet_length": 0,
+        "packet_length_mean": 0,
+        "packet_length_std": 0
+      },
+      "sentinel_count_by_field": {
+        "init_win_bytes_forward": 10000,
+        "init_win_bytes_backward": 0
+      },
+      "null_count": 50000,
+      "sentinel_count": 10000,
+      "cast_error_count": 10000,
+      "negative_invalid_count": 20000,
+      "invalid_range_count": 40000,
+      "nan_count": 0,
+      "infinity_count": 0
+    },
+    "files": [
+      {
+        "source_file": "synthetic.csv",
+        "input_records": 120000,
+        "valid_records": 40000,
+        "quarantined_records": 60000,
+        "rejected_records": 20000,
+        "records_with_reason_codes": 110000,
+        "invalid_label_count": 20000,
+        "parsed_records": 100000,
+        "null_count_by_field": {
+          "destination_port": 0,
+          "flow_duration": 0,
+          "total_fwd_packets": 10000,
+          "total_backward_packets": 0,
+          "total_length_of_fwd_packets": 0,
+          "total_length_of_bwd_packets": 0,
+          "flow_bytes_s": 20000,
+          "flow_packets_s": 0,
+          "flow_iat_mean": 0,
+          "flow_iat_std": 0,
+          "min_packet_length": 0,
+          "max_packet_length": 0,
+          "packet_length_mean": 0,
+          "packet_length_std": 0,
+          "fin_flag_count": 0,
+          "syn_flag_count": 0,
+          "rst_flag_count": 0,
+          "psh_flag_count": 0,
+          "ack_flag_count": 0,
+          "init_win_bytes_forward": 10000,
+          "init_win_bytes_backward": 0,
+          "label": 10000
+        },
+        "negative_invalid_count_by_field": {
+          "destination_port": 0,
+          "flow_duration": 10000,
+          "total_fwd_packets": 0,
+          "total_backward_packets": 0,
+          "total_length_of_fwd_packets": 0,
+          "total_length_of_bwd_packets": 0,
+          "flow_bytes_s": 0,
+          "flow_packets_s": 0,
+          "flow_iat_mean": 0,
+          "flow_iat_std": 0,
+          "min_packet_length": 0,
+          "max_packet_length": 0,
+          "packet_length_mean": 0,
+          "packet_length_std": 0,
+          "fin_flag_count": 0,
+          "syn_flag_count": 0,
+          "rst_flag_count": 0,
+          "psh_flag_count": 0,
+          "ack_flag_count": 0,
+          "init_win_bytes_forward": 0,
+          "init_win_bytes_backward": 10000
+        },
+        "invalid_range_count_by_field": {
+          "destination_port": 10000,
+          "flow_duration": 10000,
+          "total_fwd_packets": 0,
+          "total_backward_packets": 0,
+          "total_length_of_fwd_packets": 0,
+          "total_length_of_bwd_packets": 0,
+          "flow_bytes_s": 0,
+          "flow_packets_s": 0,
+          "flow_iat_mean": 0,
+          "flow_iat_std": 0,
+          "min_packet_length": 0,
+          "max_packet_length": 0,
+          "packet_length_mean": 0,
+          "packet_length_std": 0,
+          "fin_flag_count": 0,
+          "syn_flag_count": 10000,
+          "rst_flag_count": 0,
+          "psh_flag_count": 0,
+          "ack_flag_count": 0,
+          "init_win_bytes_forward": 0,
+          "init_win_bytes_backward": 10000
+        },
+        "cast_error_count_by_field": {
+          "destination_port": 0,
+          "flow_duration": 0,
+          "total_fwd_packets": 10000,
+          "total_backward_packets": 0,
+          "total_length_of_fwd_packets": 0,
+          "total_length_of_bwd_packets": 0,
+          "flow_bytes_s": 0,
+          "flow_packets_s": 0,
+          "flow_iat_mean": 0,
+          "flow_iat_std": 0,
+          "min_packet_length": 0,
+          "max_packet_length": 0,
+          "packet_length_mean": 0,
+          "packet_length_std": 0,
+          "fin_flag_count": 0,
+          "syn_flag_count": 0,
+          "rst_flag_count": 0,
+          "psh_flag_count": 0,
+          "ack_flag_count": 0,
+          "init_win_bytes_forward": 0,
+          "init_win_bytes_backward": 0
+        },
+        "nan_count_by_field": {
+          "flow_bytes_s": 0,
+          "flow_packets_s": 0,
+          "flow_iat_mean": 0,
+          "flow_iat_std": 0,
+          "min_packet_length": 0,
+          "max_packet_length": 0,
+          "packet_length_mean": 0,
+          "packet_length_std": 0
+        },
+        "infinity_count_by_field": {
+          "flow_bytes_s": 0,
+          "flow_packets_s": 0,
+          "flow_iat_mean": 0,
+          "flow_iat_std": 0,
+          "min_packet_length": 0,
+          "max_packet_length": 0,
+          "packet_length_mean": 0,
+          "packet_length_std": 0
+        },
+        "sentinel_count_by_field": {
+          "init_win_bytes_forward": 10000,
+          "init_win_bytes_backward": 0
+        },
+        "null_count": 50000,
+        "sentinel_count": 10000,
+        "cast_error_count": 10000,
+        "negative_invalid_count": 20000,
+        "invalid_range_count": 40000,
+        "nan_count": 0,
+        "infinity_count": 0
+      }
+    ],
+    "label_distribution": [
+      {
+        "source_file": "synthetic.csv",
+        "label": "SYNTHETIC_TEST",
+        "quality_status": "QUARANTINED",
+        "count": 50000
+      },
+      {
+        "source_file": "synthetic.csv",
+        "label": "",
+        "quality_status": "QUARANTINED",
+        "count": 10000
+      },
+      {
+        "source_file": "synthetic.csv",
+        "label": "SYNTHETIC_TEST",
+        "quality_status": "VALID",
+        "count": 40000
+      },
+      {
+        "source_file": "synthetic.csv",
+        "label": "0",
+        "quality_status": "REJECTED",
+        "count": 10000
+      },
+      {
+        "source_file": "synthetic.csv",
+        "label": null,
+        "quality_status": "REJECTED",
+        "count": 10000
+      }
+    ]
+  },
+  "cleaned_label_distribution": [
+    {
+      "source_file": "synthetic.csv",
+      "label": "SYNTHETIC_TEST",
+      "quality_status": "VALID",
+      "count": 40000
+    }
+  ],
+  "post_cleaning_validation": {
+    "status": "PASS",
+    "error_counts": {},
+    "records_with_errors": 0,
+    "input_records": 120000,
+    "valid_records": 40000,
+    "quarantined_records": 60000,
+    "rejected_records": 20000,
+    "schema_validation": {
+      "status": "PASS",
+      "errors": [],
+      "core_field_count": 22
+    }
+  },
+  "record_reconciliation": {
+    "status": "PASS",
+    "before": {
+      "input_records": 120000,
+      "valid_records": 40000,
+      "quarantined_records": 60000,
+      "rejected_records": 20000
+    },
+    "after": {
+      "input_records": 120000,
+      "valid_records": 40000,
+      "quarantined_records": 60000,
+      "rejected_records": 20000
+    },
+    "transitions": [
+      {
+        "quality_status_before": "VALID",
+        "quality_status": "VALID",
+        "count": 40000
+      },
+      {
+        "quality_status_before": "QUARANTINED",
+        "quality_status": "QUARANTINED",
+        "count": 60000
+      },
+      {
+        "quality_status_before": "REJECTED",
+        "quality_status": "REJECTED",
+        "count": 20000
+      }
+    ],
+    "evidence_multiset_preserved": true
+  },
+  "performance": {
+    "processing_started_at": "2026-10-21T16:12:18.907637+00:00",
+    "processing_finished_at": "2026-10-21T16:12:45.656372+00:00",
+    "processing_duration_seconds": 26.751912376000007,
+    "stage_duration_seconds": {
+      "ingestion_and_checksum": 2.798567645999981,
+      "transformation_validation_and_before_report": 7.504604610000001,
+      "cleaning_post_validation_and_after_report": 7.169465285000001,
+      "features_and_aggregation": 2.096411523000029,
+      "output_write_and_read_back": 7.117001904000006
+    },
+    "throughput_flows_per_second": 4485.660625430869,
+    "input_records": 120000,
+    "input_bytes": 20341373,
+    "timing_scope": "CSV/checksum read through validation, reports computation, features, aggregation, writes and Parquet read-back; excludes Spark startup and final JSON/CSV publication",
+    "spark_version": "3.5.0",
+    "spark_app_id": "app-20261021161130-0001",
+    "spark_master": "spark://spark-master:7077",
+    "shuffle_partitions": 4,
+    "adaptive_query_execution": "false",
+    "cache_batch_size": 1000,
+    "storage_level": "DISK_ONLY",
+    "input_partitions": 2,
+    "feature_partitions": 2,
+    "executor_cores": "2",
+    "executor_memory": "2g",
+    "worker_count": null,
+    "worker_count_note": "Not inferred from executor count; obtain topology evidence from Spark Master UI"
+  },
+  "outputs": {
+    "cleaned_path": {
+      "path": "s3a://bigdata-network/smoke/benchmarks/20261021/cleaned/bench-fb612f14128542ce908752b50444ed91",
+      "records": 40000,
+      "schema": {
+        "type": "struct",
+        "fields": [
+          {
+            "name": "destination_port",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_duration",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "total_fwd_packets",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "total_backward_packets",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "total_length_of_fwd_packets",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "total_length_of_bwd_packets",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_bytes_s",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_packets_s",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_iat_mean",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_iat_std",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "min_packet_length",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "max_packet_length",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "packet_length_mean",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "packet_length_std",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "fin_flag_count",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "syn_flag_count",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "rst_flag_count",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "psh_flag_count",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "ack_flag_count",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "init_win_bytes_forward",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "init_win_bytes_backward",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "source_file",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "source_dataset",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "batch_id",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "pipeline_version",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "schema_version",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "processed_at",
+            "type": "timestamp",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "quality_status",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "quality_reason_codes",
+            "type": {
+              "type": "array",
+              "elementType": "string",
+              "containsNull": true
+            },
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_bytes_s_invalid",
+            "type": "boolean",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_packets_s_invalid",
+            "type": "boolean",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "init_win_fwd_missing",
+            "type": "boolean",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "init_win_bwd_missing",
+            "type": "boolean",
+            "nullable": true,
+            "metadata": {}
+          }
+        ]
+      },
+      "format": "parquet",
+      "compression": "snappy",
+      "read_back_status": "PASS"
+    },
+    "features_path": {
+      "path": "s3a://bigdata-network/smoke/benchmarks/20261021/features/bench-fb612f14128542ce908752b50444ed91",
+      "records": 40000,
+      "schema": {
+        "type": "struct",
+        "fields": [
+          {
+            "name": "destination_port",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_duration",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "total_fwd_packets",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "total_backward_packets",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "total_length_of_fwd_packets",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "total_length_of_bwd_packets",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_bytes_s",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_packets_s",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_iat_mean",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_iat_std",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "min_packet_length",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "max_packet_length",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "packet_length_mean",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "packet_length_std",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "fin_flag_count",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "syn_flag_count",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "rst_flag_count",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "psh_flag_count",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "ack_flag_count",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "init_win_bytes_forward",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "init_win_bytes_backward",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "source_file",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "source_dataset",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "batch_id",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "pipeline_version",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "schema_version",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "processed_at",
+            "type": "timestamp",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "quality_status",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "quality_reason_codes",
+            "type": {
+              "type": "array",
+              "elementType": "string",
+              "containsNull": true
+            },
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_bytes_s_invalid",
+            "type": "boolean",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_packets_s_invalid",
+            "type": "boolean",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "init_win_fwd_missing",
+            "type": "boolean",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "init_win_bwd_missing",
+            "type": "boolean",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "total_packets",
+            "type": "decimal(20,0)",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "total_bytes",
+            "type": "decimal(20,0)",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "fwd_packet_ratio",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "bwd_packet_ratio",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          }
+        ]
+      },
+      "format": "parquet",
+      "compression": "snappy",
+      "read_back_status": "PASS"
+    },
+    "aggregates_path": {
+      "path": "s3a://bigdata-network/smoke/benchmarks/20261021/aggregates/bench-fb612f14128542ce908752b50444ed91",
+      "records": 10,
+      "schema": {
+        "type": "struct",
+        "fields": [
+          {
+            "name": "flow_count",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "valid_records",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "quarantined_records",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "rejected_records",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "total_packets_sum",
+            "type": "decimal(30,0)",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "total_bytes_sum",
+            "type": "decimal(30,0)",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "avg_flow_duration",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "grouping",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "source_file",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "valid_ratio",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "error_ratio",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "batch_id",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          }
+        ]
+      },
+      "format": "parquet",
+      "compression": "snappy",
+      "read_back_status": "PASS"
+    },
+    "quarantine_path": {
+      "path": "s3a://bigdata-network/smoke/benchmarks/20261021/quarantine/bench-fb612f14128542ce908752b50444ed91",
+      "records": 60000,
+      "schema": {
+        "type": "struct",
+        "fields": [
+          {
+            "name": "destination_port",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_duration",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "total_fwd_packets",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "total_backward_packets",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "total_length_of_fwd_packets",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "total_length_of_bwd_packets",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_bytes_s",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_packets_s",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_iat_mean",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_iat_std",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "min_packet_length",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "max_packet_length",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "packet_length_mean",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "packet_length_std",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "fin_flag_count",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "syn_flag_count",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "rst_flag_count",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "psh_flag_count",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "ack_flag_count",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "init_win_bytes_forward",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "init_win_bytes_backward",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "_raw_values",
+            "type": {
+              "type": "struct",
+              "fields": [
+                {
+                  "name": "destination_port",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "flow_duration",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "total_fwd_packets",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "total_backward_packets",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "total_length_of_fwd_packets",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "total_length_of_bwd_packets",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_packet_length_max",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_packet_length_min",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_packet_length_mean",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_packet_length_std",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_packet_length_max",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_packet_length_min",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_packet_length_mean",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_packet_length_std",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "flow_bytes_s",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "flow_packets_s",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "flow_iat_mean",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "flow_iat_std",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "flow_iat_max",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "flow_iat_min",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_iat_total",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_iat_mean",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_iat_std",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_iat_max",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_iat_min",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_iat_total",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_iat_mean",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_iat_std",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_iat_max",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_iat_min",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_psh_flags",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_psh_flags",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_urg_flags",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_urg_flags",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_header_length",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_header_length",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_packets_s",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_packets_s",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "min_packet_length",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "max_packet_length",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "packet_length_mean",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "packet_length_std",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "packet_length_variance",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fin_flag_count",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "syn_flag_count",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "rst_flag_count",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "psh_flag_count",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "ack_flag_count",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "urg_flag_count",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "cwe_flag_count",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "ece_flag_count",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "down_up_ratio",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "average_packet_size",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "avg_fwd_segment_size",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "avg_bwd_segment_size",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_header_length_repeat_2",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_avg_bytes_bulk",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_avg_packets_bulk",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_avg_bulk_rate",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_avg_bytes_bulk",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_avg_packets_bulk",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_avg_bulk_rate",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "subflow_fwd_packets",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "subflow_fwd_bytes",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "subflow_bwd_packets",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "subflow_bwd_bytes",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "init_win_bytes_forward",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "init_win_bytes_backward",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "act_data_pkt_fwd",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "min_seg_size_forward",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "active_mean",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "active_std",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "active_max",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "active_min",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "idle_mean",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "idle_std",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "idle_max",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "idle_min",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "label",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                }
+              ]
+            },
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "source_file",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "source_path",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "_raw_record",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "_corrupt_record",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "_malformed_reason",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "cast_failure_fields",
+            "type": {
+              "type": "array",
+              "elementType": "string",
+              "containsNull": true
+            },
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "source_dataset",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "batch_id",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "pipeline_version",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "schema_version",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "processed_at",
+            "type": "timestamp",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "quality_reason_codes",
+            "type": {
+              "type": "array",
+              "elementType": "string",
+              "containsNull": true
+            },
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "quality_status",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "quality_status_before",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_bytes_s_invalid",
+            "type": "boolean",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_packets_s_invalid",
+            "type": "boolean",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "init_win_fwd_missing",
+            "type": "boolean",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "init_win_bwd_missing",
+            "type": "boolean",
+            "nullable": true,
+            "metadata": {}
+          }
+        ]
+      },
+      "format": "parquet",
+      "compression": "snappy",
+      "read_back_status": "PASS"
+    },
+    "rejected_path": {
+      "path": "s3a://bigdata-network/smoke/benchmarks/20261021/rejected/bench-fb612f14128542ce908752b50444ed91",
+      "records": 20000,
+      "schema": {
+        "type": "struct",
+        "fields": [
+          {
+            "name": "destination_port",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_duration",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "total_fwd_packets",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "total_backward_packets",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "total_length_of_fwd_packets",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "total_length_of_bwd_packets",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_bytes_s",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_packets_s",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_iat_mean",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_iat_std",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "min_packet_length",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "max_packet_length",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "packet_length_mean",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "packet_length_std",
+            "type": "double",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "fin_flag_count",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "syn_flag_count",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "rst_flag_count",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "psh_flag_count",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "ack_flag_count",
+            "type": "integer",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "init_win_bytes_forward",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "init_win_bytes_backward",
+            "type": "long",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "label",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "_raw_values",
+            "type": {
+              "type": "struct",
+              "fields": [
+                {
+                  "name": "destination_port",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "flow_duration",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "total_fwd_packets",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "total_backward_packets",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "total_length_of_fwd_packets",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "total_length_of_bwd_packets",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_packet_length_max",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_packet_length_min",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_packet_length_mean",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_packet_length_std",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_packet_length_max",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_packet_length_min",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_packet_length_mean",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_packet_length_std",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "flow_bytes_s",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "flow_packets_s",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "flow_iat_mean",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "flow_iat_std",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "flow_iat_max",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "flow_iat_min",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_iat_total",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_iat_mean",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_iat_std",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_iat_max",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_iat_min",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_iat_total",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_iat_mean",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_iat_std",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_iat_max",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_iat_min",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_psh_flags",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_psh_flags",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_urg_flags",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_urg_flags",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_header_length",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_header_length",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_packets_s",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_packets_s",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "min_packet_length",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "max_packet_length",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "packet_length_mean",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "packet_length_std",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "packet_length_variance",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fin_flag_count",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "syn_flag_count",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "rst_flag_count",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "psh_flag_count",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "ack_flag_count",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "urg_flag_count",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "cwe_flag_count",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "ece_flag_count",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "down_up_ratio",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "average_packet_size",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "avg_fwd_segment_size",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "avg_bwd_segment_size",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_header_length_repeat_2",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_avg_bytes_bulk",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_avg_packets_bulk",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "fwd_avg_bulk_rate",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_avg_bytes_bulk",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_avg_packets_bulk",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "bwd_avg_bulk_rate",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "subflow_fwd_packets",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "subflow_fwd_bytes",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "subflow_bwd_packets",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "subflow_bwd_bytes",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "init_win_bytes_forward",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "init_win_bytes_backward",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "act_data_pkt_fwd",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "min_seg_size_forward",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "active_mean",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "active_std",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "active_max",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "active_min",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "idle_mean",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "idle_std",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "idle_max",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "idle_min",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                },
+                {
+                  "name": "label",
+                  "type": "string",
+                  "nullable": true,
+                  "metadata": {}
+                }
+              ]
+            },
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "source_file",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "source_path",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "_raw_record",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "_corrupt_record",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "_malformed_reason",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "cast_failure_fields",
+            "type": {
+              "type": "array",
+              "elementType": "string",
+              "containsNull": true
+            },
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "source_dataset",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "batch_id",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "pipeline_version",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "schema_version",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "processed_at",
+            "type": "timestamp",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "quality_reason_codes",
+            "type": {
+              "type": "array",
+              "elementType": "string",
+              "containsNull": true
+            },
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "quality_status",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "quality_status_before",
+            "type": "string",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_bytes_s_invalid",
+            "type": "boolean",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "flow_packets_s_invalid",
+            "type": "boolean",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "init_win_fwd_missing",
+            "type": "boolean",
+            "nullable": true,
+            "metadata": {}
+          },
+          {
+            "name": "init_win_bwd_missing",
+            "type": "boolean",
+            "nullable": true,
+            "metadata": {}
+          }
+        ]
+      },
+      "format": "parquet",
+      "compression": "snappy",
+      "read_back_status": "PASS"
+    }
+  },
+  "metric_notes": {
+    "null_count": "Typed NULL cells, including cast failures and permitted cleaned rate/window NULLs",
+    "cast_error_count": "Source cast failures; retained after cleaning as provenance, not remaining invalid cells",
+    "error_ratio": "(quarantined + rejected) / input; soft-issue VALID rows are counted separately",
+    "total_bytes": "Sum of forward/backward payload bytes; not wire bytes",
+    "completion": "Batch is complete only when _SUCCESS.json exists in the quality report batch directory"
+  },
+  "computed_output_records": {
+    "features": 40000,
+    "aggregates": 10
+  }
+}

@@ -53,6 +53,8 @@ class ProcessingConfig:
     spark_master: str = "local[2]"
     spark_app_name: str = "cicids2017-processing"
     shuffle_partitions: int = 4
+    cache_batch_size: int = 1000
+    storage_level: str = "DISK_ONLY"
     executor_memory: str = "1g"
     executor_cores: int = 2
     spark_packages: str = "org.apache.hadoop:hadoop-aws:3.3.4"
@@ -67,7 +69,9 @@ class ProcessingConfig:
     quarantine_path: str = "s3a://bigdata-network/quality/quarantine"
     rejected_path: str = "s3a://bigdata-network/quality/rejected"
     aggregates_path: str = "s3a://bigdata-network/processed/aggregates"
+    features_path: str = "s3a://bigdata-network/processed/derived_features"
     report_path: str = "s3a://bigdata-network/reports/data_quality"
+    performance_path: str = "s3a://bigdata-network/reports/performance"
     batch_id: str = field(default_factory=lambda: uuid4().hex)
     pipeline_version: str = PIPELINE_VERSION
 
@@ -80,6 +84,8 @@ class ProcessingConfig:
             spark_master=env.get("SPARK_MASTER_URL", "local[2]"),
             spark_app_name=env.get("SPARK_APP_NAME", "cicids2017-processing"),
             shuffle_partitions=int(env.get("SPARK_SHUFFLE_PARTITIONS", "4")),
+            cache_batch_size=int(env.get("SPARK_CACHE_BATCH_SIZE", "1000")),
+            storage_level=env.get("SPARK_STORAGE_LEVEL", "DISK_ONLY"),
             executor_memory=env.get("SPARK_EXECUTOR_MEMORY", "1g"),
             executor_cores=int(env.get("SPARK_EXECUTOR_CORES", "2")),
             spark_packages=env.get("SPARK_PACKAGES", "org.apache.hadoop:hadoop-aws:3.3.4"),
@@ -94,15 +100,19 @@ class ProcessingConfig:
             quarantine_path=env.get("QUARANTINE_PATH", f"{base}/quality/quarantine"),
             rejected_path=env.get("REJECTED_PATH", f"{base}/quality/rejected"),
             aggregates_path=env.get("AGGREGATES_PATH", f"{base}/processed/aggregates"),
+            features_path=env.get("FEATURES_PATH", f"{base}/processed/derived_features"),
             report_path=env.get("REPORT_PATH", f"{base}/reports/data_quality"),
+            performance_path=env.get("PERFORMANCE_PATH", f"{base}/reports/performance"),
             batch_id=env.get("BATCH_ID") or uuid4().hex,
             pipeline_version=env.get("PIPELINE_VERSION", PIPELINE_VERSION),
         )
 
     def validate(self, require_minio=True):
         load_contract(self.schema_path)
-        if self.shuffle_partitions < 1 or self.executor_cores < 1:
-            raise ValueError("Spark partitions and executor cores must be positive")
+        if self.shuffle_partitions < 1 or self.executor_cores < 1 or self.cache_batch_size < 1:
+            raise ValueError("Spark partitions, executor cores and cache batch size must be positive")
+        if self.storage_level not in {"MEMORY_AND_DISK", "DISK_ONLY"}:
+            raise ValueError("SPARK_STORAGE_LEVEL must be MEMORY_AND_DISK or DISK_ONLY")
         if not self.batch_id or any(c not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-" for c in self.batch_id):
             raise ValueError("BATCH_ID must contain only letters, digits, '-' or '_'")
         if require_minio:
@@ -120,6 +130,7 @@ def create_spark_session(config=None, *, enable_minio=True):
     builder = (SparkSession.builder.master(config.spark_master).appName(config.spark_app_name)
                .config("spark.sql.session.timeZone", "UTC")
                .config("spark.sql.shuffle.partitions", config.shuffle_partitions)
+               .config("spark.sql.inMemoryColumnarStorage.batchSize", config.cache_batch_size)
                .config("spark.executor.memory", config.executor_memory)
                .config("spark.executor.cores", config.executor_cores)
                .config("spark.sql.parquet.compression.codec", "snappy"))

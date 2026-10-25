@@ -1,0 +1,34 @@
+Execution record, 21/10/2026 (client date, Asia/Bangkok).
+Working directory: D:\bigdata-pcap-anomaly
+These output filenames already exist. For a new run use docs/benchmark-guide.md and new filenames.
+
+docker compose -f docker/docker-compose.yml up -d --no-build
+docker compose -f docker/docker-compose.yml exec -T spark-master python3 -m experiments.seed_scaling --manifest /tmp/scaling-20261021.json --execute
+
+docker compose -f docker/docker-compose.yml exec -T -e SPARK_EXECUTOR_MEMORY=2g spark-master python3 -m experiments.benchmark_size --inputs s3a://bigdata-network/smoke/benchmark-scaling/v1/copies-1000/synthetic.csv s3a://bigdata-network/smoke/benchmark-scaling/v1/copies-5000/synthetic.csv s3a://bigdata-network/smoke/benchmark-scaling/v1/copies-10000/synthetic.csv --dataset-kind synthetic --synthetic-scaling --experiment-id scaling-20261021 --warmups 1 --repeats 2 --master-ui http://spark-master:8080 --expected-workers 2 --output-prefix s3a://bigdata-network/smoke/benchmarks/20261021 --results /tmp/benchmark-size-20261021.json --execute
+
+docker compose -f docker/docker-compose.yml exec -T -e SPARK_EXECUTOR_MEMORY=2g spark-master python3 -m experiments.benchmark_partitions --input s3a://bigdata-network/smoke/benchmark-scaling/v1/copies-10000/synthetic.csv --partitions 4 8 16 32 --dataset-kind synthetic --synthetic-scaling --experiment-id scaling-20261021 --warmups 1 --repeats 2 --master-ui http://spark-master:8080 --expected-workers 2 --output-prefix s3a://bigdata-network/smoke/benchmarks/20261021 --results /tmp/benchmark-partitions-20261021.json --execute
+
+docker compose -f docker/docker-compose.yml stop spark-worker-2
+docker compose -f docker/docker-compose.yml exec -T -e SPARK_EXECUTOR_MEMORY=2g spark-master python3 -m experiments.benchmark_workers --input s3a://bigdata-network/smoke/benchmark-scaling/v1/copies-10000/synthetic.csv --dataset-kind synthetic --synthetic-scaling --experiment-id scaling-20261021 --warmups 1 --repeats 2 --master-ui http://spark-master:8080 --expected-workers 1 --output-prefix s3a://bigdata-network/smoke/benchmarks/20261021 --results /tmp/benchmark-workers-1-20261021.json --execute
+docker compose -f docker/docker-compose.yml start spark-worker-2
+docker compose -f docker/docker-compose.yml exec -T -e SPARK_EXECUTOR_MEMORY=2g spark-master python3 -m experiments.benchmark_workers --input s3a://bigdata-network/smoke/benchmark-scaling/v1/copies-10000/synthetic.csv --dataset-kind synthetic --synthetic-scaling --experiment-id scaling-20261021 --warmups 1 --repeats 2 --master-ui http://spark-master:8080 --expected-workers 2 --output-prefix s3a://bigdata-network/smoke/benchmarks/20261021 --results /tmp/benchmark-workers-2-20261021.json --execute
+
+docker cp spark-master:/tmp/benchmark-size-20261021.json docs/benchmarks/20261021/size.json
+docker cp spark-master:/tmp/benchmark-partitions-20261021.json docs/benchmarks/20261021/partitions.json
+docker cp spark-master:/tmp/benchmark-workers-1-20261021.json docs/benchmarks/20261021/workers-1.json
+docker cp spark-master:/tmp/benchmark-workers-2-20261021.json docs/benchmarks/20261021/workers-2.json
+python -m experiments.plot_results docs/benchmarks/20261021/size.json docs/benchmarks/20261021/partitions.json docs/benchmarks/20261021/workers-1.json docs/benchmarks/20261021/workers-2.json --csv docs/benchmarks/20261021/summary.csv --runs-csv docs/benchmarks/20261021/runs.csv --png docs/benchmarks/20261021/benchmark.png
+
+python -m unittest tests.test_benchmark -v
+docker compose -f docker/docker-compose.yml exec -T spark-master python3 -m unittest discover -s tests -v
+python -m storage.upload_minio
+docker compose -f docker/docker-compose.yml exec -T spark-master python3 -m experiments.verify_benchmark_outputs /workspace/docs/benchmarks/20261021/partitions.json /workspace/docs/benchmarks/20261021/size.json /workspace/docs/benchmarks/20261021/workers-1.json /workspace/docs/benchmarks/20261021/workers-2.json --report /tmp/benchmark-minio-audit-20261021.json --example-report /tmp/benchmark-quality-example-20261021.json
+docker cp spark-master:/tmp/benchmark-minio-audit-20261021.json docs/benchmarks/20261021/minio-audit.json
+docker cp spark-master:/tmp/benchmark-quality-example-20261021.json docs/benchmarks/20261021/quality-example.json
+python -m compileall -q processing experiments tests
+git -c core.safecrlf=false diff --check
+
+Full Spark logs remain in docs/benchmark-*-20261021.local.log and docs/pipeline-tests-20261021.local.log.
+Storage uploader command above was DRY_RUN (no --execute).
+Only synthetic seed and isolated new synthetic output batches were written to MinIO.

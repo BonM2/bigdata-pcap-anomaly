@@ -1,0 +1,316 @@
+{
+  "status": "PASS",
+  "scope": "Re-read stored final markers, quality and performance JSON; Parquet schema/count/label read-back was executed in each measured pipeline trial",
+  "batch_count": 22,
+  "parquet_outputs": 110,
+  "batches": [
+    {
+      "batch_id": "bench-fb612f14128542ce908752b50444ed91",
+      "warmup": false,
+      "quality_report_path": "s3a://bigdata-network/smoke/benchmarks/20261021/report/bench-fb612f14128542ce908752b50444ed91/quality.json",
+      "stored_marker_status": "COMPLETE",
+      "post_cleaning_status": "PASS",
+      "parquet_outputs": 5,
+      "quality": {
+        "input_records": 120000,
+        "valid_records": 40000,
+        "quarantined_records": 60000,
+        "rejected_records": 20000
+      }
+    },
+    {
+      "batch_id": "bench-096b1fed6f8f47c7ad183e8728fa043f",
+      "warmup": false,
+      "quality_report_path": "s3a://bigdata-network/smoke/benchmarks/20261021/report/bench-096b1fed6f8f47c7ad183e8728fa043f/quality.json",
+      "stored_marker_status": "COMPLETE",
+      "post_cleaning_status": "PASS",
+      "parquet_outputs": 5,
+      "quality": {
+        "input_records": 120000,
+        "valid_records": 40000,
+        "quarantined_records": 60000,
+        "rejected_records": 20000
+      }
+    },
+    {
+      "batch_id": "bench-f579538c264747e4aea2ba31c0822421",
+      "warmup": false,
+      "quality_report_path": "s3a://bigdata-network/smoke/benchmarks/20261021/report/bench-f579538c264747e4aea2ba31c0822421/quality.json",
+      "stored_marker_status": "COMPLETE",
+      "post_cleaning_status": "PASS",
+      "parquet_outputs": 5,
+      "quality": {
+        "input_records": 120000,
+        "valid_records": 40000,
+        "quarantined_records": 60000,
+        "rejected_records": 20000
+      }
+    },
+    {
+      "batch_id": "bench-6d4128c754f648b78a65c35957b1fd32",
+      "warmup": false,
+      "quality_report_path": "s3a://bigdata-network/smoke/benchmarks/20261021/report/bench-6d4128c754f648b78a65c35957b1fd32/quality.json",
+      "stored_marker_status": "COMPLETE",
+      "post_cleaning_status": "PASS",
+      "parquet_outputs": 5,
+      "quality": {
+        "input_records": 120000,
+        "valid_records": 40000,
+        "quarantined_records": 60000,
+        "rejected_records": 20000
+      }
+    },
+    {
+      "batch_id": "bench-617263a2ab194768af78f82431aaa8e5",
+      "warmup": false,
+      "quality_report_path": "s3a://bigdata-network/smoke/benchmarks/20261021/report/bench-617263a2ab194768af78f82431aaa8e5/quality.json",
+      "stored_marker_status": "COMPLETE",
+      "post_cleaning_status": "PASS",
+      "parquet_outputs": 5,
+      "quality": {
+        "input_records": 120000,
+        "valid_records": 40000,
+        "quarantined_records": 60000,
+        "rejected_records": 20000
+      }
+    },
+    {
+      "batch_id": "bench-7da5e72c502a46d9b803d0b4d6e79ee3",
+      "warmup": false,
+      "quality_report_path": "s3a://bigdata-network/smoke/benchmarks/20261021/report/bench-7da5e72c502a46d9b803d0b4d6e79ee3/quality.json",
+      "stored_marker_status": "COMPLETE",
+      "post_cleaning_status": "PASS",
+      "parquet_outputs": 5,
+      "quality": {
+        "input_records": 120000,
+        "valid_records": 40000,
+        "quarantined_records": 60000,
+        "rejected_records": 20000
+      }
+    },
+    {
+      "batch_id": "bench-547451cb0deb4c4cbe90ebb83f69b91e",
+      "warmup": false,
+      "quality_report_path": "s3a://bigdata-network/smoke/benchmarks/20261021/report/bench-547451cb0deb4c4cbe90ebb83f69b91e/quality.json",
+      "stored_marker_status": "COMPLETE",
+      "post_cleaning_status": "PASS",
+      "parquet_outputs": 5,
+      "quality": {
+        "input_records": 120000,
+        "valid_records": 40000,
+        "quarantined_records": 60000,
+        "rejected_records": 20000
+      }
+    },
+    {
+      "batch_id": "bench-d42e147bf3244b1e88fe090819fe5f04",
+      "warmup": false,
+      "quality_report_path": "s3a://bigdata-network/smoke/benchmarks/20261021/report/bench-d42e147bf3244b1e88fe090819fe5f04/quality.json",
+      "stored_marker_status": "COMPLETE",
+      "post_cleaning_status": "PASS",
+      "parquet_outputs": 5,
+      "quality": {
+        "input_records": 120000,
+        "valid_records": 40000,
+        "quarantined_records": 60000,
+        "rejected_records": 20000
+      }
+    },
+    {
+      "batch_id": "bench-919133905cf84f3a9ef460d9d5cf156b",
+      "warmup": true,
+      "quality_report_path": "s3a://bigdata-network/smoke/benchmarks/20261021/report/bench-919133905cf84f3a9ef460d9d5cf156b/quality.json",
+      "stored_marker_status": "COMPLETE",
+      "post_cleaning_status": "PASS",
+      "parquet_outputs": 5,
+      "quality": {
+        "input_records": 120000,
+        "valid_records": 40000,
+        "quarantined_records": 60000,
+        "rejected_records": 20000
+      }
+    },
+    {
+      "batch_id": "bench-924fecbfadbc4aad969c28d7bf47a241",
+      "warmup": false,
+      "quality_report_path": "s3a://bigdata-network/smoke/benchmarks/20261021/report/bench-924fecbfadbc4aad969c28d7bf47a241/quality.json",
+      "stored_marker_status": "COMPLETE",
+      "post_cleaning_status": "PASS",
+      "parquet_outputs": 5,
+      "quality": {
+        "input_records": 12000,
+        "valid_records": 4000,
+        "quarantined_records": 6000,
+        "rejected_records": 2000
+      }
+    },
+    {
+      "batch_id": "bench-123287610cbf471993d2d5bfa17119cb",
+      "warmup": false,
+      "quality_report_path": "s3a://bigdata-network/smoke/benchmarks/20261021/report/bench-123287610cbf471993d2d5bfa17119cb/quality.json",
+      "stored_marker_status": "COMPLETE",
+      "post_cleaning_status": "PASS",
+      "parquet_outputs": 5,
+      "quality": {
+        "input_records": 60000,
+        "valid_records": 20000,
+        "quarantined_records": 30000,
+        "rejected_records": 10000
+      }
+    },
+    {
+      "batch_id": "bench-f75d52988e564263a89d8813d40879e5",
+      "warmup": false,
+      "quality_report_path": "s3a://bigdata-network/smoke/benchmarks/20261021/report/bench-f75d52988e564263a89d8813d40879e5/quality.json",
+      "stored_marker_status": "COMPLETE",
+      "post_cleaning_status": "PASS",
+      "parquet_outputs": 5,
+      "quality": {
+        "input_records": 120000,
+        "valid_records": 40000,
+        "quarantined_records": 60000,
+        "rejected_records": 20000
+      }
+    },
+    {
+      "batch_id": "bench-de9ce347097d4c189d66af5533a1186f",
+      "warmup": false,
+      "quality_report_path": "s3a://bigdata-network/smoke/benchmarks/20261021/report/bench-de9ce347097d4c189d66af5533a1186f/quality.json",
+      "stored_marker_status": "COMPLETE",
+      "post_cleaning_status": "PASS",
+      "parquet_outputs": 5,
+      "quality": {
+        "input_records": 120000,
+        "valid_records": 40000,
+        "quarantined_records": 60000,
+        "rejected_records": 20000
+      }
+    },
+    {
+      "batch_id": "bench-c5c4db3939944340997c3a7689f3dce9",
+      "warmup": false,
+      "quality_report_path": "s3a://bigdata-network/smoke/benchmarks/20261021/report/bench-c5c4db3939944340997c3a7689f3dce9/quality.json",
+      "stored_marker_status": "COMPLETE",
+      "post_cleaning_status": "PASS",
+      "parquet_outputs": 5,
+      "quality": {
+        "input_records": 60000,
+        "valid_records": 20000,
+        "quarantined_records": 30000,
+        "rejected_records": 10000
+      }
+    },
+    {
+      "batch_id": "bench-5be59f27a7064cf89a2783a2be285680",
+      "warmup": false,
+      "quality_report_path": "s3a://bigdata-network/smoke/benchmarks/20261021/report/bench-5be59f27a7064cf89a2783a2be285680/quality.json",
+      "stored_marker_status": "COMPLETE",
+      "post_cleaning_status": "PASS",
+      "parquet_outputs": 5,
+      "quality": {
+        "input_records": 12000,
+        "valid_records": 4000,
+        "quarantined_records": 6000,
+        "rejected_records": 2000
+      }
+    },
+    {
+      "batch_id": "bench-28553f3b4477494baf27de51ab3bbfc6",
+      "warmup": true,
+      "quality_report_path": "s3a://bigdata-network/smoke/benchmarks/20261021/report/bench-28553f3b4477494baf27de51ab3bbfc6/quality.json",
+      "stored_marker_status": "COMPLETE",
+      "post_cleaning_status": "PASS",
+      "parquet_outputs": 5,
+      "quality": {
+        "input_records": 12000,
+        "valid_records": 4000,
+        "quarantined_records": 6000,
+        "rejected_records": 2000
+      }
+    },
+    {
+      "batch_id": "bench-41619ba5c3444a02932b0725fc3d5a6a",
+      "warmup": false,
+      "quality_report_path": "s3a://bigdata-network/smoke/benchmarks/20261021/report/bench-41619ba5c3444a02932b0725fc3d5a6a/quality.json",
+      "stored_marker_status": "COMPLETE",
+      "post_cleaning_status": "PASS",
+      "parquet_outputs": 5,
+      "quality": {
+        "input_records": 120000,
+        "valid_records": 40000,
+        "quarantined_records": 60000,
+        "rejected_records": 20000
+      }
+    },
+    {
+      "batch_id": "bench-f1dd3da37d9144448ccbeb0adfaca129",
+      "warmup": false,
+      "quality_report_path": "s3a://bigdata-network/smoke/benchmarks/20261021/report/bench-f1dd3da37d9144448ccbeb0adfaca129/quality.json",
+      "stored_marker_status": "COMPLETE",
+      "post_cleaning_status": "PASS",
+      "parquet_outputs": 5,
+      "quality": {
+        "input_records": 120000,
+        "valid_records": 40000,
+        "quarantined_records": 60000,
+        "rejected_records": 20000
+      }
+    },
+    {
+      "batch_id": "bench-0a426801a6f04b2182a71b7d9626a2cd",
+      "warmup": true,
+      "quality_report_path": "s3a://bigdata-network/smoke/benchmarks/20261021/report/bench-0a426801a6f04b2182a71b7d9626a2cd/quality.json",
+      "stored_marker_status": "COMPLETE",
+      "post_cleaning_status": "PASS",
+      "parquet_outputs": 5,
+      "quality": {
+        "input_records": 120000,
+        "valid_records": 40000,
+        "quarantined_records": 60000,
+        "rejected_records": 20000
+      }
+    },
+    {
+      "batch_id": "bench-611a3385c2ee4f2ea5c20da29d431645",
+      "warmup": false,
+      "quality_report_path": "s3a://bigdata-network/smoke/benchmarks/20261021/report/bench-611a3385c2ee4f2ea5c20da29d431645/quality.json",
+      "stored_marker_status": "COMPLETE",
+      "post_cleaning_status": "PASS",
+      "parquet_outputs": 5,
+      "quality": {
+        "input_records": 120000,
+        "valid_records": 40000,
+        "quarantined_records": 60000,
+        "rejected_records": 20000
+      }
+    },
+    {
+      "batch_id": "bench-d74d9f6fa6d144209ba46e60ffb20b9b",
+      "warmup": false,
+      "quality_report_path": "s3a://bigdata-network/smoke/benchmarks/20261021/report/bench-d74d9f6fa6d144209ba46e60ffb20b9b/quality.json",
+      "stored_marker_status": "COMPLETE",
+      "post_cleaning_status": "PASS",
+      "parquet_outputs": 5,
+      "quality": {
+        "input_records": 120000,
+        "valid_records": 40000,
+        "quarantined_records": 60000,
+        "rejected_records": 20000
+      }
+    },
+    {
+      "batch_id": "bench-4ecbe229ba20432198ddd8edb45b4771",
+      "warmup": true,
+      "quality_report_path": "s3a://bigdata-network/smoke/benchmarks/20261021/report/bench-4ecbe229ba20432198ddd8edb45b4771/quality.json",
+      "stored_marker_status": "COMPLETE",
+      "post_cleaning_status": "PASS",
+      "parquet_outputs": 5,
+      "quality": {
+        "input_records": 120000,
+        "valid_records": 40000,
+        "quarantined_records": 60000,
+        "rejected_records": 20000
+      }
+    }
+  ]
+}

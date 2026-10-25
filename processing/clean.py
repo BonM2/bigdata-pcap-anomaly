@@ -35,6 +35,13 @@ def clean_flows(raw, config=None, contract=None):
     config = config or ProcessingConfig.from_env()
     contract = contract or load_contract(config.schema_path)
     frame = validate_flows(transform_flows(raw, config, contract), contract)
+    return clean_classified_flows(frame, contract)
+
+
+def clean_classified_flows(classified, contract=None):
+    """Clean an already transformed/validated frame without reclassifying rows."""
+    contract = contract or load_contract()
+    frame = classified.withColumn("quality_status_before", F.col("quality_status"))
     for name in RATES:
         value = F.col(name)
         invalid = value.isNull() | F.isnan(value) | (F.abs(value) == float("inf")) | (value < 0)

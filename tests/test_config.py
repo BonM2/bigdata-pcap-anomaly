@@ -18,3 +18,7 @@ class ConfigTests(unittest.TestCase):
             ProcessingConfig.from_env({}).validate()
         with self.assertRaisesRegex(ValueError, "positive"):
             ProcessingConfig(shuffle_partitions=0).validate(require_minio=False)
+        with self.assertRaisesRegex(ValueError, "positive"):
+            ProcessingConfig(cache_batch_size=0).validate(require_minio=False)
+        with self.assertRaisesRegex(ValueError, "SPARK_STORAGE_LEVEL"):
+            ProcessingConfig(storage_level="INVALID").validate(require_minio=False)
