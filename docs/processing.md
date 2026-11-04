@@ -11,7 +11,8 @@ trường chứa newline không thuộc định dạng hỗ trợ của bộ CIC
 Chạy tại root repository. Docker Desktop phải dùng Linux containers.
 
 ```powershell
-Copy-Item docker/.env.example docker/.env
+if (-not (Test-Path docker/.env)) { Copy-Item docker/.env.example docker/.env }
+New-Item -ItemType Directory -Force docs/evidence/local | Out-Null
 # Sửa MINIO_ROOT_USER và MINIO_ROOT_PASSWORD trong docker/.env trước khi chạy.
 docker compose -f docker/docker-compose.yml build
 docker compose -f docker/docker-compose.yml up -d
@@ -32,8 +33,8 @@ AWS SDK 1.12.262; MinIO được build từ mã nguồn upstream release
 Kiểm toán CSV thật tại local trước khi upload (không sửa nguồn):
 
 ```powershell
-python -m processing.audit_source --source-dir data/raw/cicids2017
-python -m storage.upload_minio --source-dir data/raw/cicids2017
+python -m processing.audit_source --source-dir data/raw/cicids2017 --report docs/evidence/local/source-audit.local.json
+python -m storage.upload_minio --source-dir data/raw/cicids2017 --audit-report docs/evidence/local/source-audit.local.json
 ```
 
 Lệnh upload ở trên mặc định là **DRY_RUN**, kiểm tra lại SHA-256 và in kế hoạch,
@@ -41,7 +42,7 @@ không kết nối mạng hay ghi object. Sau khi đọc báo cáo và quyết �
 chạy lệnh sau mới upload vào `bigdata-network/raw/cicids2017/`:
 
 ```powershell
-docker compose -f docker/docker-compose.yml exec spark-master python3 -m storage.upload_minio --execute
+docker compose -f docker/docker-compose.yml exec spark-master python3 -m storage.upload_minio --audit-report /workspace/docs/evidence/local/source-audit.local.json --execute
 ```
 
 Upload yêu cầu đủ 8 CSV đã qua kiểm tra cấu trúc, schema/contract không đổi và
@@ -53,7 +54,7 @@ Sau khi upload, chạy job chỉ đọc:
 
 ```powershell
 docker compose -f docker/docker-compose.yml exec spark-master python3 -m processing.check_minio --report /tmp/minio-check.json
-docker cp spark-master:/tmp/minio-check.json docs/minio-check.local.json
+docker cp spark-master:/tmp/minio-check.json docs/evidence/local/minio-check.local.json
 ```
 
 Job xuất số cột raw/core, số record từng file, SHA-256, số malformed, số
@@ -68,7 +69,7 @@ CICIDS2017): 4 VALID, 6 QUARANTINED, 2 REJECTED. Dữ liệu có header 79 cột
 ```powershell
 docker compose -f docker/docker-compose.yml exec spark-master python3 -m tests.seed_minio
 docker compose -f docker/docker-compose.yml exec -e INPUT_PATH=s3a://bigdata-network/smoke/cicids2017/synthetic_flow.csv spark-master python3 -m processing.check_minio --report /tmp/minio-smoke.json
-docker cp spark-master:/tmp/minio-smoke.json docs/minio-smoke.local.json
+docker cp spark-master:/tmp/minio-smoke.json docs/evidence/local/minio-smoke.local.json
 ```
 
 Script seed chỉ ghi `smoke/`, không ghi `raw/`, không ghi đè object khác nội dung.
@@ -144,7 +145,7 @@ Kiểm thử synthetic qua MinIO và Spark cluster; chỉ dùng `smoke/`, không
 ```powershell
 docker compose -f docker/docker-compose.yml exec -T spark-master python3 -m tests.smoke_pipeline
 docker compose -f docker/docker-compose.yml exec -T spark-master python3 -m tests.smoke_pipeline --execute --report /tmp/pipeline-smoke.json
-docker cp spark-master:/tmp/pipeline-smoke.json docs/pipeline-smoke.local.json
+docker cp spark-master:/tmp/pipeline-smoke.json docs/evidence/local/pipeline-smoke.local.json
 ```
 
 Kiểm thử sample hoàn toàn local trong container tạm, không cần MinIO:
@@ -236,15 +237,15 @@ bao gồm khoảng trắng và ký tự thay thế Unicode.
 
 Hướng dẫn mới cho **size, 1/2 workers và 4/8/16/32 partitions**, warmup, speedup,
 CSV/JSON và biểu đồ: [benchmark-guide.md](benchmark-guide.md). Kết quả đo và các
-giới hạn được tổng hợp trong [storage-processing-report.md](storage-processing-report.md).
+giới hạn được tổng hợp trong [storage-processing-report.md](reports/storage-processing-report.md).
 
 Các runner mặc định in kế hoạch, cần `--execute` để chạy; không thay đổi topology
 Docker hoặc upload input. Mỗi trial ghi batch mới và report riêng. Ví dụ nhỏ:
 
 ```powershell
 docker compose -f docker/docker-compose.yml exec -T spark-master python3 -m experiments.benchmark_partitions --local --input file:///workspace/data/sample/sample_flow.csv --local-output /tmp/benchmark-output --dataset-kind synthetic --partitions 2 4 --repeats 2 --results /tmp/partitions.json --execute
-docker cp spark-master:/tmp/partitions.json docs/benchmark-partitions.local.json
-python -m experiments.plot_results docs/benchmark-partitions.local.json --csv docs/benchmark-summary.local.csv
+docker cp spark-master:/tmp/partitions.json docs/evidence/local/benchmark-partitions.local.json
+python -m experiments.plot_results docs/evidence/local/benchmark-partitions.local.json --csv docs/evidence/local/benchmark-summary.local.csv
 ```
 
 - `experiments.benchmark_size`: truyền `--inputs <URI1> <URI2> ...`; dùng byte

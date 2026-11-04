@@ -2,7 +2,7 @@
 
 Đọc source ngày 25/10/2026. Các lệnh dưới đây dùng để học/tái lập sau này, **không
 được thực thi khi soạn tài liệu**. Số đo là artifact ngày 20–21/10. Đường batch chính
-được điều phối bởi [run_pipeline — main.py:34](../processing/main.py#L34).
+được điều phối bởi [run_pipeline — main.py:34](../../processing/main.py#L34).
 
 ```mermaid
 flowchart LR
@@ -21,8 +21,8 @@ flowchart LR
 
 Audit/upload/smoke là entry point chuẩn bị/kiểm chứng riêng. `main` không tự audit
 local rồi upload 8 CSV. Benchmark gọi lại toàn `run_pipeline`, không chỉ đo một
-phép tổng hợp. Xem [main:65](../processing/main.py#L65),
-[benchmark:130](../experiments/benchmark.py#L130).
+phép tổng hợp. Xem [main:65](../../processing/main.py#L65),
+[benchmark:130](../../experiments/benchmark.py#L130).
 
 ## 1. Source Audit (Data Profiling)
 
@@ -35,17 +35,17 @@ phép tổng hợp. Xem [main:65](../processing/main.py#L65),
    chia file cho process local; không phải Spark executors.
 4. **Output:** JSON có bytes/hash/count, thống kê 79 field và `policy_preview`.
    `structurally_ready_for_upload` kiểm header và malformed, không yêu cầu mọi value sạch.
-5. **Source Code:** [audit_file:17](../processing/audit_source.py#L17),
-   [main:146](../processing/audit_source.py#L146), tạo report ở
-   [audit:167](../processing/audit_source.py#L167).
+5. **Source Code:** [audit_file:17](../../processing/audit_source.py#L17),
+   [main:146](../../processing/audit_source.py#L146), tạo report ở
+   [audit:167](../../processing/audit_source.py#L167).
 6. **Example:** fixture 12 dòng cho preview 4 VALID, 6 QUARANTINED, 2 REJECTED;
-   [test_audit:11](../tests/test_audit.py#L11) xác nhận cả SHA và vị trí 35/56.
+   [test_audit:11](../../tests/test_audit.py#L11) xác nhận cả SHA và vị trí 35/56.
    Không nhầm preview Python với output Spark.
 7. **Error Handling:** sai tập tên file dừng CLI; CSV syntax/width lỗi được đếm.
    UTF-8 lỗi được đếm và decode replacement cho thống kê; bytes nguồn không sửa.
    Header mismatch thể hiện trong report, khiến structural-ready false.
 8. **Verification:** đối chiếu header/hash/record counts; xem
-   [source-audit-report.md](source-audit-report.md), không chạy lại audit 884 MB khi chỉ học.
+   [source-audit-report.md](../reports/source-audit-report.md), không chạy lại audit 884 MB khi chỉ học.
 9. **Technical Rationale:** stream giảm RAM, audit 79 cột nhìn được cả ngoài 22 core;
    SHA phục vụ lineage và chống upload nhầm phiên bản file, không chứng minh ngữ nghĩa dữ liệu đúng.
 10. **Defense Questions:**
@@ -61,12 +61,12 @@ phép tổng hợp. Xem [main:65](../processing/main.py#L65),
    dựng key `raw/cicids2017/<filename>`. Chỉ khi `--execute` mới dùng Boto3,
    `HEAD` bucket/object, upload các key chưa có, rồi kiểm metadata/length.
 4. **Output:** mặc định là kế hoạch `DRY_RUN`; khi execute thành công là object raw.
-5. **Source Code:** [prepare_upload:23](../storage/upload_minio.py#L23),
-   [main:49](../storage/upload_minio.py#L49), [upload loop:81](../storage/upload_minio.py#L81).
+5. **Source Code:** [prepare_upload:23](../../storage/upload_minio.py#L23),
+   [main:49](../../storage/upload_minio.py#L49), [upload loop:81](../../storage/upload_minio.py#L81).
    `storage/minio_client.py` chưa có triển khai.
 6. **Example:** Tuesday được ánh xạ thành key
    `raw/cicids2017/Tuesday-WorkingHours.pcap_ISCX.csv`, SHA lấy từ audit.
-   [dry-run artifact](source-integrity-20261021.local.json) ghi kế hoạch, không chứng minh remote object tồn tại.
+   [dry-run artifact](../evidence/local/source-integrity-20261021.local.json) ghi kế hoạch, không chứng minh remote object tồn tại.
 7. **Error Handling:** khác hash/size/contract dừng; object có metadata khác bị từ chối
    overwrite; lỗi mạng/SDK propagate. Cần single writer: preflight rồi upload không phải atomic create-if-absent.
 8. **Verification:** dry-run chứng minh input không đổi; verification uploader kiểm
@@ -87,11 +87,11 @@ phép tổng hợp. Xem [main:65](../processing/main.py#L65),
    chạy `clean_flows`, so tổng counts và lấy schema.
 4. **Output:** `check_minio` in JSON, tùy chọn ghi local report; không ghi Parquet.
    `tests.smoke_pipeline --execute` là E2E khác, có seed và ghi batch smoke riêng.
-5. **Source Code:** [check_minio main:15](../processing/check_minio.py#L15),
-   [smoke main:14](../tests/smoke_pipeline.py#L14), [seed main:9](../tests/seed_minio.py#L9).
+5. **Source Code:** [check_minio main:15](../../processing/check_minio.py#L15),
+   [smoke main:14](../../tests/smoke_pipeline.py#L14), [seed main:9](../../tests/seed_minio.py#L9).
 6. **Example:** fixture kỳ vọng `12 = 4 + 6 + 2`, kiểm ở
-   [smoke:34](../tests/smoke_pipeline.py#L34). Report lịch sử:
-   [pipeline-smoke-final.local.json](pipeline-smoke-final.local.json).
+   [smoke:34](../../tests/smoke_pipeline.py#L34). Report lịch sử:
+   [pipeline-smoke-final.local.json](../evidence/local/pipeline-smoke-final.local.json).
 7. **Error Handling:** không S3A bị parser error; header/connection lỗi propagate;
    chỉ header không có data trả lỗi. `finally` unpersist/stop Spark.
 8. **Verification:** xem `status`, app ID, schema và counts. Smoke đọc thành công
@@ -113,17 +113,17 @@ phép tổng hợp. Xem [main:65](../processing/main.py#L65),
    chỉ bỏ header của partition 0 từng file; union DataFrames theo tên canonical.
 4. **Output:** `(raw_df, manifest)`. Lỗi row-width được pad/cắt để có đủ schema nhưng
    vẫn giữ `_raw_record`, `_malformed_reason`, `_corrupt_record` để bị REJECTED.
-5. **Source Code:** [validate_header:16](../processing/ingestion.py#L16),
-   [parse_record:24](../processing/ingestion.py#L24),
-   [_parse_partition:34](../processing/ingestion.py#L34),
-   [read_raw_flows:43](../processing/ingestion.py#L43).
+5. **Source Code:** [validate_header:16](../../processing/ingestion.py#L16),
+   [parse_record:24](../../processing/ingestion.py#L24),
+   [_parse_partition:34](../../processing/ingestion.py#L34),
+   [read_raw_flows:43](../../processing/ingestion.py#L43).
 6. **Example:** fixture dòng dữ liệu 11 có 78 fields → padding label NULL,
    reason `COLUMN_COUNT:78:EXPECTED:79`. Cột 35/56 được giữ dưới hai tên riêng.
-   [test_ingestion:13](../tests/test_ingestion.py#L13) còn kiểm comma trong quoted label.
+   [test_ingestion:13](../../tests/test_ingestion.py#L13) còn kiểm comma trong quoted label.
 7. **Error Handling:** không CSV, file rỗng, sai header → dừng job; row parse lỗi →
    giữ để reject. Một physical line được coi một record; multiline CSV không được hỗ trợ.
 8. **Verification:** manifest SHA/bytes; test 5 physical data lines cho 1 valid/4 rejected;
-   kiểm count per source trong [main:67](../processing/main.py#L67).
+   kiểm count per source trong [main:67](../../processing/main.py#L67).
 9. **Technical Rationale:** mapping vị trí không mất duplicate header. Chọn strict parser
    thay vì phụ thuộc `PERMISSIVE` tự quyết row-width. SHA tạo thêm một lượt đọc đầy đủ,
    và checksum/header ở driver là phần tuần tự.
@@ -141,16 +141,16 @@ phép tổng hợp. Xem [main:65](../processing/main.py#L65),
    Tạo struct `_raw_values`, array `cast_failure_fields` và metadata.
 4. **Output:** typed DataFrame chưa có quality_status; giá trị cast lỗi thành NULL,
    kèm tên field lỗi. `processed_at` là thời gian xử lý, không event time.
-5. **Source Code:** [transform_flows:8](../processing/transform.py#L8),
-   [cast/regex:30](../processing/transform.py#L30), [select/evidence:37](../processing/transform.py#L37).
+5. **Source Code:** [transform_flows:8](../../processing/transform.py#L8),
+   [cast/regex:30](../../processing/transform.py#L30), [select/evidence:37](../../processing/transform.py#L37).
 6. **Example:** test `destination_port=' 443 '` → Int 443, raw vẫn có khoảng trắng;
    `flow_iat_mean='1.25e2'` → Double 125; packet count `'1.5'` → NULL + cast failure.
-   [test_transform:8](../tests/test_transform.py#L8).
+   [test_transform:8](../../tests/test_transform.py#L8).
 7. **Error Handling:** thiếu core/raw canonical hoặc duplicate name → ValueError;
    thiếu source_file → ValueError. Cast input sai/overflow không ném lỗi ngay cả ANSI,
    nhờ `try_cast`; validation sau đó quyết định trạng thái.
 8. **Verification:** test dtype, Long max/overflow, label/evidence và integer grammar;
-   [test_transform:24](../tests/test_transform.py#L24).
+   [test_transform:24](../../tests/test_transform.py#L24).
 9. **Technical Rationale:** rõ nguồn gốc NULL và tránh ép số thập phân thành số gói
    nguyên một cách im lặng. `cast_failure_fields` không chứa chuỗi rỗng: empty có reason riêng.
 10. **Defense Questions:**
@@ -166,11 +166,11 @@ phép tổng hợp. Xem [main:65](../processing/main.py#L65),
    port 0–65535, source flags 0/1, window sentinel, label. Rate là lỗi mềm;
    non-rate core thường là lỗi cứng. Malformed có độ ưu tiên cao nhất.
 4. **Output:** thêm `quality_reason_codes` và `quality_status`, chưa sửa value lỗi.
-5. **Source Code:** [validate_flows:138](../processing/validation.py#L138),
-   [status precedence:184](../processing/validation.py#L184).
+5. **Source Code:** [validate_flows:138](../../processing/validation.py#L138),
+   [status precedence:184](../../processing/validation.py#L184).
 6. **Example:** Infinity ở rate → VALID với `INFINITY:flow_bytes_s`; duration -1 →
    QUARANTINED; malformed đồng thời duration âm → REJECTED. Xem
-   [test_clean:25](../tests/test_clean.py#L25).
+   [test_clean:25](../../tests/test_clean.py#L25).
 7. **Error Handling:** lỗi dữ liệu thành status/reason, không exception toàn job;
    thiếu cột cấu trúc để dựng Spark expression có thể khiến analyzer/job lỗi.
    Hàm này không gọi đầy đủ schema_validation trước từng rule.
@@ -192,15 +192,15 @@ phép tổng hợp. Xem [main:65](../processing/main.py#L65),
    Tách ba frame theo status, không deduplicate và không tự nâng quarantine thành valid.
 4. **Output:** `CleanResult(annotated, valid, quarantined, rejected)`. Valid chọn đúng
    22 core + 12 metadata; hai nhánh lỗi và annotated giữ raw evidence.
-5. **Source Code:** [CleanResult:13](../processing/clean.py#L13),
-   [clean_flows:29](../processing/clean.py#L29),
-   [clean_classified_flows:41](../processing/clean.py#L41).
+5. **Source Code:** [CleanResult:13](../../processing/clean.py#L13),
+   [clean_flows:29](../../processing/clean.py#L29),
+   [clean_classified_flows:41](../../processing/clean.py#L41).
 6. **Example:** `'Infinity'` rate → NULL/true; window -1 → NULL/true; window -2 vẫn
-   -2 ở quarantine. [test_clean:6](../tests/test_clean.py#L6).
+   -2 ở quarantine. [test_clean:6](../../tests/test_clean.py#L6).
 7. **Error Handling:** dữ liệu hard không được “chữa thành 0”; trạng thái lỗi giữ
    để truy vết. Lỗi execution propagate về main. Raw files không bị ghi lại.
 8. **Verification:** schema valid 34 cột; flags khớp reason/value; duplicates còn;
-   count các nhánh cộng đúng input. [test_clean:23](../tests/test_clean.py#L23).
+   count các nhánh cộng đúng input. [test_clean:23](../../tests/test_clean.py#L23).
 9. **Technical Rationale:** 0 có nghĩa đo được bằng 0, NULL có nghĩa không có giá trị
    sử dụng được. Flag giữ thông tin việc clean. Không đủ khóa flow để xóa duplicate an toàn.
 10. **Defense Questions:**
@@ -217,16 +217,16 @@ phép tổng hợp. Xem [main:65](../processing/main.py#L65),
    multiset raw evidence bằng `exceptAll` hai chiều và status transitions.
 4. **Output:** frame thêm `post_clean_errors`, summary PASS/FAIL, reconciliation report.
    Các con số sau clean là final status, không cộng status_before thêm lần nữa.
-5. **Source Code:** [validate_cleaned_flows:69](../processing/validation.py#L69),
-   [post_clean_summary:130](../processing/validation.py#L130),
-   [reconcile_stages:43](../processing/validation.py#L43), [gate main:85](../processing/main.py#L85).
+5. **Source Code:** [validate_cleaned_flows:69](../../processing/validation.py#L69),
+   [post_clean_summary:130](../../processing/validation.py#L130),
+   [reconcile_stages:43](../../processing/validation.py#L43), [gate main:85](../../processing/main.py#L85).
 6. **Example:** thay label/cờ hoặc đặt port 65536 trên VALID gây lỗi hậu kiểm;
    thay một row bằng duplicate khác dù giữ count vẫn bị multiset check bắt.
-   [test_post_validation:33](../tests/test_post_validation.py#L33),
-   [test_post_validation:62](../tests/test_post_validation.py#L62).
+   [test_post_validation:33](../../tests/test_post_validation.py#L33),
+   [test_post_validation:62](../../tests/test_post_validation.py#L62).
 7. **Error Handling:** main dừng trước features/write nếu hậu kiểm/schema FAIL;
    status lạ/null hoặc chuyển trạng thái trái policy gây ValueError.
-8. **Verification:** [test_pipeline:46](../tests/test_pipeline.py#L46) inject hậu kiểm
+8. **Verification:** [test_pipeline:46](../../tests/test_pipeline.py#L46) inject hậu kiểm
    thất bại và xác nhận không có final success hay cleaned output.
 9. **Technical Rationale:** count equality chưa đủ; multiset cần giữ cả số lần lặp.
    PASS không có nghĩa quarantine/reject hết mọi hard value lỗi. Hậu kiểm cũng chưa
@@ -245,12 +245,12 @@ phép tổng hợp. Xem [main:65](../processing/main.py#L65),
    Count/quality ratios dùng mọi row; packet/bytes/average duration dùng VALID.
 4. **Output:** features giữ nguyên số VALID, thêm 4 cột; aggregate có nhiều row ở
    nhiều cấp grouping. `grouping` phân biệt NULL roll-up với label NULL thật.
-5. **Source Code:** [add_features:9](../processing/features.py#L9),
-   [aggregate_flows:30](../processing/features.py#L30), [main:92](../processing/main.py#L92).
+5. **Source Code:** [add_features:9](../../processing/features.py#L9),
+   [aggregate_flows:30](../../processing/features.py#L30), [main:92](../../processing/main.py#L92).
 6. **Example:** test forward=3/backward=1, bytes=100/25 → totals 4/125, ratios
    0,75/0,25. Một label gồm hai VALID duration 10/30 và một quarantine duration -1
-   có avg 20 µs, valid_ratio 2/3. [test_features:11](../tests/test_features.py#L11),
-   [test_features:34](../tests/test_features.py#L34).
+   có avg 20 µs, valid_ratio 2/3. [test_features:11](../../tests/test_features.py#L11),
+   [test_features:34](../../tests/test_features.py#L34).
 7. **Error Handling:** thiếu/sai Long nguồn → ValueError; NULL/âm → derived total
    NULL; denominator zero → ratio NULL. Aggregate sum rỗng=0, avg không có VALID=NULL.
 8. **Verification:** test công thức/overflow/empty; main count features bằng số VALID.
@@ -273,18 +273,18 @@ phép tổng hợp. Xem [main:65](../processing/main.py#L65),
    flow kiểm label/source/status distribution; ghi reports rồi final `_SUCCESS.json`.
 4. **Output:** năm output datasets + quality JSON/CSV + performance JSON; marker
    JSON cuối là tín hiệu commit theo quy ước ứng dụng, không phải transaction ACID.
-5. **Source Code:** [output_plan:43](../processing/output.py#L43),
-   [write_verified_parquet:79](../processing/output.py#L79),
-   [quality_snapshot:13](../processing/quality_report.py#L13),
-   [main publish:132](../processing/main.py#L132).
-6. **Example:** batch 120k tại [quality-example.json](benchmarks/20261021/quality-example.json)
+5. **Source Code:** [output_plan:43](../../processing/output.py#L43),
+   [write_verified_parquet:79](../../processing/output.py#L79),
+   [quality_snapshot:13](../../processing/quality_report.py#L13),
+   [main publish:132](../../processing/main.py#L132).
+6. **Example:** batch 120k tại [quality-example.json](../benchmarks/20261021/quality-example.json)
    có 40k cleaned, 40k features, 10 aggregates, 60k quarantine, 20k reject.
    Features không được cộng thêm vào conservation equation.
 7. **Error Handling:** existing batch bị từ chối, sai count/schema dừng; job lỗi cố
    ghi `_FAILED.json` và raise; không có final success. Một số output có thể đã ghi
    xong trước lỗi, không tự rollback/delete.
 8. **Verification:** test empty outputs, wrong expected count, failure markers và
-   footer codec Snappy: [test_pipeline:57](../tests/test_pipeline.py#L57).
+   footer codec Snappy: [test_pipeline:57](../../tests/test_pipeline.py#L57).
    Read-back không so toàn bộ numeric cells từng row; schema/count/distribution là phạm vi thực hiện.
 9. **Technical Rationale:** Parquet giữ kiểu và thuận tiện đọc cột, Snappy phù hợp
    batch; prefix batch hỗ trợ truy vết. Chưa `partitionBy`, compaction hay exactly-once xuyên batch.
@@ -302,16 +302,16 @@ phép tổng hợp. Xem [main:65](../processing/main.py#L65),
    verify Master topology/app cores trước khi ghi nhận kết quả; gọi full pipeline.
 4. **Output:** JSON từng invocation, CSV từng trial/summary, PNG; stage times,
    throughput và matched-baseline speedup.
-5. **Source Code:** [benchmark main:45](../experiments/benchmark.py#L45),
-   [trial_order:26](../experiments/benchmark.py#L26),
-   [summarize:12](../experiments/plot_results.py#L12),
-   [scaled_payload:11](../experiments/seed_scaling.py#L11).
+5. **Source Code:** [benchmark main:45](../../experiments/benchmark.py#L45),
+   [trial_order:26](../../experiments/benchmark.py#L26),
+   [summarize:12](../../experiments/plot_results.py#L12),
+   [scaled_payload:11](../../experiments/seed_scaling.py#L11).
 6. **Example:** 1 worker median 22,766 s, 2 workers 24,851 s → speedup 0,916×;
-   không sửa số đo thành “hai workers tốt hơn”. [summary.csv](benchmarks/20261021/summary.csv).
+   không sửa số đo thành “hai workers tốt hơn”. [summary.csv](../benchmarks/20261021/summary.csv).
 7. **Error Handling:** result file có sẵn bị từ chối; topology đổi hoặc thiếu cores
    gây FAILED; summarizer từ chối invocation chưa COMPLETE. Runner không tự stop/start worker.
 8. **Verification:** 18 measured + 4 warmup; log/test/artifact xác thực lịch sử;
-   [verify_benchmark_outputs main:11](../experiments/verify_benchmark_outputs.py#L11)
+   [verify_benchmark_outputs main:11](../../experiments/verify_benchmark_outputs.py#L11)
    đọc lại marker/QA/performance, không tự đọc lại toàn Parquet lần thứ hai.
 9. **Technical Rationale:** full timer tránh chỉ chọn stage nhanh nhất; exclude startup
    cần công bố. Hai repeats, cùng máy, low-entropy input và cache chưa flush giới hạn suy luận.

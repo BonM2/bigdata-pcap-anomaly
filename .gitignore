@@ -38,3 +38,6 @@ minio_data/
 .DS_Store
 .env
 **/.env
+
+# Local execution evidence and generated previews; measured benchmark artifacts stay tracked.
+docs/evidence/local/

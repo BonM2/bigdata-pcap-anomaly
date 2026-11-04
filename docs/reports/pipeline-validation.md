@@ -1,5 +1,9 @@
 # Kiểm chứng Storage → Processing
 
+> Hồ sơ lịch sử; không coi kết quả dưới đây là lần chạy mới. Đường dẫn bằng chứng
+> đã được cập nhật theo [danh mục lưu trữ](../evidence/README.md). Dùng
+> [README hiện hành](../../README.md) để xem trạng thái mới nhất và lệnh chạy.
+
 Đây là hồ sơ kiểm chứng ngày 20/10/2026. Thực nghiệm bổ sung ngày **21/10/2026**
 (size, 1/2 workers, 4/8/16/32 partitions và bộ test mở rộng) được ghi riêng tại
 [storage-processing-report.md](storage-processing-report.md); giữ các số đo cũ
@@ -26,20 +30,20 @@ theo `.gitignore`; bản Markdown này lưu kết luận để review cùng sour
   Không in hoặc hardcode credentials; Spark dùng credentials từ môi trường.
 - `storage.upload_minio` chạy **DRY_RUN** thành công để đối chiếu SHA-256 hiện
   tại của đủ 8 CSV, schema và Contract với audit đã có; không upload object.
-  Bằng chứng: `docs/source-integrity.local.json`.
+  Bằng chứng: `docs/evidence/local/source-integrity-20261021.local.json`.
 
 ## Test và lỗi được phát hiện
 
 Bộ mở rộng đầu tiên phát hiện hết Java heap khi hậu kiểm một chuỗi Spark plan
 dài chưa materialize. Test đã được điều chỉnh để cache từng giai đoạn giống
 pipeline; **26 test đạt trong 79,208 giây**. Log:
-`docs/pipeline-tests-rerun.local.log`.
+`docs/evidence/local/pipeline-tests-rerun.local.log`.
 
 Sau khi bổ sung test output rỗng, metadata, cấu hình cache và benchmark,
 **bộ cuối cùng có 29/29 test đạt trong 93,481 giây**. Log:
-`docs/pipeline-tests-verified.local.log`. Test output rỗng cũng materialize
+`docs/evidence/local/pipeline-tests-verified.local.log`. Test output rỗng cũng materialize
 annotated input trước khi ghi ba nhánh, như pipeline thực tế; lần thử chưa
-materialize bị OOM được lưu riêng ở `docs/pipeline-tests-final.local.log`.
+materialize bị OOM được lưu riêng ở `docs/evidence/local/pipeline-tests-final.local.log`.
 Các lỗi ghi và count mismatch được cố ý inject trong test phải trả lỗi và
 không tạo marker hoàn thành. `compileall` và `git diff --check` đạt.
 
@@ -75,14 +79,14 @@ Nguồn `s3a://bigdata-network/smoke/cicids2017/synthetic_flow.csv`: 12 dòng,
 - Thời gian đo: **37,131 giây**, throughput **0,323 flow/s**. Đây là workload cực
   nhỏ, chủ yếu đo overhead; không dùng để kết luận khả năng mở rộng.
 - Có `quality.json`, `summary.csv`, `performance.json`, marker hoàn thành cuối.
-  Bản báo cáo lấy về: `docs/pipeline-smoke.local.json`; log:
-  `docs/pipeline-smoke.local.log`.
+  Bản báo cáo lấy về: `docs/evidence/local/pipeline-smoke.local.json`; log:
+  `docs/evidence/local/pipeline-smoke.local.log`.
 
 **Xác minh lại với code cuối ngày 20/10/2026:** batch
 `c53a54981e4b46b99c7093030c2faa66`, app `app-20261020041357-0004`,
 storage level DISK_ONLY, **32,587 giây**. Vẫn 12 = 4 VALID + 6 QUARANTINED +
 2 REJECTED; hậu kiểm PASS và cả 5 output Parquet read-back PASS. Bằng chứng:
-`docs/pipeline-smoke-final.local.json`, `docs/pipeline-smoke-final.local.log`.
+`docs/evidence/local/pipeline-smoke-final.local.json`, `docs/evidence/local/pipeline-smoke-final.local.log`.
 
 ## Một CSV thật — chỉ đọc trên cluster
 
@@ -115,8 +119,8 @@ với tốc độ smoke vì khác workload/phạm vi thời gian. Shuffle partit
 AQE bật, cache batch = 1000. Report để worker_count null khi chưa thu bằng chứng
 Master API; không suy worker count từ số executor.
 
-Báo cáo: `docs/pipeline-one-real.local.json`. Log thành công:
-`docs/pipeline-one-real-cluster.local.log`. Log lỗi local được lưu riêng.
+Báo cáo: `docs/evidence/local/pipeline-one-real.local.json`. Log thành công:
+`docs/evidence/local/pipeline-one-real-cluster.local.log`. Log lỗi local được lưu riêng.
 
 ## Đủ 8 CSV thật — chỉ đọc trên cluster
 
@@ -171,9 +175,9 @@ phù hợp giới hạn 2 GB/worker trong Compose và đã hoàn thành không c
 log lần chạy thành công. Không so tốc độ một CSV/8 CSV như benchmark size có
 kiểm soát vì khác cấu hình bộ nhớ/cache và chưa lặp lại nhiều lần.
 
-Báo cáo: `docs/pipeline-eight-real.local.json`. Log thành công:
-`docs/pipeline-eight-real-2g.local.log`. Các log thử 1 GB được giữ riêng.
-`docs/pipeline-final-topology.local.json` lấy từ Spark Master xác nhận app trên
+Báo cáo: `docs/evidence/local/pipeline-eight-real.local.json`. Log thành công:
+`docs/evidence/local/pipeline-eight-real-2g.local.log`. Các log thử 1 GB được giữ riêng.
+`docs/evidence/local/pipeline-final-topology.local.json` lấy từ Spark Master xác nhận app trên
 ở trạng thái **FINISHED**, 4 cores, memory per executor 2048 MiB; hai workers
 ALIVE, mỗi worker 2 cores/2048 MiB.
 
@@ -200,15 +204,15 @@ sang `DISK_ONLY` để phục vụ input lớn. Không trộn chúng với trial
 level khác khi so sánh. Summarizer mới tách nhóm cả theo storage level, cache
 batch size và AQE; báo cáo cũ không có storage_level được đánh dấu UNRECORDED.
 
-Bằng chứng: `docs/benchmark-partitions.local.json`,
-`docs/benchmark-partitions.local.log`, `docs/benchmark-summary.local.csv`.
+Bằng chứng: `docs/evidence/local/benchmark-partitions.local.json`,
+`docs/evidence/local/benchmark-partitions.local.log`, `docs/evidence/local/benchmark-summary.local.csv`.
 Runner size và worker đã có CLI, nhưng chưa có phép so sánh size hoặc 1/2 workers
 đủ lặp để kết luận hiệu năng. Không tự điền các kết quả chưa đo.
 
 ## Giới hạn và tái lập
 
 Lệnh CLI, chính sách output, định nghĩa metric và benchmark nằm trong
-[processing.md](processing.md). Chỉ sử dụng batch có marker `_SUCCESS.json` tại
+[processing.md](../processing.md). Chỉ sử dụng batch có marker `_SUCCESS.json` tại
 prefix quality report. Một `_SUCCESS` bên trong Parquet không xác nhận cả job.
 
 Chưa có kết quả ghi Parquet của dữ liệu thật lên MinIO. Việc upload CSV thật

@@ -1,395 +1,146 @@
-# Big Data PCAP Pipeline
+# Big Data Storage → Processing
 
-**Đồ án học phần:** Nhập môn Dữ liệu lớn  
-**Quy trình được chọn:** **Storage → Processing**  
-**Dữ liệu:** CICIDS2017 — dữ liệu network flow từ các tệp CSV đã trích xuất từ PCAP  
-**Công nghệ chính:** MinIO (S3-compatible Data Lake), Apache Spark / PySpark, Spark SQL, Apache Parquet, Snappy và Docker Compose
+Đồ án xử lý batch dữ liệu network flow CICIDS2017 bằng **Spark/PySpark 3.5.0 và MinIO**:
+đọc CSV, chuẩn hóa, kiểm tra/làm sạch, tạo feature, tổng hợp và lưu **Parquet + Snappy**.
+Đã kiểm chứng end-to-end bằng synthetic; 8 CSV thật mới được kiểm chứng **chỉ đọc**, chưa có bằng chứng ghi output thật lên MinIO.
 
-> **Phạm vi:** Repository tập trung vào đọc dữ liệu từ Storage, làm sạch, chuẩn hóa, chuyển đổi, tổng hợp bằng Spark và ghi kết quả trở lại Data Lake. Huấn luyện mô hình ML, dự đoán tấn công, cảnh báo, dashboard và hoạt động nghiên cứu khoa học **không phải sản phẩm bắt buộc của đồ án này**. Các script PCAP extraction và upload chỉ hỗ trợ việc chuẩn bị dữ liệu đầu vào.
->
-> **Trạng thái triển khai:** Đã có pipeline hoàn chỉnh theo Data Contract v2.3.0: ingestion, transformation, validation, cleaning, hậu kiểm, feature engineering, aggregation, Parquet Snappy/read-back và báo cáo JSON/CSV. Xem [hướng dẫn chạy thực tế](docs/processing.md) và [kết quả kiểm chứng](docs/pipeline-validation.md). CLI mặc định chỉ in kế hoạch; `--validate-only` chỉ đọc/xử lý, `--execute` mới ghi batch output riêng biệt.
->
-> **Kiểm chứng 20/10/2026:** Đã chạy pipeline chỉ đọc trên đủ 8 CSV thật: 2.830.743 input = 2.830.628 VALID + 115 QUARANTINED, hậu kiểm PASS. MinIO end-to-end đã kiểm chứng bằng fixture riêng. Chưa upload hay ghi Parquet dữ liệu thật lên MinIO. Xem [kết quả và giới hạn thực nghiệm](docs/pipeline-validation.md).
+## 1. Điều kiện môi trường
 
-> **Bổ sung 21/10/2026:** 36/36 tests PASS; benchmark synthetic scaling 12k/60k/120k,
-> 1/2 workers và 4/8/16/32 shuffle partitions đã chạy 18 lần đo + 4 warmup.
-> Có CSV/JSON, biểu đồ và 110 output Parquet read-back thành công trên MinIO.
-> Xem [báo cáo triển khai đầy đủ](docs/storage-processing-report.md) và
-> [biểu đồ benchmark](docs/benchmarks/20261021/benchmark.png).
+- Windows PowerShell, Git và Docker Desktop dùng **Linux containers/WSL2**, có Docker Compose v2.
+- Docker Desktop đang chạy; có mạng để build image và đủ RAM/đĩa cho dữ liệu, cache và output.
+- Môi trường thực nghiệm cấp khoảng 8 GiB RAM cho Docker; đây không phải cấu hình tối thiểu đã xác định.
+- Spark, Java và Python chạy trong image; không cần cài riêng trên Windows cho các lệnh dưới.
 
-## 1. Mục tiêu
-
-Xây dựng một pipeline batch **Storage → Processing** có thể:
-
-1. Đọc dữ liệu luồng mạng đã lưu trong **MinIO** bằng Spark và giao thức S3A.
-2. Ánh xạ tên trường, ép kiểu, kiểm tra và làm sạch dữ liệu theo **Data Contract**.
-3. Tạo các đặc trưng dẫn xuất hợp lệ và thực hiện tổng hợp bằng Spark DataFrame / Spark SQL.
-4. Lưu dữ liệu đầu ra dạng **Parquet + Snappy** mà không thay đổi dữ liệu raw.
-5. Sinh thống kê chất lượng dữ liệu, thời gian xử lý, log và kết quả benchmark có thể tái lập.
-
-**Sản phẩm tối thiểu:** Spark job xử lý phân tán, minh chứng dữ liệu trước/sau, Data Quality Report và số liệu thời gian xử lý.
-
-### 1.1. Đặc trưng Big Data được thể hiện
-
-- **Volume:** nhiều tệp CSV với tổng khoảng **2.830.743 network flow** (xấp xỉ **843,66 MiB** trong bộ dữ liệu đã được kiểm toán); đánh giá khả năng mở rộng khi tăng tải. Dung lượng này là quy mô bộ dữ liệu thực tế, không tự đồng nhất với quy mô sản xuất rất lớn.
-- **Veracity:** dữ liệu có Null/NaN/Infinity, giá trị thời lượng âm, sentinel `-1`, header trùng và nhãn có vấn đề mã hóa; cần cơ chế kiểm soát chất lượng và truy vết.
-
-Pipeline hiện tại là **batch processing**; không khẳng định có xử lý streaming hoặc tốc độ dữ liệu phát sinh liên tục.
-
-## 2. Kiến trúc và luồng dữ liệu
+## 2. Cấu trúc repository
 
 ```text
-[8 CSV CICIDS2017 (raw network flow)]
-                   |
-                   | Storage: MinIO / S3-compatible
-                   v
-      s3a://<bucket>/raw/cicids2017/
-                   |
-                   | Spark read CSV (S3A)
-                   v
-         [Apache Spark / PySpark]
-          1. Validate raw header
-          2. Map schema + cast types
-          3. Validate + clean + quarantine
-          4. Transform / derived features
-          5. Aggregate by source_file / label
-                   |
-             Parquet + Snappy
-                   v
-      s3a://<bucket>/cleaned/flows/
-      s3a://<bucket>/processed/aggregates/
-      s3a://<bucket>/quality/quarantine/
-      s3a://<bucket>/reports/data_quality/
-      s3a://<bucket>/reports/performance/
+bigdata-pcap-anomaly/
+├── README.md, requirements.txt
+├── data/          # sample, schemas; CSV thật đặt tại raw/cicids2017/
+├── docker/        # Compose, .env.example và Dockerfiles
+├── processing/    # Pipeline, validation, cleaning, output và reports
+├── storage/       # Upload CSV lên MinIO
+├── extraction/    # Placeholder, ngoài pipeline đã triển khai
+├── experiments/   # Benchmark và vẽ kết quả
+├── tests/         # Unit/integration tests và synthetic smoke test
+└── docs/          # Hướng dẫn, giải thích và bằng chứng thực nghiệm
 ```
 
-**Ranh giới thực hiện:** bắt đầu khi CSV đã tồn tại tại Storage, kết thúc khi Spark ghi được đầu ra đã chuẩn hóa/tổng hợp kèm số liệu kiểm tra. `extraction/` và `storage/upload_minio.py` là phần hỗ trợ chuẩn bị input, không phải trọng tâm đánh giá Storage → Processing.
+## 3. Clone, cấu hình và khởi động
 
-Xem thêm sơ đồ: [`docs/architecture.png`](docs/architecture.png) và [`docs/data_flow.png`](docs/data_flow.png) (cần cập nhật để phản ánh đúng phiên bản code chạy thực tế).
-
-## 3. Cấu trúc repository
-
-```text
-bigdata-pcap-pipeline/
-├── .gitignore
-├── README.md
-├── requirements.txt
-│
-├── docker/
-│   ├── docker-compose.yml             # MinIO + Spark Master + 2 Workers (theo thiết kế)
-│   └── spark/
-│       └── Dockerfile                 # Tuỳ chọn: JAR, dependency cho Spark image
-│
-├── data/
-│   ├── sample/
-│   │   ├── sample.pcap                # PCAP nhỏ để kiểm thử extraction
-│   │   └── sample_flow.csv            # CSV nhỏ để kiểm thử processing
-│   └── schemas/
-│       ├── raw_flow_schema.json       # Schema đầu vào / ánh xạ nguồn
-│       └── feature_dictionary.md      # Data Contract / từ điển feature
-│
-├── extraction/
-│   ├── extract_flow.py                # PCAP -> flow (phần hỗ trợ đầu vào)
-│   └── utils.py
-│
-├── storage/
-│   ├── minio_client.py                # Kết nối client MinIO/S3
-│   └── upload_minio.py                # Upload CSV lên vùng raw
-│
-├── processing/
-│   ├── __init__.py
-│   ├── main.py                        # Điều phối Spark job
-│   ├── config.py                      # Cấu hình Spark, MinIO, paths
-│   ├── clean.py                       # Làm sạch và chính sách lỗi
-│   ├── transform.py                   # Chuẩn hoá dữ liệu, ép kiểu
-│   └── features.py                    # Derived features / aggregation hợp lệ
-│
-├── experiments/
-│   ├── benchmark_size.py              # Đánh giá theo kích thước input
-│   ├── benchmark_workers.py           # Đánh giá khi thay đổi số worker
-│   ├── benchmark_partitions.py        # Đánh giá khi thay đổi partition
-│   └── plot_results.py               # Vẽ biểu đồ từ số đo thực tế
-│
-└── docs/
-    ├── architecture.png
-    ├── data_flow.png
-    └── report_draft.md
+Mở PowerShell, chạy lần lượt; nếu đã clone thì chỉ vào thư mục gốc dự án.
+```powershell
+git clone https://github.com/BonM2/bigdata-pcap-anomaly.git
+Set-Location bigdata-pcap-anomaly
+if (-not (Test-Path docker/.env)) { Copy-Item docker/.env.example docker/.env }
+notepad docker/.env
 ```
+Trong Notepad, đặt `MINIO_ROOT_USER` và `MINIO_ROOT_PASSWORD` riêng, thay password mẫu;
+giữ `MINIO_BUCKET=bigdata-network` để dùng nguyên các URI bên dưới. Không commit/chia sẻ `.env`.
 
-### 3.1. Trách nhiệm và giao diện giữa các module
-
-| Module | Trách nhiệm | Giao diện dự kiến |
-|---|---|---|
-| `storage/minio_client.py` | Tạo client, thao tác với MinIO | Bucket / object key / kết nối |
-| `storage/upload_minio.py` | Đẩy raw CSV, không ghi đè thiếu kiểm soát | Local CSV → MinIO `raw/` |
-| `processing/config.py` | Tập trung cấu hình Spark, S3A, input/output | Env + cấu hình pipeline |
-| `processing/transform.py` | Map tên cột, resolve header trùng, cast kiểu | Raw Spark DataFrame → standardized DataFrame |
-| `processing/clean.py` | Kiểm tra và xử lý bản ghi lỗi theo chính sách | Standardized DataFrame → cleaned / quarantined |
-| `processing/features.py` | Tính feature dẫn xuất có ngữ nghĩa và bảng aggregate | Cleaned DataFrame → derived/aggregate DataFrame |
-| `processing/main.py` | Điều phối đọc, xử lý, ghi và đo thời gian | MinIO raw → Parquet + reports |
-| `experiments/*.py` | Benchmark theo kích thước, worker, partition | Cấu hình → thời gian, throughput, log |
-
-## 4. Dữ liệu đầu vào
-
-### 4.1. Nguồn và quy mô
-
-Nguồn đầu vào chính của môn Big Data là **8 CSV CICIDS2017** đã trích xuất đặc trưng flow, không phải gói tin PCAP trực tiếp:
-
-| File | Số flow (baseline kiểm toán) |
-|---|---:|
-| `Monday-WorkingHours.pcap_ISCX.csv` | 529.918 |
-| `Tuesday-WorkingHours.pcap_ISCX.csv` | 445.909 |
-| `Wednesday-workingHours.pcap_ISCX.csv` | 692.703 |
-| `Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv` | 170.366 |
-| `Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv` | 288.602 |
-| `Friday-WorkingHours-Morning.pcap_ISCX.csv` | 191.033 |
-| `Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv` | 286.467 |
-| `Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv` | 225.745 |
-| **Tổng** | **2.830.743** |
-
-Các giá trị trên là số liệu nền của bộ dữ liệu đã cung cấp, **không phải đầu ra của job Spark**. Khi chạy thật cần đối chiếu lại counts và checksum của input.
-
-### 4.2. Schema và các giới hạn quan trọng
-
-- Mỗi CSV nguồn có **79 cột header**, trong đó `Fwd Header Length` lặp ở vị trí cột **35 và 56** (đếm từ 1). Không đổi tên cột hàng loạt khi chưa xử lý trùng header.
-- **Core cleaned schema** trong Data Contract v2.3.0 gồm **21 feature mạng + 1 `label`**. Trường metadata và flags kiểm soát chất lượng nằm ngoài 22 trường lõi.
-- CSV hiện có **không chứa** `source_ip`, `destination_ip`, `source_port`, `protocol`, `timestamp`, `flow_id` hoặc `ip_version`. Không tự tạo giá trị cho các trường không có sẵn; tên ngày trong filename không thay thế event timestamp.
-- Nhóm TCP flag trong bộ nguồn có thể có giá trị 0/1; **không diễn giải tổng các trường này thành số packet SYN/ACK thực**.
-- Phân tích trong môn học tập trung vào bộ dữ liệu CICIDS2017 liên quan đến IPv4; không tuyên bố đã kiểm định `ip_version` theo từng flow khi CSV không có trường này.
-
-**Tài liệu tham chiếu:** [`data/schemas/feature_dictionary.md`](data/schemas/feature_dictionary.md) — phiên bản áp dụng đề xuất: *Network Flow Feature Dictionary — Storage → Processing, v2.3.0*; [`data/schemas/raw_flow_schema.json`](data/schemas/raw_flow_schema.json). Cần kiểm tra hai tài liệu khớp nhau trước khi xử lý.
-
-## 5. Quy tắc Storage → Processing
-
-### 5.1. Standardization
-
-- Validate số lượng/vị trí cột và header trước khi parse.
-- Mapping tên nguồn → `snake_case` theo bảng tường minh.
-- Cast đúng kiểu Spark SQL (`Integer`, `Long`, `Double`, `String`) và ghi nhận lỗi cast.
-- Giữ nguồn dữ liệu raw bất biến; dữ liệu cleaned phải có metadata truy vết được đến source.
-
-### 5.2. Data Quality / Cleaning
-
-- Kiểm tra `NULL`, `NaN`, `Infinity`, giá trị âm không hợp lệ, nhãn lỗi và duplicate có căn cứ.
-- Không mặc định thay `Infinity` bằng `0` hay xóa mọi bản ghi có `0` packet backward.
-- Với `Init_Win_bytes_* = -1`, xử lý theo ngữ nghĩa sentinel được Data Contract mô tả; không coi là kích thước cửa sổ hợp lệ.
-- Giữ nguyên nhãn nguồn; mọi mapping thêm phải có mô tả rõ ràng.
-- Cần phân biệt các trạng thái `VALID`, `QUARANTINED`, `REJECTED` và đối soát số lượng bản ghi.
-
-### 5.3. Transformation / Aggregation
-
-- Chỉ tạo feature có công thức và điều kiện dữ liệu xác định (ví dụ `total_packets = total_fwd_packets + total_backward_packets` khi cả hai hợp lệ).
-- Aggregate **theo `source_file`, `label`** hoặc các trường thực sự có trong schema.
-- **Không** tính thống kê theo `source_ip` hoặc time window của sự kiện từ bộ CSV này do thiếu trường cần thiết.
-- `features.py` không được suy diễn TCP flag 0/1 thành số lượng packet thật.
-
-### 5.4. Đầu ra và Data Lake layout (đề xuất theo Data Contract)
-
-Tên bucket và prefix bên dưới là **quy ước mục tiêu**, phải được đồng bộ với `processing/config.py` và `docker/docker-compose.yml` trước khi chạy:
-
-```text
-bigdata-network/                      # Tên bucket đề xuất
-├── raw/
-│   └── cicids2017/                   # 8 CSV không chỉnh sửa
-├── cleaned/
-│   └── flows/                        # Parquet + Snappy
-├── processed/
-│   ├── derived_features/             # Tuỳ chọn
-│   └── aggregates/                   # Parquet + Snappy
-├── quality/
-│   ├── quarantine/                   # Nếu có record cách ly
-│   └── rejected/                     # Nếu có record bị từ chối
-└── reports/
-    ├── data_quality/                 # JSON/CSV theo batch
-    └── performance/                  # Time / throughput / config
+Tiếp tục trong **cùng cửa sổ PowerShell, tại root**. `$dc` rút gọn tùy chọn Compose;
+`$runTag` là UUID tạo tên báo cáo mới. Mở cửa sổ mới thì khai báo lại các biến.
+```powershell
+$dc = @('compose', '--env-file', 'docker/.env', '-f', 'docker/docker-compose.yml')
+$runTag = [guid]::NewGuid().ToString('N')
+$evidenceDir = 'docs/evidence/local'
+New-Item -ItemType Directory -Force $evidenceDir | Out-Null
+docker info --format '{{.OSType}}'
+docker @dc config --quiet
+docker @dc up -d --build
+docker @dc ps
 ```
+Mong đợi Docker in `linux`, cấu hình không lỗi, bốn services chạy và MinIO `healthy`.
+Mở **Spark Master UI: http://localhost:8080**; đợi đủ **2 Workers ALIVE**.
+Mở **MinIO Console: http://localhost:9001**, đăng nhập bằng tài khoản trong `.env`.
+Sau mỗi lệnh Docker, chỉ tiếp tục khi `$LASTEXITCODE` bằng `0`; lỗi thì xem [hướng dẫn vận hành](docs/processing.md).
 
-**Bắt buộc kiểm chứng:** Spark đọc lại được file Parquet đã ghi, kiểm tra `schema`, số lượng bản ghi và `label` sau xử lý. Không dùng `overwrite` lên prefix `raw/`.
+## 4. Chạy thử bằng synthetic
 
-### 5.5. Data Quality Report
-
-Báo cáo theo batch và theo source file nên có:
-
-```text
-batch_id, source_file, schema_version, pipeline_version
-input_records, valid_records, quarantined_records, rejected_records
-null_count, nan_count, infinity_count, invalid_range_count
-cast_failure_count, label_distribution_before, label_distribution_after
-cleaned_output_records, aggregate_output_records
-processing_duration_seconds, throughput_flows_per_second
-spark_app_id, worker_count, partition_count, run_status
+**Có ghi MinIO:** lệnh sau tự tạo bucket nếu thiếu, seed fixture và ghi batch mới dưới `smoke/`.
+Object mẫu khác nội dung bị từ chối; không ghi đè raw.
+```powershell
+$sampleReport = "/tmp/sample-$runTag.json"
+docker @dc exec -T spark-master python3 -m tests.smoke_pipeline --execute --report $sampleReport
+docker cp "spark-master:$sampleReport" "$evidenceDir/sample-$runTag.local.json"
+$result = Get-Content "$evidenceDir/sample-$runTag.local.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+$result | Select-Object run_status,batch_id,input_records,valid_records,quarantined_records,rejected_records
 ```
+Mong đợi exit code `0`, `VERIFIED` và **12 input = 4 VALID + 6 QUARANTINED + 2 REJECTED**.
+Đây là fixture tổng hợp, không phải CSV thật. Kiểm tra thêm output ở mục 6 trước khi tiếp tục.
+`/tmp` là đường dẫn **trong container**; `docker cp` lưu report về Windows. `/workspace` được mount chỉ đọc.
 
-Quy tắc kiểm kê khi mỗi input record có đúng một trạng thái:
+## 5. Chạy với 8 CSV CICIDS2017 thật
 
-```text
-input_records = valid_records + quarantined_records + rejected_records
+Tải CSV từ [CICIDS2017 chính thức](https://www.unb.ca/cic/datasets/ids-2017.html), giải nén đúng
+8 file theo [danh sách nguồn](docs/reports/source-audit-report.md). Tạo thư mục chứa dữ liệu:
+```powershell
+New-Item -ItemType Directory -Force data/raw/cicids2017 | Out-Null
 ```
-
-Phải công bố rõ mẫu số và phạm vi đo throughput; báo cáo parser corrupt records riêng nếu có.
-
-## 6. Chuẩn bị môi trường
-
-### 6.1. Yêu cầu
-
-- Docker Engine và Docker Compose v2.
-- Python với phiên bản tương thích với PySpark trong `requirements.txt` và Docker image.
-- Java, Spark, Hadoop S3A connector và AWS SDK **tương thích với phiên bản Spark/Hadoop thực tế** nếu chạy Spark ngoài container đã chuẩn bị.
-- Có đủ CPU/RAM/dung lượng lưu trữ cho bộ CSV và output trung gian.
-- Quyền truy cập tới MinIO bucket và endpoint từ mạng container chạy Spark.
-
-Không cần cài mọi công cụ `Zeek`, `TShark`, `NFStream` để chạy Storage → Processing nếu đã sử dụng CSV flow có sẵn.
-
-### 6.2. Kiểm tra và khởi động hạ tầng
-
-Chạy từ thư mục gốc repository:
-
-```bash
-# Kiểm tra cú pháp file Compose trước khi chạy
-docker compose -f docker/docker-compose.yml config
-
-# Khởi động các dịch vụ được định nghĩa trong Compose
-docker compose -f docker/docker-compose.yml up -d --build
-
-# Xem dịch vụ và trạng thái
-docker compose -f docker/docker-compose.yml ps
-
-# Xem log (tên service thực tế lấy từ kết quả 'docker compose ... config --services')
-docker compose -f docker/docker-compose.yml logs --tail=100
+Copy CSV vào `data/raw/cicids2017/`, giữ nguyên tên/header/nội dung; không đưa CSV lớn vào Git.
+Hoàn tất bước synthetic trước để có bucket, rồi kiểm tra và audit:
+```powershell
+(Get-ChildItem data/raw/cicids2017 -File -Filter '*.csv').Count
+$audit = "/tmp/audit-$runTag.json"
+docker @dc exec -T spark-master python3 -m processing.audit_source --report $audit
+docker @dc exec -T spark-master python3 -m storage.upload_minio --audit-report $audit
 ```
+Count phải là `8`. Audit kiểm đúng tập tên/header và hash.
+Uploader mặc định **DRY_RUN**: in 8 object dự kiến, chưa kết nối/ghi MinIO. Chỉ tiếp tục khi cả hai lệnh thành công.
 
-**Lưu ý:** Các lệnh Compose phía trên dùng được khi Docker và file Compose hợp lệ. Không giả định tên container, cổng UI, tài khoản MinIO hay địa chỉ Spark Master: cần lấy chúng từ file `docker/docker-compose.yml` hiện tại. Để xem service:
-
-```bash
-docker compose -f docker/docker-compose.yml config --services
+**Ghi dữ liệu thật:** sau khi xem kế hoạch, lệnh dưới upload vào `raw/cicids2017/`.
+Chỉ chạy một uploader; object có sẵn khác metadata hash/kích thước bị từ chối ghi đè.
+```powershell
+docker @dc exec -T spark-master python3 -m storage.upload_minio --audit-report $audit --execute
 ```
+Trong Console, xác nhận bucket `bigdata-network` có đủ 8 object đúng tên tại `raw/cicids2017/`.
 
-### 6.3. Cấu hình kết nối
+Kiểm tra một CSV trước, rồi đủ tám CSV; `--validate-only` tính pipeline nhưng không ghi output MinIO.
+```powershell
+$oneCsv = 's3a://bigdata-network/raw/cicids2017/Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv'
+docker @dc exec -T -e SPARK_EXECUTOR_MEMORY=2g spark-master python3 -m processing.main --input $oneCsv --validate-only
+docker @dc exec -T -e SPARK_EXECUTOR_MEMORY=2g spark-master python3 -m processing.main --validate-only
+```
+Mong đợi `VALIDATED_NO_OUTPUT` và hậu kiểm PASS; `outputs` rỗng là đúng. Mặc định input là glob 8 CSV trên MinIO.
+Không có cờ mode thì main chỉ in `PLAN_ONLY`. Dùng executor 2g vì mức 1g từng OOM trên đủ tám CSV.
 
-Không commit access key/secret key. Các giá trị cần cấu hình (đặt qua môi trường hoặc cơ chế cấu hình thực tế trong repository):
+**Ghi output dữ liệu thật:** chỉ chạy sau khi validate-only đạt và bạn quyết định xuất kết quả.
+```powershell
+$realReport = "/tmp/real-$runTag.json"
+docker @dc exec -T -e SPARK_EXECUTOR_MEMORY=2g spark-master python3 -m processing.main --execute --local-report $realReport
+docker cp "spark-master:$realReport" "$evidenceDir/real-$runTag.local.json"
+$result = Get-Content "$evidenceDir/real-$runTag.local.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+```
+Mong đợi `VERIFIED`, năm output read-back PASS và marker cuối. Mỗi lượt tạo batch mới;
+không overwrite nguồn/batch cũ. Job lỗi có thể để lại output dở dang, chưa được xem là hoàn thành.
 
-| Nhóm | Thông tin cần có |
-|---|---|
-| MinIO | Endpoint từ **mạng Spark container** và bucket |
-| S3A | Access key, secret key, `s3a://` path, path-style access, HTTP/HTTPS |
-| Spark | Master URL, executor/worker cores, memory, số partitions |
-| Pipeline | Raw CSV prefix, cleaned prefix, aggregates prefix, batch ID |
+## 6. Kiểm tra output trên MinIO
 
-`processing/config.py` đọc cấu hình từ biến môi trường; xem bảng cấu hình trong [hướng dẫn processing](docs/processing.md). Tránh đưa khóa thật vào ảnh chụp và log nộp bài.
+Dùng `$result` của lần synthetic hoặc lần execute thật vừa chạy:
+```powershell
+$result.batch_id
+$result.post_cleaning_validation | Select-Object status,records_with_errors
+$result.outputs.PSObject.Properties.Value | Select-Object path,records,read_back_status
+$result.performance | Select-Object processing_duration_seconds,throughput_flows_per_second
+```
+Mong đợi hậu kiểm PASS, 0 lỗi hậu kiểm và **5 output** read-back PASS: cleaned, features, aggregates, quarantine, rejected.
+Mở bucket `bigdata-network` trong Console, theo các `path` in ra để kiểm tra Parquet.
+Report mẫu: `smoke/pipeline/report/<batch_id>/`; report thật: `reports/data_quality/<batch_id>/`.
+Trong đúng batch phải có `quality.json`, `summary.csv` và **`_SUCCESS.json` có COMPLETE**.
+Chỉ marker JSON cuối xác nhận toàn batch; `_SUCCESS` trong một thư mục Parquet không thay thế được.
 
-## 7. Hướng dẫn chạy pipeline
+<a id="testing"></a>
 
-### Bước 1 — Kiểm tra dữ liệu đầu vào
-
-- Dùng `data/sample/sample_flow.csv` để kiểm thử nhanh schema và quy tắc làm sạch.
-- Sử dụng `storage/upload_minio.py` để upload 8 CSV vào `raw/cicids2017/` **sau khi kiểm tra tham số/entry point thực tế của script**.
-- Đối chiếu số object, tên file, kích thước và (nếu có) checksum trên MinIO.
-
-### Bước 2 — Chạy Spark job Storage → Processing
-
-`processing/main.py` là entry point. Xem kế hoạch trước, rồi kiểm tra chỉ đọc trên dữ liệu đã có:
+## 7. Chạy unit/integration tests
 
 ```powershell
-docker compose -f docker/docker-compose.yml exec -T spark-master python3 -m processing.main
-docker compose -f docker/docker-compose.yml exec -T spark-master python3 -m processing.main --validate-only
+docker @dc exec -T spark-master python3 -m unittest discover -s tests -v
 ```
+Mong đợi unittest kết thúc `OK`, exit code `0`. Suite dùng Spark local và file tạm, không tự upload CSV thật.
+Không chạy tests đồng thời benchmark; kết quả kiểm thử lịch sử nằm trong tài liệu bên dưới.
 
-Chỉ dùng `--execute` khi đã quyết định ghi kết quả. Dùng `--input <URI>` để chọn
-một CSV trước khi chạy cả 8 file. Các lệnh sample và output chi tiết nằm trong
-[hướng dẫn processing](docs/processing.md).
+## 8. Tài liệu chuyên sâu
 
-Khi chạy bằng Docker, vị trí file Python phải tồn tại **trong container driver** (bind mount hoặc copy image); endpoint S3A phải dùng địa chỉ container truy cập được, không mặc định dùng `localhost`.
-
-Quy trình logic kỳ vọng:
-
-```text
-Read raw CSV
-  → Verify source header & schema
-  → Cast / standardize
-  → Validate / clean / quarantine
-  → Derive features / aggregates
-  → Write Parquet + technical report
-  → Read-back verification
-```
-
-### Bước 3 — Kiểm tra kết quả
-
-Cần thu thập bằng chứng rằng:
-
-- Có các object trong `cleaned/flows/` và `processed/aggregates/`.
-- Dữ liệu Parquet đọc được và có schema 22 trường lõi (cộng metadata được khai báo).
-- Số lượng input/output và trạng thái chất lượng được đối soát.
-- Có thời gian hoàn thành job và Spark application log.
-- Dữ liệu `raw/` không bị chỉnh sửa.
-
-Pipeline xuất báo cáo chất lượng trước/sau và thời gian đo thực tế. Chỉ marker
-`_SUCCESS.json` tại prefix báo cáo batch xác nhận toàn bộ job hoàn thành; các
-output dở dang của batch lỗi không được dùng làm kết quả nghiệm thu.
-
-## 8. Thực nghiệm và benchmark
-
-Các script trong `experiments/` thực thi pipeline và lưu số đo từng trial. Lệnh chạy,
-warmup, topology và cách tạo biểu đồ nằm trong [hướng dẫn benchmark](docs/benchmark-guide.md).
-Xem [báo cáo triển khai](docs/storage-processing-report.md) để phân biệt số đo thực tế,
-synthetic scaling và phần chưa thực hiện trên CSV thật.
-
-| Script | Câu hỏi cần trả lời | Ví dụ cấu hình so sánh (mục tiêu) |
-|---|---|---|
-| `benchmark_size.py` | Thời gian/throughput thay đổi khi tăng input? | Synthetic scaling 12k / 60k / 120k records; không gán nhãn GB |
-| `benchmark_workers.py` | Có speedup khi tăng số worker không? | 1 worker so với 2 workers |
-| `benchmark_partitions.py` | Bao nhiêu partition phù hợp workload? | 4 / 8 / 16 / 32 |
-| `plot_results.py` | Kết quả đo thể hiện xu hướng nào? | JSON → CSV min/median/max, throughput, speedup và PNG |
-
-Mỗi lần benchmark cần lưu **input size**, số record, worker count, cores, memory, số partition, phạm vi thời gian đo, duration và throughput. Chạy nhiều lần để tránh kết luận dựa vào một phép đo ngẫu nhiên. Nếu nhân bản flow chỉ nhằm tạo tải benchmark, phải ghi nhãn **synthetic benchmark load**; không dùng các bản sao đó như dữ liệu quan sát an ninh mạng mới.
-
-Công thức tham khảo:
-
-```text
-Throughput (flows/second) = Số flow đầu vào / Thời gian xử lý (giây)
-Speedup(N workers) = Thời gian xử lý ở baseline / Thời gian xử lý với N workers
-```
-
-Hai công thức chỉ có ý nghĩa khi cùng workload và định nghĩa thời gian đo. Không điền số liệu minh họa vào báo cáo dưới dạng kết quả chạy thật.
-
-## 9. Tiêu chí hoàn thành và minh chứng nộp bài
-
-- [ ] Có mô tả rõ phạm vi **Storage → Processing**, 2 đặc trưng Big Data trở lên và sơ đồ architecture/data flow.
-- [ ] MinIO lưu raw CSV; Spark đọc input trực tiếp qua S3A.
-- [x] Có Spark job thực thi làm sạch, chuẩn hóa, chuyển đổi và tổng hợp.
-- [x] Có cleaned Parquet + Snappy, aggregate và cơ chế quarantine/reject (đã kiểm chứng trên synthetic MinIO).
-- [x] Có thống kê chất lượng dữ liệu trước/sau xử lý và record reconciliation.
-- [x] Có processing time, throughput và cả 3 phép so sánh size/workers/partitions trên synthetic scaling.
-- [ ] Có Spark log/Spark UI screenshot, MinIO raw/output screenshot và bằng chứng đọc lại Parquet.
-- [x] README dẫn đến môi trường, cấu hình và lệnh chạy thực tế đã kiểm chứng.
-- [ ] Có `docs/report_draft.md` hoàn thiện thành báo cáo, phân công nhóm và tài liệu tham khảo.
-
-**Minh chứng cần nộp theo đề bài:** báo cáo PDF, source code/config, dữ liệu mẫu hoặc nguồn dữ liệu/script sinh dữ liệu, log/ảnh/video demo nếu cần, bảng phân công và đóng góp. Bài nộp phải phân biệt mô tả thiết kế với kết quả thật sự đã chạy.
-
-## 10. Phân công theo thành phần
-
-| Nhóm công việc | Phụ trách theo cây thư mục đã cung cấp | Đầu ra cần phối hợp |
-|---|---|---|
-| Data schema, Data Contract | TV1 | `data/schemas/feature_dictionary.md` và mapping schema |
-| Extraction / source preparation | TV2 | `extraction/`, sample flow nhất quán schema |
-| MinIO + Docker infrastructure | TV3 | `docker/`, `storage/`, raw object & endpoint |
-| PySpark processing + benchmark | TV4 phối hợp TV1 | `processing/`, `experiments/`, cleaned Parquet và báo cáo |
-
-Đây là phân công **theo chú thích trong cấu trúc thư mục**, cần đối chiếu với phân công thực tế của nhóm trong báo cáo.
-
-## 11. Tài liệu và quy tắc làm việc
-
-- [Data Contract — Feature Dictionary](data/schemas/feature_dictionary.md): nguồn quy định tên feature, kiểu dữ liệu, ý nghĩa, chất lượng và storage output.
-- [Raw Flow Schema](data/schemas/raw_flow_schema.json): schema đầu vào của CSV/network flow.
-- [Sơ đồ kiến trúc](docs/architecture.png) và [sơ đồ data flow](docs/data_flow.png).
-- [Bản nháp báo cáo](docs/report_draft.md).
-
-**Quy ước:** commit source code, config mẫu, dữ liệu sample đủ nhỏ và tài liệu; không commit dataset lớn, PCAP lớn, output Parquet nhiều file, file `.env` chứa secrets hoặc thông tin truy cập MinIO. Nên giữ môi trường chạy cố định (phiên bản Spark/Python/JAR), ghi batch ID và source_file để có thể tái lập kết quả.
-
----
-
-### Ghi chú về khả năng tái lập
-
-Cấu hình và CLI thực tế được ghi trong [docs/processing.md](docs/processing.md).
-[Kết quả kiểm chứng](docs/pipeline-validation.md) phân biệt test, sample MinIO và
-dữ liệu thật. Không coi lệnh ví dụ hoặc benchmark trên sample nhỏ là bằng chứng
-đã chạy toàn bộ dữ liệu hay chứng minh khả năng mở rộng.
+- [Vận hành, cấu hình và đọc lại Parquet](docs/processing.md) · [Data Contract](data/schemas/feature_dictionary.md).
+- [Hồ sơ kiểm chứng](docs/reports/pipeline-validation.md) · [Báo cáo triển khai](docs/reports/storage-processing-report.md).
+- [Hướng dẫn benchmark](docs/benchmark-guide.md) · [Kiến trúc hệ thống](docs/explanations/system-overview-explained.md).

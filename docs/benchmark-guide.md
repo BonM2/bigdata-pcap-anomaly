@@ -117,4 +117,4 @@ git -c core.safecrlf=false diff --check
 
 Test benchmark chạy được trên host không cần PySpark; các test Spark chạy trong image
 dự án. End-to-end MinIO được kiểm chứng ngay trong mỗi trial benchmark, không cần
-seed lại dữ liệu thật. Kết quả đã đo nằm trong [báo cáo triển khai](storage-processing-report.md).
+seed lại dữ liệu thật. Kết quả đã đo nằm trong [báo cáo triển khai](reports/storage-processing-report.md).

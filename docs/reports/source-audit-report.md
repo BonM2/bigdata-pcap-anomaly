@@ -1,5 +1,9 @@
 # Báo cáo kiểm tra CICIDS2017 trước upload
 
+> Hồ sơ lịch sử; kết luận bên dưới thuộc thời điểm audit. Đường dẫn bằng chứng
+> đã được cập nhật theo [danh mục lưu trữ](../evidence/README.md). Dùng
+> [README hiện hành](../../README.md) để xem trạng thái mới nhất và lệnh chạy.
+
 Thời điểm audit: 12/10/2026, 23:23 (UTC+07:00).
 
 ## Kết luận
@@ -143,8 +147,8 @@ hiện trong báo cáo này.
 
 ## Bằng chứng và tái lập
 
-- [Hướng dẫn processing](processing.md).
-- [Audit chi tiết theo file/cột, min/max, nhãn và hash (local)](source-audit.local.json).
-- [Spark MinIO smoke report (local)](minio-smoke.local.json).
+- [Hướng dẫn processing](../processing.md).
+- [Audit chi tiết theo file/cột, min/max, nhãn và hash (local)](../evidence/local/source-audit.local.json).
+- [Spark MinIO smoke report (local)](../evidence/local/minio-smoke.local.json).
 - JSON local và CSV thật đều được gitignore; báo cáo Markdown này không chứa
   credentials hay nội dung dataset lớn.

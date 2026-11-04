@@ -12,18 +12,18 @@ Mở VS Code tại `D:\bigdata-pcap-anomaly`. Chuẩn bị các tab:
 
 | Tab | Nội dung cần chỉ | Lời nói |
 |---|---|---|
-| `docs/system-overview-explained.md` preview | Mermaid kiến trúc | “Driver khác master daemon; đây là một host chạy các container.” |
-| [main.py:34](../processing/main.py#L34) | `run_pipeline` và các ranh giới | “Đây là đường gọi thật.” |
-| [ingestion.py:94](../processing/ingestion.py#L94) | textFile/mapPartitionsWithIndex | “Reader actual không dùng inferSchema CSV.” |
-| [clean.py:41](../processing/clean.py#L41) | Hai vòng rate/window và split | “Clean policy mềm; hard lỗi giữ ở nhánh lỗi.” |
-| [validation.py:43](../processing/validation.py#L43) | exceptAll/transitions | “Count đúng chưa đủ, duplicate multiplicity được bảo toàn.” |
-| [quality-example.json](benchmarks/20261021/quality-example.json) | before/after/post/reconciliation/outputs | “Đây là report thực nghiệm synthetic.” |
-| [summary.csv](benchmarks/20261021/summary.csv) và [PNG](benchmarks/20261021/benchmark.png) | 9 nhóm cấu hình | “Mỗi nhóm hai scored trials, warmup lưu riêng.” |
-| [test-results.json](benchmarks/20261021/test-results.json) | 36 tests/log SHA | “Đây là PASS lịch sử ngày 21/10, không phải vừa rerun.” |
+| `docs/explanations/system-overview-explained.md` preview | Mermaid kiến trúc | “Driver khác master daemon; đây là một host chạy các container.” |
+| [main.py:34](../../processing/main.py#L34) | `run_pipeline` và các ranh giới | “Đây là đường gọi thật.” |
+| [ingestion.py:94](../../processing/ingestion.py#L94) | textFile/mapPartitionsWithIndex | “Reader actual không dùng inferSchema CSV.” |
+| [clean.py:41](../../processing/clean.py#L41) | Hai vòng rate/window và split | “Clean policy mềm; hard lỗi giữ ở nhánh lỗi.” |
+| [validation.py:43](../../processing/validation.py#L43) | exceptAll/transitions | “Count đúng chưa đủ, duplicate multiplicity được bảo toàn.” |
+| [quality-example.json](../benchmarks/20261021/quality-example.json) | before/after/post/reconciliation/outputs | “Đây là report thực nghiệm synthetic.” |
+| [summary.csv](../benchmarks/20261021/summary.csv) và [PNG](../benchmarks/20261021/benchmark.png) | 9 nhóm cấu hình | “Mỗi nhóm hai scored trials, warmup lưu riêng.” |
+| [test-results.json](../benchmarks/20261021/test-results.json) | 36 tests/log SHA | “Đây là PASS lịch sử ngày 21/10, không phải vừa rerun.” |
 
 VS Code `Ctrl+P`, gõ `processing/main.py:34` để tới đúng dòng; preview Markdown để
-render Mermaid. Hai PNG architecture/data_flow cũ chỉ 1 byte, không mở chúng như
-sơ đồ đã hoàn thiện. Không mở toàn bộ 8 CSV lớn khi chỉ cần fixture.
+render Mermaid; các PNG placeholder cũ đã được loại bỏ. Không mở toàn bộ 8 CSV lớn
+khi chỉ cần fixture.
 
 Lời mở đầu gợi ý: “Em sẽ chỉ code kiểm soát dữ liệu, một record trước/sau và bằng
 chứng storage/benchmark. Sau đó, nếu cluster đang sẵn sàng, em chạy đọc synthetic
@@ -33,19 +33,19 @@ nhỏ và kiểm executor tasks; em không upload hay ghi lại dataset thật t
 
 ### A1. Một record Before/After (khoảng 1–2 phút)
 
-Mở [sample_flow.csv dòng 3](../data/sample/sample_flow.csv#L3): rate `Infinity` ở
-fixture. Chỉ [transform:32](../processing/transform.py#L32) để giải thích Double Inf
-cast thành công, không phải cast failure; [validation:160](../processing/validation.py#L160)
-để giải thích soft; [clean:45](../processing/clean.py#L45) để giải thích NULL+flag;
-[post-check:104](../processing/validation.py#L104) để kiểm raw/cờ/value.
+Mở [sample_flow.csv dòng 3](../../data/sample/sample_flow.csv#L3): rate `Infinity` ở
+fixture. Chỉ [transform:32](../../processing/transform.py#L32) để giải thích Double Inf
+cast thành công, không phải cast failure; [validation:160](../../processing/validation.py#L160)
+để giải thích soft; [clean:45](../../processing/clean.py#L45) để giải thích NULL+flag;
+[post-check:104](../../processing/validation.py#L104) để kiểm raw/cờ/value.
 
-Chuyển sang [sample dòng 6](../data/sample/sample_flow.csv#L6): duration -1, hard →
-quarantine, không sửa thành 0. Dùng [Before/After tables](data-quality-explained.md)
+Chuyển sang [sample dòng 6](../../data/sample/sample_flow.csv#L6): duration -1, hard →
+quarantine, không sửa thành 0. Dùng [Before/After tables](../explanations/data-quality-explained.md)
 để cho thấy mỗi stage gọi hàm nào và đi output nào. Nói rõ các row là synthetic.
 
 ### A2. Report và marker (khoảng 1 phút)
 
-Mở [quality-example.json](benchmarks/20261021/quality-example.json), tìm lần lượt:
+Mở [quality-example.json](../benchmarks/20261021/quality-example.json), tìm lần lượt:
 
 ```text
 batch_id = bench-fb612f14128542ce908752b50444ed91
@@ -57,28 +57,28 @@ outputs.<name>.read_back_status = PASS
 ```
 
 NULL typed cells 20k→50k, NaN/Inf về 0, historical cast failures vẫn 10k. Đó là số
-ô, không cộng thành số record lỗi. Mở [minio-audit.json](benchmarks/20261021/minio-audit.json):
+ô, không cộng thành số record lỗi. Mở [minio-audit.json](../benchmarks/20261021/minio-audit.json):
 22 batch/110 output datasets; audit tải lại marker/report, không count toàn bộ
-Parquet lần mới. Giải thích final marker ở [main:136](../processing/main.py#L136).
+Parquet lần mới. Giải thích final marker ở [main:136](../../processing/main.py#L136).
 
 ### A3. Bộ thật và test (khoảng 1 phút)
 
-Mở [pipeline-eight-real.local.json](pipeline-eight-real.local.json):
+Mở [pipeline-eight-real.local.json](../evidence/local/pipeline-eight-real.local.json):
 2.830.743 = 2.830.628 + 115 + 0, `VALIDATED_NO_OUTPUT`, `outputs={}`. Nói đúng:
 “Bộ thật đã được xử lý/hậu kiểm, nhưng lần đó chưa ghi storage output.” Artifact
 local này không được commit như các JSON benchmark; cần bảo đảm đã copy vào máy
 trình bày nếu dùng clone mới. Nếu thiếu, nói chỉ còn hồ sơ Markdown, không nhận
 là vừa mở được report gốc.
 
-Mở [log tests](pipeline-tests-20261021.local.log) cuối file: 36 tests, OK, exit=0.
+Mở [log tests](../evidence/local/pipeline-tests-20261021.local.log) cuối file: 36 tests, OK, exit=0.
 Có stack trace do failure injection và ResourceWarning; không coi mọi chữ ERROR
-trong log là unittest FAIL. [test_pipeline:36](../tests/test_pipeline.py#L36) cố ý
+trong log là unittest FAIL. [test_pipeline:36](../../tests/test_pipeline.py#L36) cố ý
 test lỗi ghi và không có final success. Không rerun bộ test nặng giữa demo trừ khi
 đã chủ động lên kế hoạch và có thời gian.
 
 ### A4. Benchmark (khoảng 1–2 phút)
 
-Hiện [PNG](benchmarks/20261021/benchmark.png), nói ba điểm:
+Hiện [PNG](../benchmarks/20261021/benchmark.png), nói ba điểm:
 
 1. Size tăng 12k→120k, median throughput 771→4.484 records/s; input low entropy,
    highest 20,34 MB, không gọi benchmark GB.
@@ -87,8 +87,8 @@ Hiện [PNG](benchmarks/20261021/benchmark.png), nói ba điểm:
    optimal tổng quát. Input/features vẫn hai partitions, không phải toàn DAG có 16.
 
 Chỉ error bars là min–max và timer gồm Parquet read-back; không so trực tiếp với
-8.975 records/s của full-real validate-only. Nguồn [summary.csv](benchmarks/20261021/summary.csv)
-và [benchmark-explained.md](benchmark-explained.md).
+8.975 records/s của full-real validate-only. Nguồn [summary.csv](../benchmarks/20261021/summary.csv)
+và [benchmark-explained.md](../explanations/benchmark-explained.md).
 
 ## 3. Kiểm tra hạ tầng trước phần live
 
@@ -108,8 +108,8 @@ Mở Master `http://localhost:8080`, kiểm **ALIVE workers** và **Active Appli
 Đếm ALIVE thay vì tổng cả DEAD worker history. Nếu có job khác dùng resource, tránh
 đưa số thời gian demo vào bảng benchmark và không dừng job của người khác.
 Worker UIs được map `http://localhost:8081`, `http://localhost:8082`; MinIO Console
-`http://localhost:9001`. Các port này có trong [Compose:23](../docker/docker-compose.yml#L23),
-[Compose:43](../docker/docker-compose.yml#L43), [Compose:53](../docker/docker-compose.yml#L53).
+`http://localhost:9001`. Các port này có trong [Compose:23](../../docker/docker-compose.yml#L23),
+[Compose:43](../../docker/docker-compose.yml#L43), [Compose:53](../../docker/docker-compose.yml#L53).
 
 ## 4. Phần B — Chạy Spark chỉ đọc và giữ driver để xem task metrics
 
@@ -145,9 +145,9 @@ Kỳ vọng dựa trên fixture/đợt chạy trước: master `spark://spark-ma
 là **kỳ vọng**, chỉ gọi live PASS sau khi lệnh thực sự thành công. Không print
 `os.environ` hoặc SparkConf đầy đủ vì có thể chứa credentials.
 
-Nguồn API: [config:126](../processing/config.py#L126),
-[run_pipeline:34](../processing/main.py#L34),
-[no-output branch:140](../processing/main.py#L140).
+Nguồn API: [config:126](../../processing/config.py#L126),
+[run_pipeline:34](../../processing/main.py#L34),
+[no-output branch:140](../../processing/main.py#L140).
 
 ### B1. Chứng minh tasks đã chạy ở executor nào
 
@@ -174,7 +174,7 @@ Không dùng số executor làm số worker: đối chiếu `hostPort` với wor
 Muốn nói cả hai worker tham gia data work, cần executor trên cả hai hosts có tasks
 completed >0. Nếu không có, trình bày đúng quan sát thay vì tuyên bố chia đều.
 Master cấp 4 cores là resource evidence, completed tasks là execution evidence.
-Code benchmark hiện mới lưu lớp đầu, [benchmark:145](../experiments/benchmark.py#L145).
+Code benchmark hiện mới lưu lớp đầu, [benchmark:145](../../experiments/benchmark.py#L145).
 Đường REST executors tham chiếu
 [Spark 3.5.0 Monitoring](https://raw.githubusercontent.com/apache/spark/v3.5.0/docs/monitoring.md).
 
@@ -201,8 +201,8 @@ cleaned.select("label", "flow_duration").filter("flow_duration >= 0").explain("f
 Kỳ vọng artifact: 34 cột / 40.000 rows / VALID. `explain` cho thấy read schema và
 filter pushdown nếu plan hỗ trợ; không lấy sự hiện diện của pushed filter làm số
 đo tiết kiệm I/O. Nguồn kiểm write/read-back actual:
-[write_verified_parquet:79](../processing/output.py#L79),
-[quality-example.json](benchmarks/20261021/quality-example.json).
+[write_verified_parquet:79](../../processing/output.py#L79),
+[quality-example.json](../benchmarks/20261021/quality-example.json).
 Nếu object bị mất hoặc không truy cập được, live read là FAIL; artifact lịch sử
 vẫn có giá trị lịch sử nhưng không biến live failure thành PASS.
 
@@ -247,7 +247,7 @@ synthetic sang raw để “đủ hình minh chứng”.
 |---|---|
 | Docker engine không kết nối | Hạ tầng hiện chưa sẵn sàng; trình bày artifact lịch sử, không tự nhận live PASS |
 | Master hai ALIVE, app vẫn local | Kiểm `spark.sparkContext.master`; local[2] không dùng standalone workers |
-| Không có S3AFileSystem class | Kiểm image/JAR Hadoop AWS theo [Dockerfile:4](../docker/spark/Dockerfile#L4); không sửa version ngẫu nhiên trong buổi bảo vệ |
+| Không có S3AFileSystem class | Kiểm image/JAR Hadoop AWS theo [Dockerfile:4](../../docker/spark/Dockerfile#L4); không sửa version ngẫu nhiên trong buổi bảo vệ |
 | Connection refused/unknown host MinIO | Phân biệt endpoint container `minio:9000` với host localhost; chưa kết luận credentials sai |
 | Access denied | Kiểm cấu hình môi trường qua người vận hành, không print secret để debug công khai |
 | No CSV input objects | Kiểm URI/prefix thực tế; không khẳng định upload đã chạy chỉ vì dry-run có plan |

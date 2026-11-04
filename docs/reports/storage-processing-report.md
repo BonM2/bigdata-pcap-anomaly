@@ -1,5 +1,9 @@
 # Báo cáo triển khai Storage → Processing
 
+> Hồ sơ lịch sử; các số đo giữ nguyên khi sắp xếp tài liệu. Đường dẫn hiện tại
+> được mô tả trong [danh mục bằng chứng](../evidence/README.md); các lệnh gốc
+> vẫn được giữ nguyên trong [commands.txt](../benchmarks/20261021/commands.txt).
+
 Ngày tổng hợp: **21/10/2026**, múi giờ Asia/Bangkok. Phạm vi: Spark 3.5.0,
 MinIO/S3A, Data Contract v2.3.0, Parquet Snappy; không ML hoặc cảnh báo.
 Số đo thực nghiệm lấy từ JSON và log thực thi, không dùng số liệu minh họa.
@@ -35,9 +39,9 @@ tái sử dụng, không chỉnh sửa trong đợt này.
 | `tests/test_benchmark.py` (mới) | Workload grouping, loại warmup, speedup, baseline, synthetic scaling và topology mismatch |
 | `tests/smoke_pipeline.py` (mới) | E2E MinIO trên fixture synthetic, xác minh 12 = 4 + 6 + 2 |
 | `README.md`, `docs/processing.md` | Trạng thái thực thi và lệnh chạy pipeline |
-| `docs/pipeline-validation.md` (mới) | Hồ sơ ngày 20/10: baseline tests, thử lỗi, 8 CSV read-only và smoke MinIO |
+| `docs/reports/pipeline-validation.md` (mới) | Hồ sơ ngày 20/10: baseline tests, thử lỗi, 8 CSV read-only và smoke MinIO |
 | `docs/benchmark-guide.md` (mới) | Phương pháp và lệnh tái lập cả ba benchmark |
-| `docs/storage-processing-report.md` (mới) | Báo cáo bàn giao này |
+| `docs/reports/storage-processing-report.md` (mới) | Báo cáo bàn giao này |
 | `.gitignore` | Cho phép lưu JSON/CSV benchmark nhỏ trong docs; vẫn loại raw CSV/Parquet/log/credentials |
 | `docs/benchmarks/20261021/` (mới) | Manifest, môi trường, các JSON đo thực tế, CSV và biểu đồ |
 
@@ -74,7 +78,7 @@ Phương trình đúng là `input = cleaned VALID + quarantine + rejected` tại
 
 Nguồn synthetic: `s3a://bigdata-network/smoke/benchmark-scaling/v1/copies-N/synthetic.csv`,
 với N = 1000, 5000, 10000. Manifest nguồn có SHA-256 trong
-[scaling-manifest.json](benchmarks/20261021/scaling-manifest.json).
+[scaling-manifest.json](../benchmarks/20261021/scaling-manifest.json).
 
 Tám CSV thật đã được kiểm chứng **read-only** ngày 20/10: **2.830.743 input =
 2.830.628 VALID + 115 QUARANTINED + 0 REJECTED**, tính được 2.830.628 features và
@@ -99,8 +103,8 @@ size (12k,60k,120k,120k,60k,12k), partition (4,8,16,32,32,16,8,4), rồi worker 
 Mỗi invocation bắt đầu bằng warmup riêng không nằm trong danh sách thứ tự này.
 
 Lệnh đầy đủ có thể chạy lại, gồm việc đổi/restoring topology và lấy artifact:
-[benchmark-guide.md](benchmark-guide.md). Dùng tên result/experiment mới khi chạy lại.
-Bản ghi nguyên các lệnh benchmark đã dùng: [commands.txt](benchmarks/20261021/commands.txt).
+[benchmark-guide.md](../benchmark-guide.md). Dùng tên result/experiment mới khi chạy lại.
+Bản ghi nguyên các lệnh benchmark đã dùng: [commands.txt](../benchmarks/20261021/commands.txt).
 
 Các lệnh kiểm thử:
 
@@ -148,10 +152,10 @@ vì API pipeline không tự suy topology. Dùng benchmark JSON khi phân tích 
 ## Kết quả benchmark thực tế
 
 Đã hoàn thành **18 trial được tính điểm + 4 warmup**. JSON của cả bốn invocation
-đều `COMPLETE`: [size](benchmarks/20261021/size.json),
-[partitions](benchmarks/20261021/partitions.json),
-[1 worker](benchmarks/20261021/workers-1.json),
-[2 workers](benchmarks/20261021/workers-2.json).
+đều `COMPLETE`: [size](../benchmarks/20261021/size.json),
+[partitions](../benchmarks/20261021/partitions.json),
+[1 worker](../benchmarks/20261021/workers-1.json),
+[2 workers](../benchmarks/20261021/workers-2.json).
 Mỗi hàng dưới có **2 lần đo**; throughput là median của throughput từng trial,
 không lấy input chia cho median duration. Speedup tính theo median duration.
 
@@ -171,10 +175,10 @@ Các warmup lần lượt size/partition/1 worker/2 workers: **41,154 / 46,885 /
 39,893 / 44,007 giây**; không trộn vào bảng. Input và features của workload 120k
 đều có **2 partitions** thực tế; biến thí nghiệm partition là cấu hình shuffle.
 
-![Biểu đồ benchmark thực nghiệm](benchmarks/20261021/benchmark.png)
+![Biểu đồ benchmark thực nghiệm](../benchmarks/20261021/benchmark.png)
 
-Bảng tổng hợp: [summary.csv](benchmarks/20261021/summary.csv). Từng lần đo, warmup,
-stage timings và URI report: [runs.csv](benchmarks/20261021/runs.csv).
+Bảng tổng hợp: [summary.csv](../benchmarks/20261021/summary.csv). Từng lần đo, warmup,
+stage timings và URI report: [runs.csv](../benchmarks/20261021/runs.csv).
 Biểu đồ đã được render và kiểm tra nhãn/giá trị, thanh sai số biểu diễn min–max,
 không phải confidence interval.
 
@@ -200,9 +204,9 @@ Audit chỉ đọc đã tải lại **22 marker cuối + 22 quality JSON + 22 pe
 đối chiếu batch/count/hậu kiểm/schema/evidence và số đo. Kết quả **PASS**, bao phủ
 **110 output Parquet** đã được Spark đọc lại trong các trial. Audit JSON không tự
 chạy lại 110 lần đọc Parquet; nó xác minh các bằng chứng đã lưu từ những lần đọc đó.
-Chi tiết: [minio-audit.json](benchmarks/20261021/minio-audit.json).
+Chi tiết: [minio-audit.json](../benchmarks/20261021/minio-audit.json).
 
-Bản [quality-example.json](benchmarks/20261021/quality-example.json) được lấy trực
+Bản [quality-example.json](../benchmarks/20261021/quality-example.json) được lấy trực
 tiếp từ batch 120k nêu trên, không tổng hợp bằng số giả:
 
 | Chỉ số | Trước cleaning | Sau cleaning |
@@ -222,7 +226,7 @@ VALID vi phạm. Đây là số đếm cell của 22 trường lõi, không ph�
 
 | Kiểm tra | Trạng thái | Bằng chứng |
 |---|---|---|
-| Toàn bộ unit/integration tests trong Docker | **PASS: 36/36**, 88,041 s; 0 FAIL, 0 SKIPPED | `docs/pipeline-tests-20261021.local.log`, [test-results.json](benchmarks/20261021/test-results.json) |
+| Toàn bộ unit/integration tests trong Docker | **PASS: 36/36**, 88,041 s; 0 FAIL, 0 SKIPPED | `docs/evidence/local/pipeline-tests-20261021.local.log`, [test-results.json](../benchmarks/20261021/test-results.json) |
 | Benchmark helper tests trên host | **PASS: 7/7** | `python -m unittest tests.test_benchmark -v` |
 | Hậu kiểm, features, aggregation, quality report | **PASS** | Test suite và 22 trial thực thi |
 | Local E2E + output rỗng + no-overwrite + lỗi ghi/hậu kiểm | **PASS** | `tests/test_pipeline.py`; lỗi inject được kỳ vọng, không phải test FAIL |
@@ -231,7 +235,7 @@ VALID vi phạm. Đây là số đếm cell của 22 trường lõi, không ph�
 | Size / workers / partitions | **PASS thực thi**, không đồng nghĩa speedup dương | 4 JSON COMPLETE, 18 trial được tính điểm |
 | Biểu đồ và CSV | **PASS** | Được sinh từ 4 JSON COMPLETE; kiểm tra hình render |
 | `compileall`, `git diff --check` | **PASS** | Chạy sau thay đổi code |
-| Bảo toàn 8 CSV và Data Contract | **PASS** | Uploader DRY_RUN exit 0 ngày 21/10; `docs/source-integrity-20261021.local.json`; không upload |
+| Bảo toàn 8 CSV và Data Contract | **PASS** | Uploader DRY_RUN exit 0 ngày 21/10; `docs/evidence/local/source-integrity-20261021.local.json`; không upload |
 | Upload/ghi Parquet của 8 CSV thật lên MinIO | **SKIPPED trong đợt này** | Giữ ràng buộc chưa tự upload/ghi dữ liệu thật; read-only 8 CSV đã PASS ngày 20/10 |
 | Benchmark tải GB hoặc nhiều máy vật lý | **SKIPPED** | Chưa thực nghiệm, không điền số giả |
 
