@@ -1,0 +1,74 @@
+{
+  "timestamp_utc": "2026-11-10T07:12:34.989007+00:00",
+  "host_platform": "Windows-10-10.0.19045-SP0",
+  "host_python": "3.13.14",
+  "docker": {
+    "ServerVersion": "29.9.3",
+    "OperatingSystem": "Docker Desktop",
+    "OSType": "linux",
+    "Architecture": "x86_64",
+    "KernelVersion": "6.18.40.1-microsoft-standard-WSL2",
+    "NCPU": 6,
+    "MemTotal": 10406920192,
+    "Driver": "overlayfs"
+  },
+  "git_commit": "981665e5a1d306761432828734f6dd16804093ec",
+  "initial_topology": {
+    "url": "spark://spark-master:7077",
+    "workers": [
+      {
+        "id": "worker-20261110071202-172.18.0.4-33305",
+        "host": "172.18.0.4",
+        "port": 33305,
+        "webuiaddress": "http://172.18.0.4:8081",
+        "cores": 2,
+        "coresused": 0,
+        "coresfree": 2,
+        "memory": 2048,
+        "memoryused": 0,
+        "memoryfree": 2048,
+        "resources": {},
+        "resourcesused": {},
+        "resourcesfree": {},
+        "state": "ALIVE",
+        "lastheartbeat": 1794294754377
+      },
+      {
+        "id": "worker-20261110071202-172.18.0.5-36839",
+        "host": "172.18.0.5",
+        "port": 36839,
+        "webuiaddress": "http://172.18.0.5:8081",
+        "cores": 2,
+        "coresused": 0,
+        "coresfree": 2,
+        "memory": 2048,
+        "memoryused": 0,
+        "memoryfree": 2048,
+        "resources": {},
+        "resourcesused": {},
+        "resourcesfree": {},
+        "state": "ALIVE",
+        "lastheartbeat": 1794294754356
+      }
+    ],
+    "aliveworkers": 2,
+    "cores": 4,
+    "coresused": 0,
+    "memory": 4096,
+    "memoryused": 0,
+    "resources": [
+      {},
+      {}
+    ],
+    "resourcesused": [
+      {},
+      {}
+    ],
+    "activeapps": [],
+    "completedapps": [],
+    "activedrivers": [],
+    "completeddrivers": [],
+    "status": "ALIVE"
+  },
+  "selection_note": "Nested original files: Friday Morning; all Friday; all eight CSVs. Label mix changes with size."
+}

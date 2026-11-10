@@ -1,0 +1,6435 @@
+{
+  "audit_timestamp_utc": "2026-11-10T05:54:58.652558+00:00",
+  "scope": "Read-only local CSV audit; policy preview is not a Spark processing result",
+  "schema_sha256": "6c62f9be0652df15f61e1975ecb111010a5b9b1dd6ea87936de88e400fefc648",
+  "contract_sha256": "7d8e9b16d1717f8977e9c9a94f7a2bf6b5ed751ad07bf113d59258b4be6059a1",
+  "source_directory": "C:\\Users\\Thinh\\Desktop\\PPNCKH\\79rows",
+  "input_records": 2830743,
+  "input_bytes": 884645759,
+  "structurally_ready_for_upload": true,
+  "files": [
+    {
+      "source_file": "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+      "input_bytes": 77123859,
+      "source_sha256": "6ff1580f5f81c0ae28a26f7631721018577f5f7c5e0feac28b795fcfe7b411ee",
+      "input_records": 225745,
+      "header_columns": 79,
+      "header_matches_exact": true,
+      "header_differences": [],
+      "duplicate_headers": {
+        "Fwd Header Length": [
+          35,
+          56
+        ]
+      },
+      "duplicate_header_value_mismatches": 0,
+      "row_width_distribution": {
+        "79": 225745
+      },
+      "malformed_records": 0,
+      "utf8_decode_error_records": 0,
+      "label_replacement_records": 0,
+      "label_distribution": {
+        "BENIGN": 97718,
+        "DDoS": 128027
+      },
+      "policy_preview": {
+        "valid_records": 225743,
+        "quarantined_records": 2,
+        "rejected_records": 0,
+        "valid_records_with_soft_issues": 88308
+      },
+      "fields": {
+        "destination_port": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0,
+          "max": 65532
+        },
+        "flow_duration": {
+          "target_type": "long",
+          "counts": {
+            "finite": 225745,
+            "negative": 2
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -1,
+          "max": 119999937
+        },
+        "total_fwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 1,
+          "max": 1932
+        },
+        "total_backward_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0,
+          "max": 2942
+        },
+        "total_length_of_fwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0,
+          "max": 183012
+        },
+        "total_length_of_bwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0,
+          "max": 5172346
+        },
+        "fwd_packet_length_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 11680.0
+        },
+        "fwd_packet_length_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1472.0
+        },
+        "fwd_packet_length_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745,
+            "fractional": 91253
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3867.0
+        },
+        "fwd_packet_length_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745,
+            "fractional": 115687
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 6692.644993
+        },
+        "bwd_packet_length_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 11680.0
+        },
+        "bwd_packet_length_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1460.0
+        },
+        "bwd_packet_length_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745,
+            "fractional": 104445
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 5800.5
+        },
+        "bwd_packet_length_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745,
+            "fractional": 113705
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 8194.660487
+        },
+        "flow_bytes_s": {
+          "target_type": "double",
+          "counts": {
+            "finite": 225711,
+            "fractional": 216366,
+            "positive_infinity": 30,
+            "nan": 4,
+            "negative": 2
+          },
+          "examples": {
+            "positive_infinity": "Infinity",
+            "nan": "NaN",
+            "negative": "-12000000"
+          },
+          "min": -12000000.0,
+          "max": 2070000000.0
+        },
+        "flow_packets_s": {
+          "target_type": "double",
+          "counts": {
+            "finite": 225711,
+            "fractional": 223072,
+            "positive_infinity": 34,
+            "negative": 2
+          },
+          "examples": {
+            "positive_infinity": "Infinity",
+            "negative": "-2000000"
+          },
+          "min": -2000000.0,
+          "max": 3000000.0
+        },
+        "flow_iat_mean": {
+          "target_type": "double",
+          "counts": {
+            "finite": 225745,
+            "fractional": 164837,
+            "negative": 2
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -1.0,
+          "max": 107000000.0
+        },
+        "flow_iat_std": {
+          "target_type": "double",
+          "counts": {
+            "finite": 225745,
+            "fractional": 172146
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 69200000.0
+        },
+        "flow_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745,
+            "negative": 2
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -1.0,
+          "max": 120000000.0
+        },
+        "flow_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745,
+            "negative": 108
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -12.0,
+          "max": 107000000.0
+        },
+        "fwd_iat_total": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745,
+            "fractional": 86185
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745,
+            "fractional": 131769
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 76700000.0
+        },
+        "fwd_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745,
+            "negative": 6
+          },
+          "examples": {
+            "negative": "-12"
+          },
+          "min": -12.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_total": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745,
+            "fractional": 90871
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745,
+            "fractional": 113750
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 76700000.0
+        },
+        "bwd_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_psh_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "bwd_psh_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_urg_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_urg_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_header_length": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 39396.0
+        },
+        "bwd_header_length": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 58852.0
+        },
+        "fwd_packets_s": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745,
+            "fractional": 223183
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3000000.0
+        },
+        "bwd_packets_s": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745,
+            "fractional": 169026
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2000000.0
+        },
+        "min_packet_length": {
+          "target_type": "double",
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 337.0
+        },
+        "max_packet_length": {
+          "target_type": "double",
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 11680.0
+        },
+        "packet_length_mean": {
+          "target_type": "double",
+          "counts": {
+            "finite": 225745,
+            "fractional": 141195
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1936.833333
+        },
+        "packet_length_std": {
+          "target_type": "double",
+          "counts": {
+            "finite": 225745,
+            "fractional": 150372
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 4731.522394
+        },
+        "packet_length_variance": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745,
+            "fractional": 128655
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 22400000.0
+        },
+        "fin_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "syn_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "rst_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "psh_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "ack_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "urg_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "cwe_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "ece_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "down_up_ratio": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 7.0
+        },
+        "average_packet_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745,
+            "fractional": 178381
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2528.0
+        },
+        "avg_fwd_segment_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745,
+            "fractional": 91253
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3867.0
+        },
+        "avg_bwd_segment_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745,
+            "fractional": 104445
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 5800.5
+        },
+        "fwd_header_length_repeat_2": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 39396.0
+        },
+        "fwd_avg_bytes_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_avg_packets_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_avg_bulk_rate": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_bytes_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_packets_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_bulk_rate": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "subflow_fwd_packets": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 1.0,
+          "max": 1932.0
+        },
+        "subflow_fwd_bytes": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 183012.0
+        },
+        "subflow_bwd_packets": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2942.0
+        },
+        "subflow_bwd_bytes": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 5172346.0
+        },
+        "init_win_bytes_forward": {
+          "target_type": "long",
+          "counts": {
+            "finite": 225745,
+            "sentinel_minus_one": 32925
+          },
+          "examples": {
+            "sentinel_minus_one": "-1"
+          },
+          "min": -1,
+          "max": 65535
+        },
+        "init_win_bytes_backward": {
+          "target_type": "long",
+          "counts": {
+            "finite": 225745,
+            "sentinel_minus_one": 88299
+          },
+          "examples": {
+            "sentinel_minus_one": "-1"
+          },
+          "min": -1,
+          "max": 65535
+        },
+        "act_data_pkt_fwd": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1931.0
+        },
+        "min_seg_size_forward": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 52.0
+        },
+        "active_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745,
+            "fractional": 4355
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 100000000.0
+        },
+        "active_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745,
+            "fractional": 5678
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 39500000.0
+        },
+        "active_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 100000000.0
+        },
+        "active_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 100000000.0
+        },
+        "idle_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745,
+            "fractional": 2150
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "idle_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745,
+            "fractional": 5445
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 65300000.0
+        },
+        "idle_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "idle_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 225745
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "label": {
+          "target_type": "string",
+          "counts": {},
+          "examples": {},
+          "min": null,
+          "max": null
+        }
+      }
+    },
+    {
+      "source_file": "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+      "input_bytes": 76906168,
+      "source_sha256": "ca1824c51bfbb7b3c72290a11be04366ba8815878c6a1cc5c44cb1cee269e99b",
+      "input_records": 286467,
+      "header_columns": 79,
+      "header_matches_exact": true,
+      "header_differences": [],
+      "duplicate_headers": {
+        "Fwd Header Length": [
+          35,
+          56
+        ]
+      },
+      "duplicate_header_value_mismatches": 0,
+      "row_width_distribution": {
+        "79": 286467
+      },
+      "malformed_records": 0,
+      "utf8_decode_error_records": 0,
+      "label_replacement_records": 0,
+      "label_distribution": {
+        "BENIGN": 127537,
+        "PortScan": 158930
+      },
+      "policy_preview": {
+        "valid_records": 286431,
+        "quarantined_records": 36,
+        "rejected_records": 0,
+        "valid_records_with_soft_issues": 77260
+      },
+      "fields": {
+        "destination_port": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0,
+          "max": 65389
+        },
+        "flow_duration": {
+          "target_type": "long",
+          "counts": {
+            "finite": 286467,
+            "negative": 36
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -13,
+          "max": 119999949
+        },
+        "total_fwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 1,
+          "max": 3119
+        },
+        "total_backward_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0,
+          "max": 3635
+        },
+        "total_length_of_fwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0,
+          "max": 232349
+        },
+        "total_length_of_bwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0,
+          "max": 7150819
+        },
+        "fwd_packet_length_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 13929.0
+        },
+        "fwd_packet_length_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1472.0
+        },
+        "fwd_packet_length_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467,
+            "fractional": 32858
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3412.938776
+        },
+        "fwd_packet_length_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467,
+            "fractional": 40610
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3541.466551
+        },
+        "bwd_packet_length_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 10136.0
+        },
+        "bwd_packet_length_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1460.0
+        },
+        "bwd_packet_length_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467,
+            "fractional": 25588
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2442.523124
+        },
+        "bwd_packet_length_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467,
+            "fractional": 29860
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2628.883261
+        },
+        "flow_bytes_s": {
+          "target_type": "double",
+          "counts": {
+            "finite": 286096,
+            "fractional": 244808,
+            "positive_infinity": 356,
+            "nan": 15,
+            "negative": 36
+          },
+          "examples": {
+            "positive_infinity": "Infinity",
+            "nan": "NaN",
+            "negative": "-12000000"
+          },
+          "min": -193000000.0,
+          "max": 2070000000.0
+        },
+        "flow_packets_s": {
+          "target_type": "double",
+          "counts": {
+            "finite": 286096,
+            "fractional": 266297,
+            "positive_infinity": 371,
+            "negative": 36
+          },
+          "examples": {
+            "positive_infinity": "Infinity",
+            "negative": "-2000000"
+          },
+          "min": -2000000.0,
+          "max": 3000000.0
+        },
+        "flow_iat_mean": {
+          "target_type": "double",
+          "counts": {
+            "finite": 286467,
+            "fractional": 64349,
+            "negative": 36
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -13.0,
+          "max": 98100000.0
+        },
+        "flow_iat_std": {
+          "target_type": "double",
+          "counts": {
+            "finite": 286467,
+            "fractional": 81207
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 84800000.0
+        },
+        "flow_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467,
+            "negative": 36
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -13.0,
+          "max": 120000000.0
+        },
+        "flow_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467,
+            "negative": 176
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -13.0,
+          "max": 98100000.0
+        },
+        "fwd_iat_total": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467,
+            "fractional": 33910
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467,
+            "fractional": 41250
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 81200000.0
+        },
+        "fwd_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_total": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467,
+            "fractional": 25217
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467,
+            "fractional": 28253
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 81300000.0
+        },
+        "bwd_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_psh_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "bwd_psh_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_urg_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_urg_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_header_length": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 79632.0
+        },
+        "bwd_header_length": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 81288.0
+        },
+        "fwd_packets_s": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467,
+            "fractional": 266474
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3000000.0
+        },
+        "bwd_packets_s": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467,
+            "fractional": 252839
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2000000.0
+        },
+        "min_packet_length": {
+          "target_type": "double",
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 289.0
+        },
+        "max_packet_length": {
+          "target_type": "double",
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 13929.0
+        },
+        "packet_length_mean": {
+          "target_type": "double",
+          "counts": {
+            "finite": 286467,
+            "fractional": 163905
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1588.0
+        },
+        "packet_length_std": {
+          "target_type": "double",
+          "counts": {
+            "finite": 286467,
+            "fractional": 256027
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2497.019924
+        },
+        "packet_length_variance": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467,
+            "fractional": 167741
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 6235108.501
+        },
+        "fin_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "syn_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "rst_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "psh_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "ack_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "urg_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "cwe_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "ece_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "down_up_ratio": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 124.0
+        },
+        "average_packet_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467,
+            "fractional": 73075
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2068.0
+        },
+        "avg_fwd_segment_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467,
+            "fractional": 32858
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3412.938776
+        },
+        "avg_bwd_segment_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467,
+            "fractional": 25588
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2442.523124
+        },
+        "fwd_header_length_repeat_2": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 79632.0
+        },
+        "fwd_avg_bytes_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_avg_packets_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_avg_bulk_rate": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_bytes_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_packets_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_bulk_rate": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "subflow_fwd_packets": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 1.0,
+          "max": 3119.0
+        },
+        "subflow_fwd_bytes": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 232349.0
+        },
+        "subflow_bwd_packets": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3635.0
+        },
+        "subflow_bwd_bytes": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 7150819.0
+        },
+        "init_win_bytes_forward": {
+          "target_type": "long",
+          "counts": {
+            "finite": 286467,
+            "sentinel_minus_one": 60210
+          },
+          "examples": {
+            "sentinel_minus_one": "-1"
+          },
+          "min": -1,
+          "max": 65535
+        },
+        "init_win_bytes_backward": {
+          "target_type": "long",
+          "counts": {
+            "finite": 286467,
+            "sentinel_minus_one": 76942
+          },
+          "examples": {
+            "sentinel_minus_one": "-1"
+          },
+          "min": -1,
+          "max": 65535
+        },
+        "act_data_pkt_fwd": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2056.0
+        },
+        "min_seg_size_forward": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 60.0
+        },
+        "active_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467,
+            "fractional": 10527
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 110000000.0
+        },
+        "active_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467,
+            "fractional": 13534
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 70500000.0
+        },
+        "active_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 110000000.0
+        },
+        "active_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 110000000.0
+        },
+        "idle_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467,
+            "fractional": 5048
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "idle_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467,
+            "fractional": 13151
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 70500000.0
+        },
+        "idle_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "idle_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 286467
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "label": {
+          "target_type": "string",
+          "counts": {},
+          "examples": {},
+          "min": null,
+          "max": null
+        }
+      }
+    },
+    {
+      "source_file": "Friday-WorkingHours-Morning.pcap_ISCX.csv",
+      "input_bytes": 58316725,
+      "source_sha256": "53a41c24d570ea83b7ac55b2e94df94e7a8216aeb80a2af0246b6bc8bb543000",
+      "input_records": 191033,
+      "header_columns": 79,
+      "header_matches_exact": true,
+      "header_differences": [],
+      "duplicate_headers": {
+        "Fwd Header Length": [
+          35,
+          56
+        ]
+      },
+      "duplicate_header_value_mismatches": 0,
+      "row_width_distribution": {
+        "79": 191033
+      },
+      "malformed_records": 0,
+      "utf8_decode_error_records": 0,
+      "label_replacement_records": 0,
+      "label_distribution": {
+        "BENIGN": 189067,
+        "Bot": 1966
+      },
+      "policy_preview": {
+        "valid_records": 191024,
+        "quarantined_records": 9,
+        "rejected_records": 0,
+        "valid_records_with_soft_issues": 118479
+      },
+      "fields": {
+        "destination_port": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0,
+          "max": 64948
+        },
+        "flow_duration": {
+          "target_type": "long",
+          "counts": {
+            "finite": 191033,
+            "negative": 9
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -12,
+          "max": 119999993
+        },
+        "total_fwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 1,
+          "max": 207964
+        },
+        "total_backward_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0,
+          "max": 284602
+        },
+        "total_length_of_fwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1235152
+        },
+        "total_length_of_bwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0,
+          "max": 627000000
+        },
+        "fwd_packet_length_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 24820.0
+        },
+        "fwd_packet_length_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2325.0
+        },
+        "fwd_packet_length_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033,
+            "fractional": 48402
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 5940.857143
+        },
+        "fwd_packet_length_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033,
+            "fractional": 58896
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 7049.469004
+        },
+        "bwd_packet_length_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 13032.0
+        },
+        "bwd_packet_length_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1639.0
+        },
+        "bwd_packet_length_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033,
+            "fractional": 37444
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3787.339614
+        },
+        "bwd_packet_length_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033,
+            "fractional": 43866
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2773.898104
+        },
+        "flow_bytes_s": {
+          "target_type": "double",
+          "counts": {
+            "finite": 190911,
+            "fractional": 161868,
+            "positive_infinity": 94,
+            "nan": 28,
+            "negative": 8
+          },
+          "examples": {
+            "positive_infinity": "Infinity",
+            "nan": "NaN",
+            "negative": "-12000000"
+          },
+          "min": -12000000.0,
+          "max": 2070000000.0
+        },
+        "flow_packets_s": {
+          "target_type": "double",
+          "counts": {
+            "finite": 190911,
+            "fractional": 182555,
+            "positive_infinity": 122,
+            "negative": 9
+          },
+          "examples": {
+            "positive_infinity": "Infinity",
+            "negative": "-2000000"
+          },
+          "min": -2000000.0,
+          "max": 3000000.0
+        },
+        "flow_iat_mean": {
+          "target_type": "double",
+          "counts": {
+            "finite": 191033,
+            "fractional": 94670,
+            "negative": 9
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -12.0,
+          "max": 119000000.0
+        },
+        "flow_iat_std": {
+          "target_type": "double",
+          "counts": {
+            "finite": 191033,
+            "fractional": 120513
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 84800000.0
+        },
+        "flow_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033,
+            "negative": 9
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -12.0,
+          "max": 120000000.0
+        },
+        "flow_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033,
+            "negative": 225
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -13.0,
+          "max": 119000000.0
+        },
+        "fwd_iat_total": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033,
+            "fractional": 46378
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033,
+            "fractional": 55224
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 83500000.0
+        },
+        "fwd_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_total": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033,
+            "fractional": 35674
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033,
+            "fractional": 40366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 83400000.0
+        },
+        "bwd_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_psh_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "bwd_psh_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_urg_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_urg_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_header_length": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 4369484.0
+        },
+        "bwd_header_length": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 5692040.0
+        },
+        "fwd_packets_s": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033,
+            "fractional": 182836
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3000000.0
+        },
+        "bwd_packets_s": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033,
+            "fractional": 164252
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2000000.0
+        },
+        "min_packet_length": {
+          "target_type": "double",
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1359.0
+        },
+        "max_packet_length": {
+          "target_type": "double",
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 24820.0
+        },
+        "packet_length_mean": {
+          "target_type": "double",
+          "counts": {
+            "finite": 191033,
+            "fractional": 125511
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2265.586207
+        },
+        "packet_length_std": {
+          "target_type": "double",
+          "counts": {
+            "finite": 191033,
+            "fractional": 145991
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 4708.990311
+        },
+        "packet_length_variance": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033,
+            "fractional": 132229
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 22200000.0
+        },
+        "fin_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "syn_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "rst_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "psh_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "ack_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "urg_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "cwe_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "ece_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "down_up_ratio": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 8.0
+        },
+        "average_packet_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033,
+            "fractional": 108753
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2328.0
+        },
+        "avg_fwd_segment_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033,
+            "fractional": 48402
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 5940.857143
+        },
+        "avg_bwd_segment_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033,
+            "fractional": 37444
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3787.339614
+        },
+        "fwd_header_length_repeat_2": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 4369484.0
+        },
+        "fwd_avg_bytes_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_avg_packets_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_avg_bulk_rate": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_bytes_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_packets_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_bulk_rate": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "subflow_fwd_packets": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 1.0,
+          "max": 207964.0
+        },
+        "subflow_fwd_bytes": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1235152.0
+        },
+        "subflow_bwd_packets": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 284602.0
+        },
+        "subflow_bwd_bytes": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 627039470.0
+        },
+        "init_win_bytes_forward": {
+          "target_type": "long",
+          "counts": {
+            "finite": 191033,
+            "sentinel_minus_one": 95834
+          },
+          "examples": {
+            "sentinel_minus_one": "-1"
+          },
+          "min": -1,
+          "max": 65535
+        },
+        "init_win_bytes_backward": {
+          "target_type": "long",
+          "counts": {
+            "finite": 191033,
+            "sentinel_minus_one": 118419
+          },
+          "examples": {
+            "sentinel_minus_one": "-1"
+          },
+          "min": -1,
+          "max": 65535
+        },
+        "act_data_pkt_fwd": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 198636.0
+        },
+        "min_seg_size_forward": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 56.0
+        },
+        "active_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033,
+            "fractional": 13914
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 106000000.0
+        },
+        "active_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033,
+            "fractional": 17651
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 50400000.0
+        },
+        "active_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 106000000.0
+        },
+        "active_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 106000000.0
+        },
+        "idle_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033,
+            "fractional": 6272
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "idle_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033,
+            "fractional": 16902
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 76600000.0
+        },
+        "idle_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "idle_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 191033
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "label": {
+          "target_type": "string",
+          "counts": {},
+          "examples": {},
+          "min": null,
+          "max": null
+        }
+      }
+    },
+    {
+      "source_file": "Monday-WorkingHours.pcap_ISCX.csv",
+      "input_bytes": 176927918,
+      "source_sha256": "852c4beb34eda186f32561fa79df7a0747e92e1a6535b01270820dd9ffe17f34",
+      "input_records": 529918,
+      "header_columns": 79,
+      "header_matches_exact": true,
+      "header_differences": [],
+      "duplicate_headers": {
+        "Fwd Header Length": [
+          35,
+          56
+        ]
+      },
+      "duplicate_header_value_mismatches": 0,
+      "row_width_distribution": {
+        "79": 529918
+      },
+      "malformed_records": 0,
+      "utf8_decode_error_records": 0,
+      "label_replacement_records": 0,
+      "label_distribution": {
+        "BENIGN": 529918
+      },
+      "policy_preview": {
+        "valid_records": 529903,
+        "quarantined_records": 15,
+        "rejected_records": 0,
+        "valid_records_with_soft_issues": 299307
+      },
+      "fields": {
+        "destination_port": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0,
+          "max": 65535
+        },
+        "flow_duration": {
+          "target_type": "long",
+          "counts": {
+            "finite": 529918,
+            "negative": 15
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -1,
+          "max": 119999987
+        },
+        "total_fwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 1,
+          "max": 219759
+        },
+        "total_backward_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0,
+          "max": 291922
+        },
+        "total_length_of_fwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1323378
+        },
+        "total_length_of_bwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0,
+          "max": 655453030
+        },
+        "fwd_packet_length_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 23360.0
+        },
+        "fwd_packet_length_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2293.0
+        },
+        "fwd_packet_length_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "fractional": 155770
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 4638.9234693878
+        },
+        "fwd_packet_length_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "fractional": 181816
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 7125.5968458437
+        },
+        "bwd_packet_length_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 13140.0
+        },
+        "bwd_packet_length_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2146.0
+        },
+        "bwd_packet_length_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "fractional": 115506
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2976.3218390805
+        },
+        "bwd_packet_length_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "fractional": 136238
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2728.5590214128
+        },
+        "flow_bytes_s": {
+          "target_type": "double",
+          "counts": {
+            "finite": 529481,
+            "fractional": 439139,
+            "positive_infinity": 373,
+            "nan": 64,
+            "negative": 9
+          },
+          "examples": {
+            "positive_infinity": "Infinity",
+            "nan": "NaN",
+            "negative": "-12000000"
+          },
+          "min": -12000000.0,
+          "max": 2071000000.0
+        },
+        "flow_packets_s": {
+          "target_type": "double",
+          "counts": {
+            "finite": 529481,
+            "fractional": 503782,
+            "positive_infinity": 437,
+            "negative": 15
+          },
+          "examples": {
+            "positive_infinity": "Infinity",
+            "negative": "-2000000"
+          },
+          "min": -2000000.0,
+          "max": 3000000.0
+        },
+        "flow_iat_mean": {
+          "target_type": "double",
+          "counts": {
+            "finite": 529918,
+            "fractional": 264897,
+            "negative": 15
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -1.0,
+          "max": 119748208.0
+        },
+        "flow_iat_std": {
+          "target_type": "double",
+          "counts": {
+            "finite": 529918,
+            "fractional": 345112
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 84800261.5664079
+        },
+        "flow_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "negative": 15
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -1.0,
+          "max": 119999735.0
+        },
+        "flow_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "negative": 512
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -14.0,
+          "max": 119748208.0
+        },
+        "fwd_iat_total": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 119999987.0
+        },
+        "fwd_iat_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "fractional": 142741
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 119987020.0
+        },
+        "fwd_iat_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "fractional": 178404
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 84602929.2769822
+        },
+        "fwd_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 119999869.0
+        },
+        "fwd_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 119987020.0
+        },
+        "bwd_iat_total": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 119999643.0
+        },
+        "bwd_iat_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "fractional": 113410
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 119974145.0
+        },
+        "bwd_iat_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "fractional": 138504
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 84418013.7826341
+        },
+        "bwd_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 119974145.0
+        },
+        "bwd_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 119974145.0
+        },
+        "fwd_psh_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "bwd_psh_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_urg_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_urg_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_header_length": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "negative": 23
+          },
+          "examples": {
+            "negative": "-1929349973"
+          },
+          "min": -1929349973.0,
+          "max": 4644908.0
+        },
+        "bwd_header_length": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "negative": 17
+          },
+          "examples": {
+            "negative": "-83885093"
+          },
+          "min": -167770490.0,
+          "max": 5838440.0
+        },
+        "fwd_packets_s": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "fractional": 504670
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3000000.0
+        },
+        "bwd_packets_s": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "fractional": 443919
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2000000.0
+        },
+        "min_packet_length": {
+          "target_type": "double",
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1359.0
+        },
+        "max_packet_length": {
+          "target_type": "double",
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 23360.0
+        },
+        "packet_length_mean": {
+          "target_type": "double",
+          "counts": {
+            "finite": 529918,
+            "fractional": 344836
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2456.0
+        },
+        "packet_length_std": {
+          "target_type": "double",
+          "counts": {
+            "finite": 529918,
+            "fractional": 395779
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 4414.547151258
+        },
+        "packet_length_variance": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "fractional": 363274
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 19488226.5506803
+        },
+        "fin_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "syn_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "rst_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "psh_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "ack_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "urg_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "cwe_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "ece_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "down_up_ratio": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 108.0
+        },
+        "average_packet_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "fractional": 293838
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3684.0
+        },
+        "avg_fwd_segment_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "fractional": 155770
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 4638.9234693878
+        },
+        "avg_bwd_segment_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "fractional": 115506
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2976.3218390805
+        },
+        "fwd_header_length_repeat_2": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "negative": 23
+          },
+          "examples": {
+            "negative": "-1929349973"
+          },
+          "min": -1929349973.0,
+          "max": 4644908.0
+        },
+        "fwd_avg_bytes_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_avg_packets_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_avg_bulk_rate": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_bytes_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_packets_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_bulk_rate": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "subflow_fwd_packets": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 1.0,
+          "max": 219759.0
+        },
+        "subflow_fwd_bytes": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1323378.0
+        },
+        "subflow_bwd_packets": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 291922.0
+        },
+        "subflow_bwd_bytes": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 655453030.0
+        },
+        "init_win_bytes_forward": {
+          "target_type": "long",
+          "counts": {
+            "finite": 529918,
+            "sentinel_minus_one": 224495
+          },
+          "examples": {
+            "sentinel_minus_one": "-1"
+          },
+          "min": -1,
+          "max": 65535
+        },
+        "init_win_bytes_backward": {
+          "target_type": "long",
+          "counts": {
+            "finite": 529918,
+            "sentinel_minus_one": 299094
+          },
+          "examples": {
+            "sentinel_minus_one": "-1"
+          },
+          "min": -1,
+          "max": 65535
+        },
+        "act_data_pkt_fwd": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 213557.0
+        },
+        "min_seg_size_forward": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "negative": 23
+          },
+          "examples": {
+            "negative": "-83885313"
+          },
+          "min": -83885313.0,
+          "max": 126.0
+        },
+        "active_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "fractional": 33853
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 101659665.0
+        },
+        "active_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "fractional": 43780
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 64349504.5029073
+        },
+        "active_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 101659665.0
+        },
+        "active_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 101659665.0
+        },
+        "idle_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "fractional": 34045
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 119999735.0
+        },
+        "idle_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918,
+            "fractional": 43958
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 75145023.2323283
+        },
+        "idle_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 119999735.0
+        },
+        "idle_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 529918
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 119999735.0
+        },
+        "label": {
+          "target_type": "string",
+          "counts": {},
+          "examples": {},
+          "min": null,
+          "max": null
+        }
+      }
+    },
+    {
+      "source_file": "Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+      "input_bytes": 83102436,
+      "source_sha256": "6bcda3857c2504676034e3ea57762d38393cc734cb377a726bd5cb153961b1b5",
+      "input_records": 288602,
+      "header_columns": 79,
+      "header_matches_exact": true,
+      "header_differences": [],
+      "duplicate_headers": {
+        "Fwd Header Length": [
+          35,
+          56
+        ]
+      },
+      "duplicate_header_value_mismatches": 0,
+      "row_width_distribution": {
+        "79": 288602
+      },
+      "malformed_records": 0,
+      "utf8_decode_error_records": 0,
+      "label_replacement_records": 0,
+      "label_distribution": {
+        "BENIGN": 288566,
+        "Infiltration": 36
+      },
+      "policy_preview": {
+        "valid_records": 288598,
+        "quarantined_records": 4,
+        "rejected_records": 0,
+        "valid_records_with_soft_issues": 164380
+      },
+      "fields": {
+        "destination_port": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0,
+          "max": 65533
+        },
+        "flow_duration": {
+          "target_type": "long",
+          "counts": {
+            "finite": 288602,
+            "negative": 4
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -2,
+          "max": 119999936
+        },
+        "total_fwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 1,
+          "max": 22673
+        },
+        "total_backward_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0,
+          "max": 44553
+        },
+        "total_length_of_fwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0,
+          "max": 12900000
+        },
+        "total_length_of_bwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0,
+          "max": 63600000
+        },
+        "fwd_packet_length_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 23360.0
+        },
+        "fwd_packet_length_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2065.0
+        },
+        "fwd_packet_length_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602,
+            "fractional": 58634
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 4317.097561
+        },
+        "fwd_packet_length_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602,
+            "fractional": 70198
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 4467.11346
+        },
+        "bwd_packet_length_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 11680.0
+        },
+        "bwd_packet_length_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1543.0
+        },
+        "bwd_packet_length_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602,
+            "fractional": 45914
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2966.952381
+        },
+        "bwd_packet_length_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602,
+            "fractional": 53110
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2380.9944
+        },
+        "flow_bytes_s": {
+          "target_type": "double",
+          "counts": {
+            "finite": 288395,
+            "fractional": 238228,
+            "negative": 4,
+            "positive_infinity": 189,
+            "nan": 18
+          },
+          "examples": {
+            "negative": "-12000000",
+            "positive_infinity": "Infinity",
+            "nan": "NaN"
+          },
+          "min": -12000000.0,
+          "max": 2070000000.0
+        },
+        "flow_packets_s": {
+          "target_type": "double",
+          "counts": {
+            "finite": 288395,
+            "fractional": 267330,
+            "negative": 4,
+            "positive_infinity": 207
+          },
+          "examples": {
+            "negative": "-2000000",
+            "positive_infinity": "Infinity"
+          },
+          "min": -2000000.0,
+          "max": 4000000.0
+        },
+        "flow_iat_mean": {
+          "target_type": "double",
+          "counts": {
+            "finite": 288602,
+            "fractional": 132477,
+            "negative": 4
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -2.0,
+          "max": 120000000.0
+        },
+        "flow_iat_std": {
+          "target_type": "double",
+          "counts": {
+            "finite": 288602,
+            "fractional": 172556
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 84800000.0
+        },
+        "flow_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602,
+            "negative": 4
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -2.0,
+          "max": 120000000.0
+        },
+        "flow_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602,
+            "negative": 353
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -12.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_total": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602,
+            "fractional": 57799
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602,
+            "fractional": 69229
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 81600000.0
+        },
+        "fwd_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_total": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602,
+            "fractional": 44704
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602,
+            "fractional": 50329
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 81600000.0
+        },
+        "bwd_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_psh_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "bwd_psh_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_urg_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "bwd_urg_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_header_length": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 742984.0
+        },
+        "bwd_header_length": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1425704.0
+        },
+        "fwd_packets_s": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602,
+            "fractional": 267659
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3000000.0
+        },
+        "bwd_packets_s": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602,
+            "fractional": 218160
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2000000.0
+        },
+        "min_packet_length": {
+          "target_type": "double",
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1306.0
+        },
+        "max_packet_length": {
+          "target_type": "double",
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 23360.0
+        },
+        "packet_length_mean": {
+          "target_type": "double",
+          "counts": {
+            "finite": 288602,
+            "fractional": 178619
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2417.842105
+        },
+        "packet_length_std": {
+          "target_type": "double",
+          "counts": {
+            "finite": 288602,
+            "fractional": 201052
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3439.674248
+        },
+        "packet_length_variance": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602,
+            "fractional": 185637
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 11800000.0
+        },
+        "fin_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "syn_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "rst_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "psh_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "ack_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "urg_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "cwe_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "ece_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "down_up_ratio": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 156.0
+        },
+        "average_packet_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602,
+            "fractional": 158992
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3558.0
+        },
+        "avg_fwd_segment_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602,
+            "fractional": 58634
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 4317.097561
+        },
+        "avg_bwd_segment_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602,
+            "fractional": 45914
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2966.952381
+        },
+        "fwd_header_length_repeat_2": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 742984.0
+        },
+        "fwd_avg_bytes_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_avg_packets_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_avg_bulk_rate": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_bytes_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_packets_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_bulk_rate": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "subflow_fwd_packets": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 1.0,
+          "max": 22673.0
+        },
+        "subflow_fwd_bytes": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 12870338.0
+        },
+        "subflow_bwd_packets": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 44553.0
+        },
+        "subflow_bwd_bytes": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 63586401.0
+        },
+        "init_win_bytes_forward": {
+          "target_type": "long",
+          "counts": {
+            "finite": 288602,
+            "sentinel_minus_one": 102433
+          },
+          "examples": {
+            "sentinel_minus_one": "-1"
+          },
+          "min": -1,
+          "max": 65535
+        },
+        "init_win_bytes_backward": {
+          "target_type": "long",
+          "counts": {
+            "finite": 288602,
+            "sentinel_minus_one": 164351
+          },
+          "examples": {
+            "sentinel_minus_one": "-1"
+          },
+          "min": -1,
+          "max": 65535
+        },
+        "act_data_pkt_fwd": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 9130.0
+        },
+        "min_seg_size_forward": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 60.0
+        },
+        "active_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602,
+            "fractional": 18214
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 65200000.0
+        },
+        "active_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602,
+            "fractional": 23504
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 38100000.0
+        },
+        "active_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 79100000.0
+        },
+        "active_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 65200000.0
+        },
+        "idle_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602,
+            "fractional": 8457
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "idle_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602,
+            "fractional": 22724
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 75300000.0
+        },
+        "idle_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "idle_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 288602
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "label": {
+          "target_type": "string",
+          "counts": {},
+          "examples": {},
+          "min": null,
+          "max": null
+        }
+      }
+    },
+    {
+      "source_file": "Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
+      "input_bytes": 52023263,
+      "source_sha256": "d67066211fb1689c78406f1506f4c44704ecb92088353d5c96d96d6474eb819d",
+      "input_records": 170366,
+      "header_columns": 79,
+      "header_matches_exact": true,
+      "header_differences": [],
+      "duplicate_headers": {
+        "Fwd Header Length": [
+          35,
+          56
+        ]
+      },
+      "duplicate_header_value_mismatches": 0,
+      "row_width_distribution": {
+        "79": 170366
+      },
+      "malformed_records": 0,
+      "utf8_decode_error_records": 0,
+      "label_replacement_records": 2180,
+      "label_distribution": {
+        "BENIGN": 168186,
+        "Web Attack � Brute Force": 1507,
+        "Web Attack � XSS": 652,
+        "Web Attack � Sql Injection": 21
+      },
+      "policy_preview": {
+        "valid_records": 170355,
+        "quarantined_records": 11,
+        "rejected_records": 0,
+        "valid_records_with_soft_issues": 104607
+      },
+      "fields": {
+        "destination_port": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0,
+          "max": 65529
+        },
+        "flow_duration": {
+          "target_type": "long",
+          "counts": {
+            "finite": 170366,
+            "negative": 11
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -1,
+          "max": 119999993
+        },
+        "total_fwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 1,
+          "max": 200755
+        },
+        "total_backward_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0,
+          "max": 270686
+        },
+        "total_length_of_fwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1197199
+        },
+        "total_length_of_bwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0,
+          "max": 627000000
+        },
+        "fwd_packet_length_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 23360.0
+        },
+        "fwd_packet_length_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1729.0
+        },
+        "fwd_packet_length_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366,
+            "fractional": 42794
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 4183.057143
+        },
+        "fwd_packet_length_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366,
+            "fractional": 51292
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 5463.49385
+        },
+        "bwd_packet_length_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 13140.0
+        },
+        "bwd_packet_length_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1460.0
+        },
+        "bwd_packet_length_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366,
+            "fractional": 33112
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3494.917198
+        },
+        "bwd_packet_length_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366,
+            "fractional": 38407
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3433.501973
+        },
+        "flow_bytes_s": {
+          "target_type": "double",
+          "counts": {
+            "finite": 170231,
+            "fractional": 140986,
+            "positive_infinity": 115,
+            "nan": 20,
+            "negative": 10
+          },
+          "examples": {
+            "positive_infinity": "Infinity",
+            "nan": "NaN",
+            "negative": "-261000000"
+          },
+          "min": -261000000.0,
+          "max": 2070000000.0
+        },
+        "flow_packets_s": {
+          "target_type": "double",
+          "counts": {
+            "finite": 170231,
+            "fractional": 162588,
+            "positive_infinity": 135,
+            "negative": 11
+          },
+          "examples": {
+            "positive_infinity": "Infinity",
+            "negative": "-2000000"
+          },
+          "min": -2000000.0,
+          "max": 3000000.0
+        },
+        "flow_iat_mean": {
+          "target_type": "double",
+          "counts": {
+            "finite": 170366,
+            "fractional": 83128,
+            "negative": 11
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -1.0,
+          "max": 120000000.0
+        },
+        "flow_iat_std": {
+          "target_type": "double",
+          "counts": {
+            "finite": 170366,
+            "fractional": 104948
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 84800000.0
+        },
+        "flow_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366,
+            "negative": 11
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -1.0,
+          "max": 120000000.0
+        },
+        "flow_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366,
+            "negative": 263
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -12.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_total": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366,
+            "fractional": 44295
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366,
+            "fractional": 53451
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 83200000.0
+        },
+        "fwd_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_total": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366,
+            "fractional": 32406
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366,
+            "fractional": 35655
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 83300000.0
+        },
+        "bwd_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_psh_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "bwd_psh_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_urg_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_urg_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_header_length": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 4173072.0
+        },
+        "bwd_header_length": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 5413720.0
+        },
+        "fwd_packets_s": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366,
+            "fractional": 162810
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3000000.0
+        },
+        "bwd_packets_s": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366,
+            "fractional": 146043
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2000000.0
+        },
+        "min_packet_length": {
+          "target_type": "double",
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1359.0
+        },
+        "max_packet_length": {
+          "target_type": "double",
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 23360.0
+        },
+        "packet_length_mean": {
+          "target_type": "double",
+          "counts": {
+            "finite": 170366,
+            "fractional": 108913
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2155.52381
+        },
+        "packet_length_std": {
+          "target_type": "double",
+          "counts": {
+            "finite": 170366,
+            "fractional": 125346
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3796.583764
+        },
+        "packet_length_variance": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366,
+            "fractional": 113991
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 14400000.0
+        },
+        "fin_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "syn_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "rst_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "psh_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "ack_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "urg_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "cwe_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "ece_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "down_up_ratio": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 10.0
+        },
+        "average_packet_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366,
+            "fractional": 94863
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2784.0
+        },
+        "avg_fwd_segment_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366,
+            "fractional": 42794
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 4183.057143
+        },
+        "avg_bwd_segment_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366,
+            "fractional": 33112
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3494.917198
+        },
+        "fwd_header_length_repeat_2": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 4173072.0
+        },
+        "fwd_avg_bytes_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_avg_packets_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_avg_bulk_rate": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_bytes_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_packets_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_bulk_rate": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "subflow_fwd_packets": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 1.0,
+          "max": 200755.0
+        },
+        "subflow_fwd_bytes": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1197199.0
+        },
+        "subflow_bwd_packets": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 270686.0
+        },
+        "subflow_bwd_bytes": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 627040569.0
+        },
+        "init_win_bytes_forward": {
+          "target_type": "long",
+          "counts": {
+            "finite": 170366,
+            "sentinel_minus_one": 81911
+          },
+          "examples": {
+            "sentinel_minus_one": "-1"
+          },
+          "min": -1,
+          "max": 65535
+        },
+        "init_win_bytes_backward": {
+          "target_type": "long",
+          "counts": {
+            "finite": 170366,
+            "sentinel_minus_one": 102373
+          },
+          "examples": {
+            "sentinel_minus_one": "-1"
+          },
+          "min": -1,
+          "max": 65535
+        },
+        "act_data_pkt_fwd": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 192491.0
+        },
+        "min_seg_size_forward": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 60.0
+        },
+        "active_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366,
+            "fractional": 14034
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 103000000.0
+        },
+        "active_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366,
+            "fractional": 17611
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 63700000.0
+        },
+        "active_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 103000000.0
+        },
+        "active_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 103000000.0
+        },
+        "idle_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366,
+            "fractional": 6536
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "idle_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366,
+            "fractional": 17143
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 72600000.0
+        },
+        "idle_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "idle_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 170366
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "label": {
+          "target_type": "string",
+          "counts": {
+            "encoding_replacement": 2180
+          },
+          "examples": {
+            "encoding_replacement": "Web Attack � Brute Force"
+          },
+          "min": null,
+          "max": null
+        }
+      }
+    },
+    {
+      "source_file": "Tuesday-WorkingHours.pcap_ISCX.csv",
+      "input_bytes": 135078995,
+      "source_sha256": "52b8692ae8c7d2ed04671fe2b98335693c0a92c7ab157d8c8b534d6523080851",
+      "input_records": 445909,
+      "header_columns": 79,
+      "header_matches_exact": true,
+      "header_differences": [],
+      "duplicate_headers": {
+        "Fwd Header Length": [
+          35,
+          56
+        ]
+      },
+      "duplicate_header_value_mismatches": 0,
+      "row_width_distribution": {
+        "79": 445909
+      },
+      "malformed_records": 0,
+      "utf8_decode_error_records": 0,
+      "label_replacement_records": 0,
+      "label_distribution": {
+        "BENIGN": 432074,
+        "FTP-Patator": 7938,
+        "SSH-Patator": 5897
+      },
+      "policy_preview": {
+        "valid_records": 445892,
+        "quarantined_records": 17,
+        "rejected_records": 0,
+        "valid_records_with_soft_issues": 256691
+      },
+      "fields": {
+        "destination_port": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0,
+          "max": 65505
+        },
+        "flow_duration": {
+          "target_type": "long",
+          "counts": {
+            "finite": 445909,
+            "negative": 17
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -4,
+          "max": 119999977
+        },
+        "total_fwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 1,
+          "max": 206446
+        },
+        "total_backward_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0,
+          "max": 276072
+        },
+        "total_length_of_fwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0,
+          "max": 2428415
+        },
+        "total_length_of_bwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0,
+          "max": 627000000
+        },
+        "fwd_packet_length_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 24820.0
+        },
+        "fwd_packet_length_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2065.0
+        },
+        "fwd_packet_length_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "fractional": 123584
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 4672.0
+        },
+        "fwd_packet_length_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "fractional": 140762
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 5398.072094
+        },
+        "bwd_packet_length_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 13140.0
+        },
+        "bwd_packet_length_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2896.0
+        },
+        "bwd_packet_length_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "fractional": 92876
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3735.736842
+        },
+        "bwd_packet_length_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "fractional": 104992
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 4113.240146
+        },
+        "flow_bytes_s": {
+          "target_type": "double",
+          "counts": {
+            "finite": 445645,
+            "fractional": 319751,
+            "nan": 201,
+            "positive_infinity": 63
+          },
+          "examples": {
+            "nan": "NaN",
+            "positive_infinity": "Infinity"
+          },
+          "min": 0.0,
+          "max": 2070000000.0
+        },
+        "flow_packets_s": {
+          "target_type": "double",
+          "counts": {
+            "finite": 445645,
+            "fractional": 424469,
+            "positive_infinity": 264,
+            "negative": 17
+          },
+          "examples": {
+            "positive_infinity": "Infinity",
+            "negative": "-2000000"
+          },
+          "min": -2000000.0,
+          "max": 3000000.0
+        },
+        "flow_iat_mean": {
+          "target_type": "double",
+          "counts": {
+            "finite": 445909,
+            "fractional": 217706,
+            "negative": 17
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -4.0,
+          "max": 120000000.0
+        },
+        "flow_iat_std": {
+          "target_type": "double",
+          "counts": {
+            "finite": 445909,
+            "fractional": 275127
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 84800000.0
+        },
+        "flow_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "negative": 17
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -4.0,
+          "max": 120000000.0
+        },
+        "flow_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "negative": 505
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -13.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_total": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "fractional": 115102
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "fractional": 137102
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 84400000.0
+        },
+        "fwd_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_total": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "fractional": 91347
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "fractional": 101716
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 82600000.0
+        },
+        "bwd_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_psh_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "bwd_psh_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_urg_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_urg_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_header_length": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "negative": 11
+          },
+          "examples": {
+            "negative": "-1073741218"
+          },
+          "min": -32212234632.0,
+          "max": 4225596.0
+        },
+        "bwd_header_length": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "negative": 5
+          },
+          "examples": {
+            "negative": "-1073741218"
+          },
+          "min": -1073741320.0,
+          "max": 5521440.0
+        },
+        "fwd_packets_s": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "fractional": 425151
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3000000.0
+        },
+        "bwd_packets_s": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "fractional": 379375
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2000000.0
+        },
+        "min_packet_length": {
+          "target_type": "double",
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1408.0
+        },
+        "max_packet_length": {
+          "target_type": "double",
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 24820.0
+        },
+        "packet_length_mean": {
+          "target_type": "double",
+          "counts": {
+            "finite": 445909,
+            "fractional": 281271
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3337.142857
+        },
+        "packet_length_std": {
+          "target_type": "double",
+          "counts": {
+            "finite": 445909,
+            "fractional": 322388
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3811.855065
+        },
+        "packet_length_variance": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "fractional": 295482
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 14500000.0
+        },
+        "fin_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "syn_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "rst_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "psh_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "ack_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "urg_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "cwe_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "ece_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "down_up_ratio": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 35.0
+        },
+        "average_packet_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "fractional": 246772
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3893.333333
+        },
+        "avg_fwd_segment_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "fractional": 123584
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 4672.0
+        },
+        "avg_bwd_segment_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "fractional": 92876
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3735.736842
+        },
+        "fwd_header_length_repeat_2": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "negative": 11
+          },
+          "examples": {
+            "negative": "-1073741218"
+          },
+          "min": -32212234632.0,
+          "max": 4225596.0
+        },
+        "fwd_avg_bytes_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_avg_packets_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_avg_bulk_rate": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_bytes_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_packets_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_bulk_rate": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "subflow_fwd_packets": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 1.0,
+          "max": 206446.0
+        },
+        "subflow_fwd_bytes": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2428415.0
+        },
+        "subflow_bwd_packets": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 276072.0
+        },
+        "subflow_bwd_bytes": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 627039032.0
+        },
+        "init_win_bytes_forward": {
+          "target_type": "long",
+          "counts": {
+            "finite": 445909,
+            "sentinel_minus_one": 200128
+          },
+          "examples": {
+            "sentinel_minus_one": "-1"
+          },
+          "min": -1,
+          "max": 65535
+        },
+        "init_win_bytes_backward": {
+          "target_type": "long",
+          "counts": {
+            "finite": 445909,
+            "sentinel_minus_one": 256599
+          },
+          "examples": {
+            "sentinel_minus_one": "-1"
+          },
+          "min": -1,
+          "max": 65535
+        },
+        "act_data_pkt_fwd": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1846.0
+        },
+        "min_seg_size_forward": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "negative": 11
+          },
+          "examples": {
+            "negative": "-536870661"
+          },
+          "min": -536870661.0,
+          "max": 138.0
+        },
+        "active_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "fractional": 30903
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 107000000.0
+        },
+        "active_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "fractional": 38937
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 24100000.0
+        },
+        "active_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 107000000.0
+        },
+        "active_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 107000000.0
+        },
+        "idle_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "fractional": 14017
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "idle_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909,
+            "fractional": 37440
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 75900000.0
+        },
+        "idle_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "idle_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 445909
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "label": {
+          "target_type": "string",
+          "counts": {},
+          "examples": {},
+          "min": null,
+          "max": null
+        }
+      }
+    },
+    {
+      "source_file": "Wednesday-workingHours.pcap_ISCX.csv",
+      "input_bytes": 225166395,
+      "source_sha256": "893c27dc968bf7a8adef1689f90be55ca4a4dc3088fb63d6ff247ac56856df2a",
+      "input_records": 692703,
+      "header_columns": 79,
+      "header_matches_exact": true,
+      "header_differences": [],
+      "duplicate_headers": {
+        "Fwd Header Length": [
+          35,
+          56
+        ]
+      },
+      "duplicate_header_value_mismatches": 0,
+      "row_width_distribution": {
+        "79": 692703
+      },
+      "malformed_records": 0,
+      "utf8_decode_error_records": 0,
+      "label_replacement_records": 0,
+      "label_distribution": {
+        "BENIGN": 440031,
+        "DoS slowloris": 5796,
+        "DoS Slowhttptest": 5499,
+        "DoS Hulk": 231073,
+        "DoS GoldenEye": 10293,
+        "Heartbleed": 11
+      },
+      "policy_preview": {
+        "valid_records": 692682,
+        "quarantined_records": 21,
+        "rejected_records": 0,
+        "valid_records_with_soft_issues": 335670
+      },
+      "fields": {
+        "destination_port": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0,
+          "max": 65487
+        },
+        "flow_duration": {
+          "target_type": "long",
+          "counts": {
+            "finite": 692703,
+            "negative": 21
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -1,
+          "max": 119999998
+        },
+        "total_fwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 1,
+          "max": 203943
+        },
+        "total_backward_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0,
+          "max": 272353
+        },
+        "total_length_of_fwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1224076
+        },
+        "total_length_of_bwd_packets": {
+          "target_type": "long",
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0,
+          "max": 627000000
+        },
+        "fwd_packet_length_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 24820.0
+        },
+        "fwd_packet_length_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2065.0
+        },
+        "fwd_packet_length_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "fractional": 259302
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 4640.757576
+        },
+        "fwd_packet_length_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "fractional": 309342
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 6429.190773
+        },
+        "bwd_packet_length_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 19530.0
+        },
+        "bwd_packet_length_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1983.0
+        },
+        "bwd_packet_length_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "fractional": 231020
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 4370.686524
+        },
+        "bwd_packet_length_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "fractional": 271990
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 6715.738331
+        },
+        "flow_bytes_s": {
+          "target_type": "double",
+          "counts": {
+            "finite": 691406,
+            "fractional": 544567,
+            "positive_infinity": 289,
+            "negative": 16,
+            "nan": 1008
+          },
+          "examples": {
+            "positive_infinity": "Infinity",
+            "negative": "-12000000",
+            "nan": "NaN"
+          },
+          "min": -12000000.0,
+          "max": 2070000000.0
+        },
+        "flow_packets_s": {
+          "target_type": "double",
+          "counts": {
+            "finite": 691406,
+            "fractional": 641230,
+            "positive_infinity": 1297,
+            "negative": 21
+          },
+          "examples": {
+            "positive_infinity": "Infinity",
+            "negative": "-2000000"
+          },
+          "min": -2000000.0,
+          "max": 3000000.0
+        },
+        "flow_iat_mean": {
+          "target_type": "double",
+          "counts": {
+            "finite": 692703,
+            "fractional": 379573,
+            "negative": 21
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -1.0,
+          "max": 120000000.0
+        },
+        "flow_iat_std": {
+          "target_type": "double",
+          "counts": {
+            "finite": 692703,
+            "fractional": 317851
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 84800000.0
+        },
+        "flow_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "negative": 21
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -1.0,
+          "max": 120000000.0
+        },
+        "flow_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "negative": 749
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -14.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_total": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "fractional": 138953
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "fractional": 166536
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 83700000.0
+        },
+        "fwd_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "negative": 11
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -8.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_total": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "fractional": 177260
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "fractional": 212002
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 82900000.0
+        },
+        "bwd_iat_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "bwd_iat_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "fwd_psh_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "bwd_psh_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_urg_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_urg_flags": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_header_length": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "negative": 1
+          },
+          "examples": {
+            "negative": "-11"
+          },
+          "min": -11.0,
+          "max": 4290372.0
+        },
+        "bwd_header_length": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 5447060.0
+        },
+        "fwd_packets_s": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "fractional": 642105
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 3000000.0
+        },
+        "bwd_packets_s": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "fractional": 550713
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2000000.0
+        },
+        "min_packet_length": {
+          "target_type": "double",
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1448.0
+        },
+        "max_packet_length": {
+          "target_type": "double",
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 24820.0
+        },
+        "packet_length_mean": {
+          "target_type": "double",
+          "counts": {
+            "finite": 692703,
+            "fractional": 455590
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2279.754386
+        },
+        "packet_length_std": {
+          "target_type": "double",
+          "counts": {
+            "finite": 692703,
+            "fractional": 513302
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 4364.022571
+        },
+        "packet_length_variance": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "fractional": 478330
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 19000000.0
+        },
+        "fin_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "syn_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "rst_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "psh_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "ack_flag_count": {
+          "target_type": "integer",
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0,
+          "max": 1
+        },
+        "urg_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "cwe_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "ece_flag_count": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1.0
+        },
+        "down_up_ratio": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 43.0
+        },
+        "average_packet_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "fractional": 409829
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 2612.0
+        },
+        "avg_fwd_segment_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "fractional": 259302
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 4640.757576
+        },
+        "avg_bwd_segment_size": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "fractional": 231020
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 4370.686524
+        },
+        "fwd_header_length_repeat_2": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "negative": 1
+          },
+          "examples": {
+            "negative": "-11"
+          },
+          "min": -11.0,
+          "max": 4290372.0
+        },
+        "fwd_avg_bytes_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_avg_packets_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "fwd_avg_bulk_rate": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_bytes_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_packets_bulk": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "bwd_avg_bulk_rate": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 0.0
+        },
+        "subflow_fwd_packets": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 1.0,
+          "max": 203943.0
+        },
+        "subflow_fwd_bytes": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 1224076.0
+        },
+        "subflow_bwd_packets": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 272353.0
+        },
+        "subflow_bwd_bytes": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 627046409.0
+        },
+        "init_win_bytes_forward": {
+          "target_type": "long",
+          "counts": {
+            "finite": 692703,
+            "sentinel_minus_one": 203253
+          },
+          "examples": {
+            "sentinel_minus_one": "-1"
+          },
+          "min": -1,
+          "max": 65535
+        },
+        "init_win_bytes_backward": {
+          "target_type": "long",
+          "counts": {
+            "finite": 692703,
+            "sentinel_minus_one": 335475
+          },
+          "examples": {
+            "sentinel_minus_one": "-1"
+          },
+          "min": -1,
+          "max": 65535
+        },
+        "act_data_pkt_fwd": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 197124.0
+        },
+        "min_seg_size_forward": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "negative": 1
+          },
+          "examples": {
+            "negative": "-1"
+          },
+          "min": -1.0,
+          "max": 60.0
+        },
+        "active_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "fractional": 34410
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 100000000.0
+        },
+        "active_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "fractional": 44413
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 74200000.0
+        },
+        "active_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 105000000.0
+        },
+        "active_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 100000000.0
+        },
+        "idle_mean": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "fractional": 15685
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "idle_std": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703,
+            "fractional": 41174
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 76900000.0
+        },
+        "idle_max": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "idle_min": {
+          "target_type": null,
+          "counts": {
+            "finite": 692703
+          },
+          "examples": {},
+          "min": 0.0,
+          "max": 120000000.0
+        },
+        "label": {
+          "target_type": "string",
+          "counts": {},
+          "examples": {},
+          "min": null,
+          "max": null
+        }
+      }
+    }
+  ]
+}

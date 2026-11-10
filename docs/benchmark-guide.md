@@ -5,6 +5,10 @@ Chạy PowerShell tại root repository, Docker Desktop ở Linux containers. Cr
 đây chỉ seed **synthetic scaling**, không upload 8 CSV thật. Mỗi lần chạy dùng một
 experiment ID mới, kết quả và output không ghi đè batch trước.
 
+Đợt đo bổ sung ngày 10/11/2026 có [synthetic benchmark](benchmarks/scaling-20261110-121252/README.md)
+và [benchmark 8 CSV thật](benchmarks/real-20261110-141211/README.md), đều có 3 lần đo
+mỗi cấu hình. Hồ sơ ngày 21/10/2026 vẫn giữ nguyên 2 lần đo lịch sử.
+
 ## Phương pháp
 
 - Ba input: nhân 12 dòng fixture 1.000 / 5.000 / 10.000 lần, thành 12.000 / 60.000 /
@@ -16,7 +20,7 @@ experiment ID mới, kết quả và output không ghi đè batch trước.
   tài nguyên được cấp từ 2 cores / 2 GiB lên 4 cores / 4 GiB; đây không phải phép so
   sánh giữ nguyên tổng tài nguyên. Các container vẫn chia sẻ một máy Docker Desktop.
 - Mỗi invocation có một warmup toàn pipeline, lưu riêng vào `warmup_runs`, không tính
-  vào median. Hai lần lặp được tính điểm; thứ tự size/partition đảo ngược ở lần hai.
+  vào median. Ba lần lặp được tính điểm; thứ tự size/partition đảo ngược ở lần hai.
   Worker chạy hai invocation riêng. Thứ tự thực thi phải được giữ trong báo cáo.
 - AQE mặc định **false** trong benchmark để tránh tự gộp shuffle. Các số 4/8/16/32 là
   `spark.sql.shuffle.partitions`, không phải số partition của mọi stage hay mọi file
@@ -43,7 +47,7 @@ $benchId = 'scaling-' + (Get-Date -Format yyyyMMdd-HHmmss)
 $resultDir = "/tmp/$benchId"
 $benchInput = 's3a://bigdata-network/smoke/benchmark-scaling/v1/copies-10000/synthetic.csv'
 $common = @('--dataset-kind', 'synthetic', '--synthetic-scaling', '--experiment-id', $benchId,
-  '--warmups', '1', '--repeats', '2', '--adaptive', 'false',
+  '--warmups', '1', '--repeats', '3', '--adaptive', 'false',
   '--master-ui', 'http://spark-master:8080',
   '--output-prefix', "s3a://bigdata-network/smoke/benchmarks/$benchId", '--execute')
 docker compose -f docker/docker-compose.yml exec -T spark-master python3 -m experiments.seed_scaling --manifest "$resultDir/scaling-manifest.json" --execute

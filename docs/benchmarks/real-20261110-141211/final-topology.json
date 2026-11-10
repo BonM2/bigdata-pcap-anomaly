@@ -1,0 +1,131 @@
+{
+  "url": "spark://spark-master:7077",
+  "workers": [
+    {
+      "id": "worker-20261110071202-172.18.0.4-33305",
+      "host": "172.18.0.4",
+      "port": 33305,
+      "webuiaddress": "http://172.18.0.4:8081",
+      "cores": 2,
+      "coresused": 0,
+      "coresfree": 2,
+      "memory": 2048,
+      "memoryused": 0,
+      "memoryfree": 2048,
+      "resources": {},
+      "resourcesused": {},
+      "resourcesfree": {},
+      "state": "DEAD",
+      "lastheartbeat": 1794297649408
+    },
+    {
+      "id": "worker-20261110080500-172.18.0.4-44547",
+      "host": "172.18.0.4",
+      "port": 44547,
+      "webuiaddress": "http://172.18.0.4:8081",
+      "cores": 2,
+      "coresused": 0,
+      "coresfree": 2,
+      "memory": 2048,
+      "memoryused": 0,
+      "memoryfree": 2048,
+      "resources": {},
+      "resourcesused": {},
+      "resourcesfree": {},
+      "state": "ALIVE",
+      "lastheartbeat": 1794298170925
+    },
+    {
+      "id": "worker-20261110071202-172.18.0.5-36839",
+      "host": "172.18.0.5",
+      "port": 36839,
+      "webuiaddress": "http://172.18.0.5:8081",
+      "cores": 2,
+      "coresused": 0,
+      "coresfree": 2,
+      "memory": 2048,
+      "memoryused": 0,
+      "memoryfree": 2048,
+      "resources": {},
+      "resourcesused": {},
+      "resourcesfree": {},
+      "state": "ALIVE",
+      "lastheartbeat": 1794298174356
+    }
+  ],
+  "aliveworkers": 2,
+  "cores": 4,
+  "coresused": 0,
+  "memory": 4096,
+  "memoryused": 0,
+  "resources": [
+    {},
+    {}
+  ],
+  "resourcesused": [
+    {},
+    {}
+  ],
+  "activeapps": [],
+  "completedapps": [
+    {
+      "id": "app-20261110071257-0000",
+      "starttime": 1794294777408,
+      "name": "cicids2017-processing",
+      "cores": 4,
+      "user": "spark",
+      "memoryperexecutor": 2048,
+      "memoryperslave": 2048,
+      "resourcesperexecutor": [],
+      "resourcesperslave": [],
+      "submitdate": "Tue Nov 10 07:12:57 UTC 2026",
+      "state": "FINISHED",
+      "duration": 2127065
+    },
+    {
+      "id": "app-20261110074830-0001",
+      "starttime": 1794296910348,
+      "name": "cicids2017-processing",
+      "cores": 4,
+      "user": "spark",
+      "memoryperexecutor": 2048,
+      "memoryperslave": 2048,
+      "resourcesperexecutor": [],
+      "resourcesperslave": [],
+      "submitdate": "Tue Nov 10 07:48:30 UTC 2026",
+      "state": "FINISHED",
+      "duration": 747605
+    },
+    {
+      "id": "app-20261110080104-0002",
+      "starttime": 1794297664163,
+      "name": "cicids2017-processing",
+      "cores": 2,
+      "user": "spark",
+      "memoryperexecutor": 2048,
+      "memoryperslave": 2048,
+      "resourcesperexecutor": [],
+      "resourcesperslave": [],
+      "submitdate": "Tue Nov 10 08:01:04 UTC 2026",
+      "state": "FINISHED",
+      "duration": 232182
+    },
+    {
+      "id": "app-20261110080505-0003",
+      "starttime": 1794297905923,
+      "name": "cicids2017-processing",
+      "cores": 4,
+      "user": "spark",
+      "memoryperexecutor": 2048,
+      "memoryperslave": 2048,
+      "resourcesperexecutor": [],
+      "resourcesperslave": [],
+      "submitdate": "Tue Nov 10 08:05:05 UTC 2026",
+      "state": "FINISHED",
+      "duration": 262149
+    }
+  ],
+  "activedrivers": [],
+  "completeddrivers": [],
+  "status": "ALIVE"
+}

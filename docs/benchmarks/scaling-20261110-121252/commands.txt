@@ -1,0 +1,38 @@
+Execution record, 10/11/2026 (Asia/Bangkok).
+Working directory: C:\Users\Thinh\Desktop\PPNCKH
+Experiment ID: scaling-20261110-121252
+
+# Build/start (credentials read from ignored docker/.env; never printed)
+docker compose --env-file docker/.env -f docker/docker-compose.yml up -d --build
+docker compose --env-file docker/.env -f docker/docker-compose.yml ps
+
+# Smoke verification
+docker compose --env-file docker/.env -f docker/docker-compose.yml exec -T spark-master python3 -m tests.smoke_pipeline --execute
+
+# Synthetic seed
+docker compose --env-file docker/.env -f docker/docker-compose.yml exec -T spark-master python3 -m experiments.seed_scaling --manifest /tmp/scaling-20261110-121252/scaling-manifest.json --execute
+
+# Size: 2 workers, p=4, 1 warmup + 3 measured trials per workload
+docker compose --env-file docker/.env -f docker/docker-compose.yml exec -T -e SPARK_EXECUTOR_MEMORY=2g spark-master python3 -m experiments.benchmark_size --inputs s3a://bigdata-network/smoke/benchmark-scaling/v1/copies-1000/synthetic.csv s3a://bigdata-network/smoke/benchmark-scaling/v1/copies-5000/synthetic.csv s3a://bigdata-network/smoke/benchmark-scaling/v1/copies-10000/synthetic.csv --expected-workers 2 --results /tmp/scaling-20261110-121252/size.json --dataset-kind synthetic --synthetic-scaling --experiment-id scaling-20261110-121252 --warmups 1 --repeats 3 --adaptive false --master-ui http://spark-master:8080 --output-prefix s3a://bigdata-network/smoke/benchmarks/scaling-20261110-121252 --execute
+
+# Partitions: 120k, 2 workers, 1 warmup + 3 measured trials per p
+docker compose --env-file docker/.env -f docker/docker-compose.yml exec -T -e SPARK_EXECUTOR_MEMORY=2g spark-master python3 -m experiments.benchmark_partitions --input s3a://bigdata-network/smoke/benchmark-scaling/v1/copies-10000/synthetic.csv --partitions 4 8 16 32 --expected-workers 2 --results /tmp/scaling-20261110-121252/partitions.json --dataset-kind synthetic --synthetic-scaling --experiment-id scaling-20261110-121252 --warmups 1 --repeats 3 --adaptive false --master-ui http://spark-master:8080 --output-prefix s3a://bigdata-network/smoke/benchmarks/scaling-20261110-121252 --execute
+
+# Workers: operator changes only spark-worker-2 and verifies Master topology
+docker compose --env-file docker/.env -f docker/docker-compose.yml stop spark-worker-2
+docker compose --env-file docker/.env -f docker/docker-compose.yml exec -T -e SPARK_EXECUTOR_MEMORY=2g spark-master python3 -m experiments.benchmark_workers --input s3a://bigdata-network/smoke/benchmark-scaling/v1/copies-10000/synthetic.csv --expected-workers 1 --results /tmp/scaling-20261110-121252/workers-1.json --dataset-kind synthetic --synthetic-scaling --experiment-id scaling-20261110-121252 --warmups 1 --repeats 3 --adaptive false --master-ui http://spark-master:8080 --output-prefix s3a://bigdata-network/smoke/benchmarks/scaling-20261110-121252 --execute
+docker compose --env-file docker/.env -f docker/docker-compose.yml start spark-worker-2
+docker compose --env-file docker/.env -f docker/docker-compose.yml exec -T -e SPARK_EXECUTOR_MEMORY=2g spark-master python3 -m experiments.benchmark_workers --input s3a://bigdata-network/smoke/benchmark-scaling/v1/copies-10000/synthetic.csv --expected-workers 2 --results /tmp/scaling-20261110-121252/workers-2.json --dataset-kind synthetic --synthetic-scaling --experiment-id scaling-20261110-121252 --warmups 1 --repeats 3 --adaptive false --master-ui http://spark-master:8080 --output-prefix s3a://bigdata-network/smoke/benchmarks/scaling-20261110-121252 --execute
+
+# Read-only MinIO audit
+docker compose --env-file docker/.env -f docker/docker-compose.yml exec -T spark-master python3 -m experiments.verify_benchmark_outputs /tmp/scaling-20261110-121252/partitions.json /tmp/scaling-20261110-121252/size.json /tmp/scaling-20261110-121252/workers-1.json /tmp/scaling-20261110-121252/workers-2.json --report /tmp/scaling-20261110-121252/minio-audit.json --example-report /tmp/scaling-20261110-121252/quality-example.json
+
+# Copy and render
+docker cp spark-master:/tmp/scaling-20261110-121252/. docs/benchmarks/scaling-20261110-121252
+python -m experiments.plot_results docs/benchmarks/scaling-20261110-121252/size.json docs/benchmarks/scaling-20261110-121252/partitions.json docs/benchmarks/scaling-20261110-121252/workers-1.json docs/benchmarks/scaling-20261110-121252/workers-2.json --csv docs/benchmarks/scaling-20261110-121252/summary.csv --runs-csv docs/benchmarks/scaling-20261110-121252/runs.csv --png docs/benchmarks/scaling-20261110-121252/benchmark.png
+
+# Tests
+python -m unittest tests.test_benchmark -v
+docker compose --env-file docker/.env -f docker/docker-compose.yml exec -T spark-master python3 -m unittest discover -s tests -v
+python -m compileall -q processing experiments tests
+git -c core.safecrlf=false diff --check

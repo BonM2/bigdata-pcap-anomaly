@@ -1,0 +1,34 @@
+{
+  "size": {
+    "status": "PASS",
+    "measured_trials": 9,
+    "warmups": 1
+  },
+  "partitions": {
+    "status": "PASS",
+    "measured_trials": 12,
+    "warmups": 1
+  },
+  "workers-1": {
+    "status": "PASS",
+    "measured_trials": 3,
+    "warmups": 1
+  },
+  "workers-2": {
+    "status": "PASS",
+    "measured_trials": 3,
+    "warmups": 1
+  },
+  "status": "PASS",
+  "unique_batches": 31,
+  "summary_configurations": 9,
+  "runs_csv_rows": 31,
+  "warmup_rows": 4,
+  "all_throughput_formulas": "PASS",
+  "record_reconciliation": "PASS",
+  "worker_topology_and_app_cores": "PASS",
+  "minio_audit": "PASS",
+  "original_source_integrity": "PASS",
+  "orchestration_syntax": "PASS",
+  "visual_png_review": "PASS"
+}
