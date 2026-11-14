@@ -164,3 +164,5 @@ docker compose --env-file docker/.env -f docker/docker-compose.yml exec -T spark
 Kết quả mong đợi: `OK` và exit code `0`. Bộ kiểm thử không tự upload 8 CSV thật.
 
 **Tài liệu chi tiết:** [Hướng dẫn xử lý](docs/processing.md) · [Data Contract](data/schemas/feature_dictionary.md) · [Benchmark](docs/benchmark-guide.md) · [Hồ sơ kiểm chứng](docs/reports/pipeline-validation.md).
+
+**Báo cáo 5V:** [Velocity](docs/reports/velocity-report.md) · [Veracity](docs/reports/veracity-report.md) ([bản Word](docs/reports/veracity-report.docx)). Báo cáo Veracity có bảng lỗi, phân loại, hậu kiểm và minh chứng ghi/đọc lại trên 8 CSV thật; tạo lại bằng `python -m experiments.build_veracity_report --docx` (cần `matplotlib` và `python-docx`).
