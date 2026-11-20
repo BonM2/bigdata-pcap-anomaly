@@ -1,0 +1,1832 @@
+{
+  "generated_at_utc": "2026-11-20T17:39:08.497451+00:00",
+  "modeling_pipeline_version": "1.0.0",
+  "source_batch_verification": {
+    "batch_id": "cicids2017_valid_v1",
+    "marker_status": "COMPLETE",
+    "quality_report_uri": "s3a://bigdata-network/reports/data_quality/cicids2017_valid_v1/quality.json",
+    "schema_version": "v2.3.0",
+    "pipeline_version": "0.1.0",
+    "etl_input_records": 2830743,
+    "etl_valid_records": 2830628,
+    "etl_quarantined_records": 115,
+    "etl_rejected_records": 0,
+    "source_file_count": 8
+  },
+  "load_audit": {
+    "cleaned_uri": "s3a://bigdata-network/cleaned/flows/cicids2017_valid_v1",
+    "column_count": 34,
+    "raw_valid_records": 2830628,
+    "non_valid_records": 0,
+    "flag_counts_before_dedup": {
+      "flow_bytes_s_invalid": 2867,
+      "flow_packets_s_invalid": 2867,
+      "init_win_fwd_missing": 1001189,
+      "init_win_bwd_missing": 1441552,
+      "any_rate_flag": 2867,
+      "any_4_feature_flags": 1442539,
+      "label_encoding_replacement_excluded_from_rules": 2180
+    }
+  },
+  "data_preparation": {
+    "dedup_subset": [
+      "destination_port",
+      "flow_duration",
+      "total_fwd_packets",
+      "total_backward_packets",
+      "total_length_of_fwd_packets",
+      "total_length_of_bwd_packets",
+      "flow_bytes_s",
+      "flow_packets_s",
+      "flow_iat_mean",
+      "flow_iat_std",
+      "min_packet_length",
+      "max_packet_length",
+      "packet_length_mean",
+      "packet_length_std",
+      "fin_flag_count",
+      "syn_flag_count",
+      "rst_flag_count",
+      "psh_flag_count",
+      "ack_flag_count",
+      "init_win_bytes_forward",
+      "init_win_bytes_backward",
+      "label"
+    ],
+    "records_before_dedup": 2830628,
+    "records_after_dedup": 2466648,
+    "duplicate_records_removed": 363980,
+    "duplicate_removal_rate": 0.12858630664290752,
+    "feature_groups_with_conflicting_labels": 769,
+    "distinct_original_labels": 15,
+    "attack_records_after_dedup": 425712,
+    "benign_records_after_dedup": 2040936,
+    "attack_ratio_after_dedup": 0.17258725201163685,
+    "label_distribution_after_dedup": [
+      {
+        "label": "BENIGN",
+        "label_binary": 0.0,
+        "class_name": "BENIGN",
+        "count": 2040936
+      },
+      {
+        "label": "DoS Hulk",
+        "label_binary": 1.0,
+        "class_name": "ATTACK",
+        "count": 172844
+      },
+      {
+        "label": "DDoS",
+        "label_binary": 1.0,
+        "class_name": "ATTACK",
+        "count": 128013
+      },
+      {
+        "label": "PortScan",
+        "label_binary": 1.0,
+        "class_name": "ATTACK",
+        "count": 90819
+      },
+      {
+        "label": "DoS GoldenEye",
+        "label_binary": 1.0,
+        "class_name": "ATTACK",
+        "count": 10286
+      },
+      {
+        "label": "FTP-Patator",
+        "label_binary": 1.0,
+        "class_name": "ATTACK",
+        "count": 5933
+      },
+      {
+        "label": "DoS slowloris",
+        "label_binary": 1.0,
+        "class_name": "ATTACK",
+        "count": 5270
+      },
+      {
+        "label": "DoS Slowhttptest",
+        "label_binary": 1.0,
+        "class_name": "ATTACK",
+        "count": 5187
+      },
+      {
+        "label": "SSH-Patator",
+        "label_binary": 1.0,
+        "class_name": "ATTACK",
+        "count": 3217
+      },
+      {
+        "label": "Bot",
+        "label_binary": 1.0,
+        "class_name": "ATTACK",
+        "count": 1953
+      },
+      {
+        "label": "Web Attack � Brute Force",
+        "label_binary": 1.0,
+        "class_name": "ATTACK",
+        "count": 1470
+      },
+      {
+        "label": "Web Attack � XSS",
+        "label_binary": 1.0,
+        "class_name": "ATTACK",
+        "count": 652
+      },
+      {
+        "label": "Infiltration",
+        "label_binary": 1.0,
+        "class_name": "ATTACK",
+        "count": 36
+      },
+      {
+        "label": "Web Attack � Sql Injection",
+        "label_binary": 1.0,
+        "class_name": "ATTACK",
+        "count": 21
+      },
+      {
+        "label": "Heartbleed",
+        "label_binary": 1.0,
+        "class_name": "ATTACK",
+        "count": 11
+      }
+    ],
+    "label_mapping": {
+      "BENIGN": {
+        "label_binary": 0.0,
+        "class_name": "BENIGN"
+      },
+      "DoS Hulk": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "DDoS": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "PortScan": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "DoS GoldenEye": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "FTP-Patator": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "DoS slowloris": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "DoS Slowhttptest": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "SSH-Patator": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "Bot": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "Web Attack � Brute Force": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "Web Attack � XSS": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "Infiltration": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "Web Attack � Sql Injection": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "Heartbleed": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      }
+    },
+    "flag_counts_after_dedup": {
+      "flow_bytes_s_invalid": 1556,
+      "flow_packets_s_invalid": 1556,
+      "init_win_fwd_missing": 856846,
+      "init_win_bwd_missing": 1161817,
+      "any_rate_flag": 1556,
+      "any_rate_flag_ratio": 0.0006308155845503695,
+      "any_4_feature_flags": 1162659,
+      "any_4_feature_flags_ratio": 0.47135181022991524
+    }
+  },
+  "split_summary": {
+    "seed": 42,
+    "target_ratios": {
+      "train": 0.7,
+      "val": 0.15,
+      "test": 0.15
+    },
+    "small_class_exact_rank_labels": [
+      "Heartbleed",
+      "Infiltration",
+      "Web Attack � Sql Injection"
+    ],
+    "counts": {
+      "train": 1726537,
+      "val": 369948,
+      "test": 370163
+    },
+    "actual_ratios": {
+      "train": 0.699952729372006,
+      "val": 0.14998005390311062,
+      "test": 0.15006721672488332
+    },
+    "attack_counts": {
+      "train": 298095,
+      "val": 63651,
+      "test": 63966
+    },
+    "benign_counts": {
+      "train": 1428442,
+      "val": 306297,
+      "test": 306197
+    },
+    "attack_ratios": {
+      "train": 0.17265485767174407,
+      "val": 0.1720539102792825,
+      "test": 0.17280495349346098
+    },
+    "per_label_counts": {
+      "BENIGN": {
+        "train": 1428442,
+        "val": 306297,
+        "test": 306197
+      },
+      "DoS Hulk": {
+        "train": 120965,
+        "val": 25684,
+        "test": 26195
+      },
+      "DDoS": {
+        "train": 89687,
+        "val": 19165,
+        "test": 19161
+      },
+      "PortScan": {
+        "train": 63586,
+        "val": 13715,
+        "test": 13518
+      },
+      "DoS GoldenEye": {
+        "train": 7257,
+        "val": 1530,
+        "test": 1499
+      },
+      "FTP-Patator": {
+        "train": 4135,
+        "val": 835,
+        "test": 963
+      },
+      "DoS slowloris": {
+        "train": 3663,
+        "val": 836,
+        "test": 771
+      },
+      "DoS Slowhttptest": {
+        "train": 3620,
+        "val": 797,
+        "test": 770
+      },
+      "SSH-Patator": {
+        "train": 2287,
+        "val": 469,
+        "test": 461
+      },
+      "Bot": {
+        "train": 1374,
+        "val": 293,
+        "test": 286
+      },
+      "Web Attack � Brute Force": {
+        "train": 1020,
+        "val": 231,
+        "test": 219
+      },
+      "Web Attack � XSS": {
+        "train": 453,
+        "val": 86,
+        "test": 113
+      },
+      "Infiltration": {
+        "train": 25,
+        "val": 5,
+        "test": 6
+      },
+      "Web Attack � Sql Injection": {
+        "train": 15,
+        "val": 3,
+        "test": 3
+      },
+      "Heartbleed": {
+        "train": 8,
+        "val": 2,
+        "test": 1
+      }
+    },
+    "disjoint_overlap_verification": {
+      "train_val": 0,
+      "train_test": 0,
+      "val_test": 0
+    }
+  },
+  "feature_importances": [
+    {
+      "feature": "packet_length_std",
+      "importance": 0.1828884535183973
+    },
+    {
+      "feature": "total_length_of_bwd_packets",
+      "importance": 0.09272605662655836
+    },
+    {
+      "feature": "packet_length_mean",
+      "importance": 0.08639354602422486
+    },
+    {
+      "feature": "max_packet_length",
+      "importance": 0.08564850029948405
+    },
+    {
+      "feature": "destination_port",
+      "importance": 0.07453899731290636
+    },
+    {
+      "feature": "init_win_bytes_backward",
+      "importance": 0.07120539232372015
+    },
+    {
+      "feature": "total_length_of_fwd_packets",
+      "importance": 0.06570669647828098
+    },
+    {
+      "feature": "flow_iat_std",
+      "importance": 0.060930747099561665
+    },
+    {
+      "feature": "total_fwd_packets",
+      "importance": 0.05582671571066469
+    },
+    {
+      "feature": "init_win_bytes_forward",
+      "importance": 0.0418895496496326
+    },
+    {
+      "feature": "total_backward_packets",
+      "importance": 0.03812162645530868
+    },
+    {
+      "feature": "flow_iat_mean",
+      "importance": 0.03727474070680338
+    },
+    {
+      "feature": "flow_packets_s",
+      "importance": 0.03170654202178224
+    },
+    {
+      "feature": "ack_flag_count",
+      "importance": 0.01622320377445346
+    },
+    {
+      "feature": "flow_bytes_s",
+      "importance": 0.01601508406844642
+    },
+    {
+      "feature": "flow_duration",
+      "importance": 0.015430798409907362
+    },
+    {
+      "feature": "psh_flag_count",
+      "importance": 0.014392695291603214
+    },
+    {
+      "feature": "min_packet_length",
+      "importance": 0.0076417074175865705
+    },
+    {
+      "feature": "fin_flag_count",
+      "importance": 0.003719182479686026
+    },
+    {
+      "feature": "syn_flag_count",
+      "importance": 0.0017197643309916069
+    },
+    {
+      "feature": "rst_flag_count",
+      "importance": 0.0
+    }
+  ],
+  "validation_baseline": {
+    "tp": 62392,
+    "fp": 171,
+    "fn": 1259,
+    "tn": 306126,
+    "total_evaluated": 369948,
+    "precision": 0.9972667551108483,
+    "recall": 0.9802202636250805,
+    "f1": 0.9886700366044971,
+    "precision_benign": 0.9959041592790799,
+    "recall_benign": 0.999441718332207,
+    "f1_benign": 0.9976698029272489,
+    "macro_f1": 0.993169919765873,
+    "accuracy": 0.9961345918885898,
+    "fpr": 0.0005582816677930244,
+    "fnr": 0.019779736374919483,
+    "decision_threshold": 0.5,
+    "coverage": 1.0,
+    "review_rate": 0.0,
+    "attack_to_review_rate": 0.0
+  },
+  "validation_threshold_selection": {
+    "selection_policy": {
+      "dataset": "validation_only",
+      "max_review_rate_budget": 0.05,
+      "review_cost_weight": 0.05,
+      "formula": "balance_score = auto_f1 - review_cost_weight * review_rate (subject to review_rate <= max_review_rate_budget)"
+    },
+    "selected": {
+      "tau_low": 0.2,
+      "tau_high": 0.8,
+      "balance_score": 0.9921515183756705,
+      "validation_auto_f1": 0.992391146647752,
+      "validation_auto_macro_f1": 0.9954246892243404,
+      "validation_auto_fpr": 0.0005100939750053952,
+      "validation_coverage": 0.9952074345583704,
+      "validation_review_rate": 0.004792565441629634,
+      "validation_attack_to_review_rate": 0.02045529528208512
+    },
+    "candidates": [
+      {
+        "flag_columns": [
+          "flow_bytes_s_invalid",
+          "flow_packets_s_invalid"
+        ],
+        "tau_low": 0.45,
+        "tau_high": 0.55,
+        "decision_threshold": 0.5,
+        "total_records": 369948,
+        "auto_records": 369608,
+        "review_records": 340,
+        "coverage": 0.9990809519175667,
+        "review_rate": 0.0009190480824332069,
+        "attack_to_review_rate": 0.0019952553769775807,
+        "benign_to_review_rate": 0.0006954034809351707,
+        "review_composition": {
+          "actual_attack": 127,
+          "actual_benign": 213,
+          "flag_only": 218,
+          "uncertainty_only": 122,
+          "both_flag_and_uncertainty": 0
+        },
+        "error_interception": {
+          "baseline_fp_total": 171,
+          "baseline_fp_routed_to_review": 5,
+          "baseline_fp_capture_rate": 0.029239766081871343,
+          "baseline_fn_total": 1259,
+          "baseline_fn_routed_to_review": 69,
+          "baseline_fn_capture_rate": 0.05480540111199365,
+          "baseline_errors_total": 1430,
+          "baseline_errors_routed_to_review": 74,
+          "baseline_error_capture_rate": 0.05174825174825175,
+          "review_error_density": 0.21764705882352942
+        },
+        "auto_metrics": {
+          "tp": 62334,
+          "fp": 166,
+          "fn": 1190,
+          "tn": 305918,
+          "total_evaluated": 369608,
+          "precision": 0.997344,
+          "recall": 0.9812669227378629,
+          "f1": 0.9892401447343364,
+          "precision_benign": 0.9961251416439819,
+          "recall_benign": 0.9994576652160845,
+          "f1_benign": 0.9977886208561102,
+          "macro_f1": 0.9935143827952233,
+          "accuracy": 0.9963312482413801,
+          "fpr": 0.0005423347839155265,
+          "fnr": 0.018733077262137146
+        },
+        "balance_score": 0.9891941923302148,
+        "within_review_budget": true
+      },
+      {
+        "flag_columns": [
+          "flow_bytes_s_invalid",
+          "flow_packets_s_invalid"
+        ],
+        "tau_low": 0.4,
+        "tau_high": 0.6,
+        "decision_threshold": 0.5,
+        "total_records": 369948,
+        "auto_records": 369402,
+        "review_records": 546,
+        "coverage": 0.9985241169029161,
+        "review_rate": 0.0014758830970839146,
+        "attack_to_review_rate": 0.0048703084004964575,
+        "benign_to_review_rate": 0.0007704939976558699,
+        "review_composition": {
+          "actual_attack": 310,
+          "actual_benign": 236,
+          "flag_only": 218,
+          "uncertainty_only": 328,
+          "both_flag_and_uncertainty": 0
+        },
+        "error_interception": {
+          "baseline_fp_total": 171,
+          "baseline_fp_routed_to_review": 13,
+          "baseline_fp_capture_rate": 0.07602339181286549,
+          "baseline_fn_total": 1259,
+          "baseline_fn_routed_to_review": 228,
+          "baseline_fn_capture_rate": 0.18109610802223988,
+          "baseline_errors_total": 1430,
+          "baseline_errors_routed_to_review": 241,
+          "baseline_error_capture_rate": 0.16853146853146853,
+          "review_error_density": 0.4413919413919414
+        },
+        "auto_metrics": {
+          "tp": 62310,
+          "fp": 158,
+          "fn": 1031,
+          "tn": 305903,
+          "total_evaluated": 369402,
+          "precision": 0.9974707050009605,
+          "recall": 0.9837230230024786,
+          "f1": 0.9905491657989491,
+          "precision_benign": 0.9966409716746922,
+          "recall_benign": 0.9994837630407011,
+          "f1_benign": 0.9980603430696824,
+          "macro_f1": 0.9943047544343158,
+          "accuracy": 0.9967812843460512,
+          "fpr": 0.0005162369592989633,
+          "fnr": 0.016276976997521352
+        },
+        "balance_score": 0.9904753716440949,
+        "within_review_budget": true
+      },
+      {
+        "flag_columns": [
+          "flow_bytes_s_invalid",
+          "flow_packets_s_invalid"
+        ],
+        "tau_low": 0.35,
+        "tau_high": 0.65,
+        "decision_threshold": 0.5,
+        "total_records": 369948,
+        "auto_records": 369241,
+        "review_records": 707,
+        "coverage": 0.998088920605058,
+        "review_rate": 0.0019110793949419919,
+        "attack_to_review_rate": 0.007226909239446356,
+        "benign_to_review_rate": 0.0008064068534788131,
+        "review_composition": {
+          "actual_attack": 460,
+          "actual_benign": 247,
+          "flag_only": 218,
+          "uncertainty_only": 489,
+          "both_flag_and_uncertainty": 0
+        },
+        "error_interception": {
+          "baseline_fp_total": 171,
+          "baseline_fp_routed_to_review": 13,
+          "baseline_fp_capture_rate": 0.07602339181286549,
+          "baseline_fn_total": 1259,
+          "baseline_fn_routed_to_review": 285,
+          "baseline_fn_capture_rate": 0.22637013502779985,
+          "baseline_errors_total": 1430,
+          "baseline_errors_routed_to_review": 298,
+          "baseline_error_capture_rate": 0.2083916083916084,
+          "review_error_density": 0.4214992927864215
+        },
+        "auto_metrics": {
+          "tp": 62217,
+          "fp": 158,
+          "fn": 974,
+          "tn": 305892,
+          "total_evaluated": 369241,
+          "precision": 0.9974669338677354,
+          "recall": 0.9845864126220506,
+          "f1": 0.9909848207317268,
+          "precision_benign": 0.996825976158975,
+          "recall_benign": 0.999483744486195,
+          "f1_benign": 0.9981530911250481,
+          "macro_f1": 0.9945689559283875,
+          "accuracy": 0.9969342516134448,
+          "fpr": 0.0005162555138049338,
+          "fnr": 0.015413587377949392
+        },
+        "balance_score": 0.9908892667619796,
+        "within_review_budget": true
+      },
+      {
+        "flag_columns": [
+          "flow_bytes_s_invalid",
+          "flow_packets_s_invalid"
+        ],
+        "tau_low": 0.3,
+        "tau_high": 0.7,
+        "decision_threshold": 0.5,
+        "total_records": 369948,
+        "auto_records": 368744,
+        "review_records": 1204,
+        "coverage": 0.9967454885551483,
+        "review_rate": 0.0032545114448517087,
+        "attack_to_review_rate": 0.014469529151152377,
+        "benign_to_review_rate": 0.0009239398361720814,
+        "review_composition": {
+          "actual_attack": 921,
+          "actual_benign": 283,
+          "flag_only": 218,
+          "uncertainty_only": 986,
+          "both_flag_and_uncertainty": 0
+        },
+        "error_interception": {
+          "baseline_fp_total": 171,
+          "baseline_fp_routed_to_review": 15,
+          "baseline_fp_capture_rate": 0.08771929824561403,
+          "baseline_fn_total": 1259,
+          "baseline_fn_routed_to_review": 367,
+          "baseline_fn_capture_rate": 0.2915011914217633,
+          "baseline_errors_total": 1430,
+          "baseline_errors_routed_to_review": 382,
+          "baseline_error_capture_rate": 0.26713286713286716,
+          "review_error_density": 0.31727574750830567
+        },
+        "auto_metrics": {
+          "tp": 61838,
+          "fp": 156,
+          "fn": 892,
+          "tn": 305858,
+          "total_evaluated": 368744,
+          "precision": 0.9974836274478175,
+          "recall": 0.9857803283915192,
+          "f1": 0.9915974471633366,
+          "precision_benign": 0.9970920945395273,
+          "recall_benign": 0.9994902194017267,
+          "f1_benign": 0.9982897167588174,
+          "macro_f1": 0.994943581961077,
+          "accuracy": 0.997157919857679,
+          "fpr": 0.0005097805982732817,
+          "fnr": 0.014219671608480791
+        },
+        "balance_score": 0.991434721591094,
+        "within_review_budget": true
+      },
+      {
+        "flag_columns": [
+          "flow_bytes_s_invalid",
+          "flow_packets_s_invalid"
+        ],
+        "tau_low": 0.25,
+        "tau_high": 0.75,
+        "decision_threshold": 0.5,
+        "total_records": 369948,
+        "auto_records": 368531,
+        "review_records": 1417,
+        "coverage": 0.9961697319623298,
+        "review_rate": 0.003830268037670159,
+        "attack_to_review_rate": 0.01681041931784261,
+        "benign_to_review_rate": 0.001132887360960114,
+        "review_composition": {
+          "actual_attack": 1070,
+          "actual_benign": 347,
+          "flag_only": 218,
+          "uncertainty_only": 1199,
+          "both_flag_and_uncertainty": 0
+        },
+        "error_interception": {
+          "baseline_fp_total": 171,
+          "baseline_fp_routed_to_review": 15,
+          "baseline_fp_capture_rate": 0.08771929824561403,
+          "baseline_fn_total": 1259,
+          "baseline_fn_routed_to_review": 404,
+          "baseline_fn_capture_rate": 0.32088959491660046,
+          "baseline_errors_total": 1430,
+          "baseline_errors_routed_to_review": 419,
+          "baseline_error_capture_rate": 0.293006993006993,
+          "review_error_density": 0.2956951305575159
+        },
+        "auto_metrics": {
+          "tp": 61726,
+          "fp": 156,
+          "fn": 855,
+          "tn": 305794,
+          "total_evaluated": 368531,
+          "precision": 0.9974790730745613,
+          "recall": 0.986337706332593,
+          "f1": 0.9918771040389512,
+          "precision_benign": 0.9972117958969375,
+          "recall_benign": 0.9994901127635234,
+          "f1_benign": 0.9983496545048229,
+          "macro_f1": 0.9951133792718871,
+          "accuracy": 0.9972566758291704,
+          "fpr": 0.0005098872364765484,
+          "fnr": 0.01366229366740704
+        },
+        "balance_score": 0.9916855906370677,
+        "within_review_budget": true
+      },
+      {
+        "flag_columns": [
+          "flow_bytes_s_invalid",
+          "flow_packets_s_invalid"
+        ],
+        "tau_low": 0.2,
+        "tau_high": 0.8,
+        "decision_threshold": 0.5,
+        "total_records": 369948,
+        "auto_records": 368175,
+        "review_records": 1773,
+        "coverage": 0.9952074345583704,
+        "review_rate": 0.004792565441629634,
+        "attack_to_review_rate": 0.02045529528208512,
+        "benign_to_review_rate": 0.0015377231902369269,
+        "review_composition": {
+          "actual_attack": 1302,
+          "actual_benign": 471,
+          "flag_only": 218,
+          "uncertainty_only": 1555,
+          "both_flag_and_uncertainty": 0
+        },
+        "error_interception": {
+          "baseline_fp_total": 171,
+          "baseline_fp_routed_to_review": 15,
+          "baseline_fp_capture_rate": 0.08771929824561403,
+          "baseline_fn_total": 1259,
+          "baseline_fn_routed_to_review": 471,
+          "baseline_fn_capture_rate": 0.37410643367752183,
+          "baseline_errors_total": 1430,
+          "baseline_errors_routed_to_review": 486,
+          "baseline_error_capture_rate": 0.33986013986013985,
+          "review_error_density": 0.27411167512690354
+        },
+        "auto_metrics": {
+          "tp": 61561,
+          "fp": 156,
+          "fn": 788,
+          "tn": 305670,
+          "total_evaluated": 368175,
+          "precision": 0.9974723333927443,
+          "recall": 0.9873614653001652,
+          "f1": 0.992391146647752,
+          "precision_benign": 0.9974286851705617,
+          "recall_benign": 0.9994899060249947,
+          "f1_benign": 0.9984582318009289,
+          "macro_f1": 0.9954246892243404,
+          "accuracy": 0.9974360019012698,
+          "fpr": 0.0005100939750053952,
+          "fnr": 0.012638534699834801
+        },
+        "balance_score": 0.9921515183756705,
+        "within_review_budget": true
+      }
+    ]
+  },
+  "validation_sensitivity_4flags": {
+    "flag_columns": [
+      "flow_bytes_s_invalid",
+      "flow_packets_s_invalid",
+      "init_win_fwd_missing",
+      "init_win_bwd_missing"
+    ],
+    "tau_low": 0.2,
+    "tau_high": 0.8,
+    "decision_threshold": 0.5,
+    "total_records": 369948,
+    "auto_records": 194696,
+    "review_records": 175252,
+    "coverage": 0.5262793689923989,
+    "review_rate": 0.4737206310076011,
+    "attack_to_review_rate": 0.16075159856090243,
+    "benign_to_review_rate": 0.5387581334456426,
+    "review_composition": {
+      "actual_attack": 10232,
+      "actual_benign": 165020,
+      "flag_only": 173697,
+      "uncertainty_only": 808,
+      "both_flag_and_uncertainty": 747
+    },
+    "error_interception": {
+      "baseline_fp_total": 171,
+      "baseline_fp_routed_to_review": 30,
+      "baseline_fp_capture_rate": 0.17543859649122806,
+      "baseline_fn_total": 1259,
+      "baseline_fn_routed_to_review": 654,
+      "baseline_fn_capture_rate": 0.5194598888006354,
+      "baseline_errors_total": 1430,
+      "baseline_errors_routed_to_review": 684,
+      "baseline_error_capture_rate": 0.4783216783216783,
+      "review_error_density": 0.00390295117887385
+    },
+    "auto_metrics": {
+      "tp": 52814,
+      "fp": 141,
+      "fn": 605,
+      "tn": 141136,
+      "total_evaluated": 194696,
+      "precision": 0.9973373619110566,
+      "recall": 0.9886744416780546,
+      "f1": 0.992987008103484,
+      "precision_benign": 0.9957316513923282,
+      "recall_benign": 0.9990019606871607,
+      "f1_benign": 0.9973641252499841,
+      "macro_f1": 0.995175566676734,
+      "accuracy": 0.9961683855857336,
+      "fpr": 0.0009980393128393157,
+      "fnr": 0.011325558321945376
+    }
+  },
+  "test_evaluation": {
+    "baseline": {
+      "tp": 62691,
+      "fp": 171,
+      "fn": 1275,
+      "tn": 306026,
+      "total_evaluated": 370163,
+      "precision": 0.9972797556552448,
+      "recall": 0.9800675358784354,
+      "f1": 0.9885987321411676,
+      "precision_benign": 0.9958509734755175,
+      "recall_benign": 0.9994415360045984,
+      "f1_benign": 0.9976430241011381,
+      "macro_f1": 0.9931208781211529,
+      "accuracy": 0.9960936128138145,
+      "fpr": 0.0005584639954016532,
+      "fnr": 0.019932464121564582,
+      "decision_threshold": 0.5,
+      "coverage": 1.0,
+      "review_rate": 0.0,
+      "attack_to_review_rate": 0.0
+    },
+    "quality_aware_primary": {
+      "flag_columns": [
+        "flow_bytes_s_invalid",
+        "flow_packets_s_invalid"
+      ],
+      "tau_low": 0.2,
+      "tau_high": 0.8,
+      "decision_threshold": 0.5,
+      "total_records": 370163,
+      "auto_records": 368444,
+      "review_records": 1719,
+      "coverage": 0.995356099880323,
+      "review_rate": 0.004643900119677007,
+      "attack_to_review_rate": 0.01949473157614983,
+      "benign_to_review_rate": 0.0015414912621612884,
+      "review_composition": {
+        "actual_attack": 1247,
+        "actual_benign": 472,
+        "flag_only": 247,
+        "uncertainty_only": 1471,
+        "both_flag_and_uncertainty": 1
+      },
+      "error_interception": {
+        "baseline_fp_total": 171,
+        "baseline_fp_routed_to_review": 13,
+        "baseline_fp_capture_rate": 0.07602339181286549,
+        "baseline_fn_total": 1275,
+        "baseline_fn_routed_to_review": 475,
+        "baseline_fn_capture_rate": 0.37254901960784315,
+        "baseline_errors_total": 1446,
+        "baseline_errors_routed_to_review": 488,
+        "baseline_error_capture_rate": 0.33748271092669435,
+        "review_error_density": 0.28388598022105876
+      },
+      "auto_metrics": {
+        "tp": 61919,
+        "fp": 158,
+        "fn": 800,
+        "tn": 305567,
+        "total_evaluated": 368444,
+        "precision": 0.9974547739098216,
+        "recall": 0.9872446945901561,
+        "f1": 0.9923234719061508,
+        "precision_benign": 0.997388752705089,
+        "recall_benign": 0.9994831956823943,
+        "f1_benign": 0.9984348758029838,
+        "macro_f1": 0.9953791738545673,
+        "accuracy": 0.9973998762362801,
+        "fpr": 0.0005168043176056914,
+        "fnr": 0.012755305409843907
+      }
+    },
+    "quality_aware_sensitivity_4flags": {
+      "flag_columns": [
+        "flow_bytes_s_invalid",
+        "flow_packets_s_invalid",
+        "init_win_fwd_missing",
+        "init_win_bwd_missing"
+      ],
+      "tau_low": 0.2,
+      "tau_high": 0.8,
+      "decision_threshold": 0.5,
+      "total_records": 370163,
+      "auto_records": 195160,
+      "review_records": 175003,
+      "coverage": 0.527227194506204,
+      "review_rate": 0.47277280549379597,
+      "attack_to_review_rate": 0.1586467811024607,
+      "benign_to_review_rate": 0.5383952161516932,
+      "review_composition": {
+        "actual_attack": 10148,
+        "actual_benign": 164855,
+        "flag_only": 173531,
+        "uncertainty_only": 772,
+        "both_flag_and_uncertainty": 700
+      },
+      "error_interception": {
+        "baseline_fp_total": 171,
+        "baseline_fp_routed_to_review": 23,
+        "baseline_fp_capture_rate": 0.13450292397660818,
+        "baseline_fn_total": 1275,
+        "baseline_fn_routed_to_review": 666,
+        "baseline_fn_capture_rate": 0.5223529411764706,
+        "baseline_errors_total": 1446,
+        "baseline_errors_routed_to_review": 689,
+        "baseline_error_capture_rate": 0.47648686030428766,
+        "review_error_density": 0.003937075364422324
+      },
+      "auto_metrics": {
+        "tp": 53209,
+        "fp": 148,
+        "fn": 609,
+        "tn": 141194,
+        "total_evaluated": 195160,
+        "precision": 0.9972262308600558,
+        "recall": 0.9886840833921736,
+        "f1": 0.9929367856309774,
+        "precision_benign": 0.9957053094786429,
+        "recall_benign": 0.9989528943979851,
+        "f1_benign": 0.9973264581751401,
+        "macro_f1": 0.9951316219030588,
+        "accuracy": 0.9961211313793811,
+        "fpr": 0.0010471056020149709,
+        "fnr": 0.011315916607826378
+      }
+    },
+    "per_label_breakdown": [
+      {
+        "label": "BENIGN",
+        "class_name": "BENIGN",
+        "total": 306197,
+        "baseline_correct": 306026,
+        "baseline_class_accuracy": 0.9994415360045984,
+        "routed_to_review": 472,
+        "review_rate": 0.0015414912621612884,
+        "auto_total": 305725,
+        "auto_correct": 305567,
+        "auto_class_accuracy": 0.9994831956823943
+      },
+      {
+        "label": "DoS Hulk",
+        "class_name": "ATTACK",
+        "total": 26195,
+        "baseline_correct": 25826,
+        "baseline_class_accuracy": 0.9859133422408857,
+        "routed_to_review": 277,
+        "review_rate": 0.010574537125405611,
+        "auto_total": 25918,
+        "auto_correct": 25749,
+        "auto_class_accuracy": 0.9934794351416004
+      },
+      {
+        "label": "DDoS",
+        "class_name": "ATTACK",
+        "total": 19161,
+        "baseline_correct": 19150,
+        "baseline_class_accuracy": 0.9994259172277021,
+        "routed_to_review": 24,
+        "review_rate": 0.0012525442304681385,
+        "auto_total": 19137,
+        "auto_correct": 19132,
+        "auto_class_accuracy": 0.9997387260281131
+      },
+      {
+        "label": "PortScan",
+        "class_name": "ATTACK",
+        "total": 13518,
+        "baseline_correct": 13505,
+        "baseline_class_accuracy": 0.9990383192779997,
+        "routed_to_review": 180,
+        "review_rate": 0.013315579227696404,
+        "auto_total": 13338,
+        "auto_correct": 13331,
+        "auto_class_accuracy": 0.99947518368571
+      },
+      {
+        "label": "DoS GoldenEye",
+        "class_name": "ATTACK",
+        "total": 1499,
+        "baseline_correct": 1353,
+        "baseline_class_accuracy": 0.9026017344896597,
+        "routed_to_review": 192,
+        "review_rate": 0.12808539026017346,
+        "auto_total": 1307,
+        "auto_correct": 1207,
+        "auto_class_accuracy": 0.9234889058913542
+      },
+      {
+        "label": "FTP-Patator",
+        "class_name": "ATTACK",
+        "total": 963,
+        "baseline_correct": 962,
+        "baseline_class_accuracy": 0.9989615784008308,
+        "routed_to_review": 12,
+        "review_rate": 0.012461059190031152,
+        "auto_total": 951,
+        "auto_correct": 950,
+        "auto_class_accuracy": 0.9989484752891693
+      },
+      {
+        "label": "DoS slowloris",
+        "class_name": "ATTACK",
+        "total": 771,
+        "baseline_correct": 712,
+        "baseline_class_accuracy": 0.9234760051880675,
+        "routed_to_review": 329,
+        "review_rate": 0.4267185473411154,
+        "auto_total": 442,
+        "auto_correct": 438,
+        "auto_class_accuracy": 0.9909502262443439
+      },
+      {
+        "label": "DoS Slowhttptest",
+        "class_name": "ATTACK",
+        "total": 770,
+        "baseline_correct": 738,
+        "baseline_class_accuracy": 0.9584415584415584,
+        "routed_to_review": 87,
+        "review_rate": 0.11298701298701298,
+        "auto_total": 683,
+        "auto_correct": 679,
+        "auto_class_accuracy": 0.9941434846266471
+      },
+      {
+        "label": "SSH-Patator",
+        "class_name": "ATTACK",
+        "total": 461,
+        "baseline_correct": 438,
+        "baseline_class_accuracy": 0.9501084598698482,
+        "routed_to_review": 29,
+        "review_rate": 0.06290672451193059,
+        "auto_total": 432,
+        "auto_correct": 428,
+        "auto_class_accuracy": 0.9907407407407407
+      },
+      {
+        "label": "Bot",
+        "class_name": "ATTACK",
+        "total": 286,
+        "baseline_correct": 6,
+        "baseline_class_accuracy": 0.02097902097902098,
+        "routed_to_review": 105,
+        "review_rate": 0.36713286713286714,
+        "auto_total": 181,
+        "auto_correct": 4,
+        "auto_class_accuracy": 0.022099447513812154
+      },
+      {
+        "label": "Web Attack � Brute Force",
+        "class_name": "ATTACK",
+        "total": 219,
+        "baseline_correct": 0,
+        "baseline_class_accuracy": 0.0,
+        "routed_to_review": 10,
+        "review_rate": 0.045662100456621,
+        "auto_total": 209,
+        "auto_correct": 0,
+        "auto_class_accuracy": 0.0
+      },
+      {
+        "label": "Web Attack � XSS",
+        "class_name": "ATTACK",
+        "total": 113,
+        "baseline_correct": 0,
+        "baseline_class_accuracy": 0.0,
+        "routed_to_review": 0,
+        "review_rate": 0.0,
+        "auto_total": 113,
+        "auto_correct": 0,
+        "auto_class_accuracy": 0.0
+      },
+      {
+        "label": "Infiltration",
+        "class_name": "ATTACK",
+        "total": 6,
+        "baseline_correct": 0,
+        "baseline_class_accuracy": 0.0,
+        "routed_to_review": 2,
+        "review_rate": 0.3333333333333333,
+        "auto_total": 4,
+        "auto_correct": 0,
+        "auto_class_accuracy": 0.0
+      },
+      {
+        "label": "Web Attack � Sql Injection",
+        "class_name": "ATTACK",
+        "total": 3,
+        "baseline_correct": 0,
+        "baseline_class_accuracy": 0.0,
+        "routed_to_review": 0,
+        "review_rate": 0.0,
+        "auto_total": 3,
+        "auto_correct": 0,
+        "auto_class_accuracy": 0.0
+      },
+      {
+        "label": "Heartbleed",
+        "class_name": "ATTACK",
+        "total": 1,
+        "baseline_correct": 1,
+        "baseline_class_accuracy": 1.0,
+        "routed_to_review": 0,
+        "review_rate": 0.0,
+        "auto_total": 1,
+        "auto_correct": 1,
+        "auto_class_accuracy": 1.0
+      }
+    ]
+  },
+  "test_examples_summary": {
+    "false_positive": 5,
+    "false_negative": 5,
+    "review": 5
+  },
+  "test_examples": {
+    "false_positive": [
+      {
+        "example_category": "FALSE_POSITIVE",
+        "source_file": "Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+        "label_original": "BENIGN",
+        "label_binary": 0.0,
+        "actual_class": "BENIGN",
+        "p_attack": 0.986766,
+        "baseline_prediction": "ATTACK",
+        "qa_decision": "ATTACK",
+        "review_trigger_reason": "NONE_AUTO",
+        "quality_flags": {
+          "flow_bytes_s_invalid": false,
+          "flow_packets_s_invalid": false,
+          "init_win_fwd_missing": false,
+          "init_win_bwd_missing": false
+        },
+        "quality_reason_codes": [],
+        "features": {
+          "destination_port": 2111,
+          "flow_duration": 175,
+          "total_fwd_packets": 1,
+          "total_backward_packets": 1,
+          "total_length_of_fwd_packets": 2,
+          "total_length_of_bwd_packets": 6,
+          "flow_bytes_s": 45714.28571,
+          "flow_packets_s": 11428.57143,
+          "flow_iat_mean": 175.0,
+          "flow_iat_std": 0.0,
+          "min_packet_length": 2.0,
+          "max_packet_length": 6.0,
+          "packet_length_mean": 3.333333333,
+          "packet_length_std": 2.309401077,
+          "fin_flag_count": 0,
+          "syn_flag_count": 0,
+          "rst_flag_count": 0,
+          "psh_flag_count": 1,
+          "ack_flag_count": 0,
+          "init_win_bytes_forward": 1024,
+          "init_win_bytes_backward": 0
+        }
+      },
+      {
+        "example_category": "FALSE_POSITIVE",
+        "source_file": "Monday-WorkingHours.pcap_ISCX.csv",
+        "label_original": "BENIGN",
+        "label_binary": 0.0,
+        "actual_class": "BENIGN",
+        "p_attack": 0.798147,
+        "baseline_prediction": "ATTACK",
+        "qa_decision": "REVIEW",
+        "review_trigger_reason": "UNCERTAINTY_BAND",
+        "quality_flags": {
+          "flow_bytes_s_invalid": false,
+          "flow_packets_s_invalid": false,
+          "init_win_fwd_missing": false,
+          "init_win_bwd_missing": true
+        },
+        "quality_reason_codes": [
+          "SENTINEL:init_win_bytes_backward"
+        ],
+        "features": {
+          "destination_port": 80,
+          "flow_duration": 110207150,
+          "total_fwd_packets": 3,
+          "total_backward_packets": 0,
+          "total_length_of_fwd_packets": 0,
+          "total_length_of_bwd_packets": 0,
+          "flow_bytes_s": 0.0,
+          "flow_packets_s": 0.0272214643,
+          "flow_iat_mean": 55103575.0,
+          "flow_iat_std": 77928129.7621479,
+          "min_packet_length": 0.0,
+          "max_packet_length": 0.0,
+          "packet_length_mean": 0.0,
+          "packet_length_std": 0.0,
+          "fin_flag_count": 0,
+          "syn_flag_count": 0,
+          "rst_flag_count": 0,
+          "psh_flag_count": 0,
+          "ack_flag_count": 1,
+          "init_win_bytes_forward": 229,
+          "init_win_bytes_backward": null
+        }
+      },
+      {
+        "example_category": "FALSE_POSITIVE",
+        "source_file": "Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+        "label_original": "BENIGN",
+        "label_binary": 0.0,
+        "actual_class": "BENIGN",
+        "p_attack": 0.986766,
+        "baseline_prediction": "ATTACK",
+        "qa_decision": "ATTACK",
+        "review_trigger_reason": "NONE_AUTO",
+        "quality_flags": {
+          "flow_bytes_s_invalid": false,
+          "flow_packets_s_invalid": false,
+          "init_win_fwd_missing": false,
+          "init_win_bwd_missing": false
+        },
+        "quality_reason_codes": [],
+        "features": {
+          "destination_port": 3551,
+          "flow_duration": 181,
+          "total_fwd_packets": 1,
+          "total_backward_packets": 1,
+          "total_length_of_fwd_packets": 2,
+          "total_length_of_bwd_packets": 6,
+          "flow_bytes_s": 44198.89503,
+          "flow_packets_s": 11049.72376,
+          "flow_iat_mean": 181.0,
+          "flow_iat_std": 0.0,
+          "min_packet_length": 2.0,
+          "max_packet_length": 6.0,
+          "packet_length_mean": 3.333333333,
+          "packet_length_std": 2.309401077,
+          "fin_flag_count": 0,
+          "syn_flag_count": 0,
+          "rst_flag_count": 0,
+          "psh_flag_count": 1,
+          "ack_flag_count": 0,
+          "init_win_bytes_forward": 1024,
+          "init_win_bytes_backward": 0
+        }
+      },
+      {
+        "example_category": "FALSE_POSITIVE",
+        "source_file": "Wednesday-workingHours.pcap_ISCX.csv",
+        "label_original": "BENIGN",
+        "label_binary": 0.0,
+        "actual_class": "BENIGN",
+        "p_attack": 0.794924,
+        "baseline_prediction": "ATTACK",
+        "qa_decision": "REVIEW",
+        "review_trigger_reason": "UNCERTAINTY_BAND",
+        "quality_flags": {
+          "flow_bytes_s_invalid": false,
+          "flow_packets_s_invalid": false,
+          "init_win_fwd_missing": false,
+          "init_win_bwd_missing": true
+        },
+        "quality_reason_codes": [
+          "SENTINEL:init_win_bytes_backward"
+        ],
+        "features": {
+          "destination_port": 80,
+          "flow_duration": 13087981,
+          "total_fwd_packets": 2,
+          "total_backward_packets": 0,
+          "total_length_of_fwd_packets": 0,
+          "total_length_of_bwd_packets": 0,
+          "flow_bytes_s": 0.0,
+          "flow_packets_s": 0.152811958,
+          "flow_iat_mean": 13100000.0,
+          "flow_iat_std": 0.0,
+          "min_packet_length": 0.0,
+          "max_packet_length": 0.0,
+          "packet_length_mean": 0.0,
+          "packet_length_std": 0.0,
+          "fin_flag_count": 0,
+          "syn_flag_count": 0,
+          "rst_flag_count": 0,
+          "psh_flag_count": 0,
+          "ack_flag_count": 1,
+          "init_win_bytes_forward": 843,
+          "init_win_bytes_backward": null
+        }
+      },
+      {
+        "example_category": "FALSE_POSITIVE",
+        "source_file": "Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+        "label_original": "BENIGN",
+        "label_binary": 0.0,
+        "actual_class": "BENIGN",
+        "p_attack": 0.986755,
+        "baseline_prediction": "ATTACK",
+        "qa_decision": "ATTACK",
+        "review_trigger_reason": "NONE_AUTO",
+        "quality_flags": {
+          "flow_bytes_s_invalid": false,
+          "flow_packets_s_invalid": false,
+          "init_win_fwd_missing": false,
+          "init_win_bwd_missing": false
+        },
+        "quality_reason_codes": [],
+        "features": {
+          "destination_port": 34573,
+          "flow_duration": 74,
+          "total_fwd_packets": 1,
+          "total_backward_packets": 1,
+          "total_length_of_fwd_packets": 2,
+          "total_length_of_bwd_packets": 6,
+          "flow_bytes_s": 108108.1081,
+          "flow_packets_s": 27027.02703,
+          "flow_iat_mean": 74.0,
+          "flow_iat_std": 0.0,
+          "min_packet_length": 2.0,
+          "max_packet_length": 6.0,
+          "packet_length_mean": 3.333333333,
+          "packet_length_std": 2.309401077,
+          "fin_flag_count": 0,
+          "syn_flag_count": 0,
+          "rst_flag_count": 0,
+          "psh_flag_count": 1,
+          "ack_flag_count": 0,
+          "init_win_bytes_forward": 1024,
+          "init_win_bytes_backward": 0
+        }
+      }
+    ],
+    "false_negative": [
+      {
+        "example_category": "FALSE_NEGATIVE",
+        "source_file": "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+        "label_original": "PortScan",
+        "label_binary": 1.0,
+        "actual_class": "ATTACK",
+        "p_attack": 0.000656,
+        "baseline_prediction": "BENIGN",
+        "qa_decision": "BENIGN",
+        "review_trigger_reason": "NONE_AUTO",
+        "quality_flags": {
+          "flow_bytes_s_invalid": false,
+          "flow_packets_s_invalid": false,
+          "init_win_fwd_missing": true,
+          "init_win_bwd_missing": true
+        },
+        "quality_reason_codes": [
+          "SENTINEL:init_win_bytes_forward",
+          "SENTINEL:init_win_bytes_backward"
+        ],
+        "features": {
+          "destination_port": 123,
+          "flow_duration": 161,
+          "total_fwd_packets": 1,
+          "total_backward_packets": 1,
+          "total_length_of_fwd_packets": 48,
+          "total_length_of_bwd_packets": 48,
+          "flow_bytes_s": 596273.2919,
+          "flow_packets_s": 12422.36025,
+          "flow_iat_mean": 161.0,
+          "flow_iat_std": 0.0,
+          "min_packet_length": 48.0,
+          "max_packet_length": 48.0,
+          "packet_length_mean": 48.0,
+          "packet_length_std": 0.0,
+          "fin_flag_count": 0,
+          "syn_flag_count": 0,
+          "rst_flag_count": 0,
+          "psh_flag_count": 0,
+          "ack_flag_count": 0,
+          "init_win_bytes_forward": null,
+          "init_win_bytes_backward": null
+        }
+      },
+      {
+        "example_category": "FALSE_NEGATIVE",
+        "source_file": "Friday-WorkingHours-Morning.pcap_ISCX.csv",
+        "label_original": "Bot",
+        "label_binary": 1.0,
+        "actual_class": "ATTACK",
+        "p_attack": 0.004133,
+        "baseline_prediction": "BENIGN",
+        "qa_decision": "BENIGN",
+        "review_trigger_reason": "NONE_AUTO",
+        "quality_flags": {
+          "flow_bytes_s_invalid": false,
+          "flow_packets_s_invalid": false,
+          "init_win_fwd_missing": false,
+          "init_win_bwd_missing": false
+        },
+        "quality_reason_codes": [],
+        "features": {
+          "destination_port": 53880,
+          "flow_duration": 62,
+          "total_fwd_packets": 1,
+          "total_backward_packets": 1,
+          "total_length_of_fwd_packets": 6,
+          "total_length_of_bwd_packets": 6,
+          "flow_bytes_s": 193548.3871,
+          "flow_packets_s": 32258.06452,
+          "flow_iat_mean": 62.0,
+          "flow_iat_std": 0.0,
+          "min_packet_length": 6.0,
+          "max_packet_length": 6.0,
+          "packet_length_mean": 6.0,
+          "packet_length_std": 0.0,
+          "fin_flag_count": 0,
+          "syn_flag_count": 0,
+          "rst_flag_count": 0,
+          "psh_flag_count": 0,
+          "ack_flag_count": 1,
+          "init_win_bytes_forward": 1255,
+          "init_win_bytes_backward": 256
+        }
+      },
+      {
+        "example_category": "FALSE_NEGATIVE",
+        "source_file": "Wednesday-workingHours.pcap_ISCX.csv",
+        "label_original": "DoS slowloris",
+        "label_binary": 1.0,
+        "actual_class": "ATTACK",
+        "p_attack": 0.006553,
+        "baseline_prediction": "BENIGN",
+        "qa_decision": "BENIGN",
+        "review_trigger_reason": "NONE_AUTO",
+        "quality_flags": {
+          "flow_bytes_s_invalid": false,
+          "flow_packets_s_invalid": false,
+          "init_win_fwd_missing": false,
+          "init_win_bwd_missing": false
+        },
+        "quality_reason_codes": [],
+        "features": {
+          "destination_port": 80,
+          "flow_duration": 5240612,
+          "total_fwd_packets": 9,
+          "total_backward_packets": 10,
+          "total_length_of_fwd_packets": 1308,
+          "total_length_of_bwd_packets": 2897,
+          "flow_bytes_s": 802.3872021,
+          "flow_packets_s": 3.625530759,
+          "flow_iat_mean": 291145.1111,
+          "flow_iat_std": 1167404.322,
+          "min_packet_length": 0.0,
+          "max_packet_length": 1049.0,
+          "packet_length_mean": 210.25,
+          "packet_length_std": 308.9326063,
+          "fin_flag_count": 0,
+          "syn_flag_count": 0,
+          "rst_flag_count": 0,
+          "psh_flag_count": 1,
+          "ack_flag_count": 0,
+          "init_win_bytes_forward": 29200,
+          "init_win_bytes_backward": 260
+        }
+      },
+      {
+        "example_category": "FALSE_NEGATIVE",
+        "source_file": "Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
+        "label_original": "Web Attack � XSS",
+        "label_binary": 1.0,
+        "actual_class": "ATTACK",
+        "p_attack": 0.007446,
+        "baseline_prediction": "BENIGN",
+        "qa_decision": "BENIGN",
+        "review_trigger_reason": "NONE_AUTO",
+        "quality_flags": {
+          "flow_bytes_s_invalid": false,
+          "flow_packets_s_invalid": false,
+          "init_win_fwd_missing": false,
+          "init_win_bwd_missing": false
+        },
+        "quality_reason_codes": [
+          "LABEL_ENCODING_REPLACEMENT"
+        ],
+        "features": {
+          "destination_port": 80,
+          "flow_duration": 6553104,
+          "total_fwd_packets": 7,
+          "total_backward_packets": 5,
+          "total_length_of_fwd_packets": 860,
+          "total_length_of_bwd_packets": 2337,
+          "flow_bytes_s": 487.8604094,
+          "flow_packets_s": 1.831193279,
+          "flow_iat_mean": 595736.7273,
+          "flow_iat_std": 1525267.178,
+          "min_packet_length": 0.0,
+          "max_packet_length": 1808.0,
+          "packet_length_mean": 245.9230769,
+          "packet_length_std": 510.9522909,
+          "fin_flag_count": 0,
+          "syn_flag_count": 0,
+          "rst_flag_count": 0,
+          "psh_flag_count": 1,
+          "ack_flag_count": 0,
+          "init_win_bytes_forward": 29200,
+          "init_win_bytes_backward": 243
+        }
+      },
+      {
+        "example_category": "FALSE_NEGATIVE",
+        "source_file": "Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
+        "label_original": "Web Attack � Sql Injection",
+        "label_binary": 1.0,
+        "actual_class": "ATTACK",
+        "p_attack": 0.022576,
+        "baseline_prediction": "BENIGN",
+        "qa_decision": "BENIGN",
+        "review_trigger_reason": "NONE_AUTO",
+        "quality_flags": {
+          "flow_bytes_s_invalid": false,
+          "flow_packets_s_invalid": false,
+          "init_win_fwd_missing": false,
+          "init_win_bwd_missing": false
+        },
+        "quality_reason_codes": [
+          "LABEL_ENCODING_REPLACEMENT"
+        ],
+        "features": {
+          "destination_port": 80,
+          "flow_duration": 5009041,
+          "total_fwd_packets": 4,
+          "total_backward_packets": 4,
+          "total_length_of_fwd_packets": 523,
+          "total_length_of_bwd_packets": 530,
+          "flow_bytes_s": 210.2198804,
+          "flow_packets_s": 1.597112102,
+          "flow_iat_mean": 715577.2857,
+          "flow_iat_std": 1891319.408,
+          "min_packet_length": 0.0,
+          "max_packet_length": 530.0,
+          "packet_length_mean": 117.0,
+          "packet_length_std": 232.171273,
+          "fin_flag_count": 0,
+          "syn_flag_count": 0,
+          "rst_flag_count": 0,
+          "psh_flag_count": 1,
+          "ack_flag_count": 0,
+          "init_win_bytes_forward": 29200,
+          "init_win_bytes_backward": 235
+        }
+      }
+    ],
+    "review": [
+      {
+        "example_category": "REVIEW",
+        "source_file": "Wednesday-workingHours.pcap_ISCX.csv",
+        "label_original": "BENIGN",
+        "label_binary": 0.0,
+        "actual_class": "BENIGN",
+        "p_attack": 0.499781,
+        "baseline_prediction": "BENIGN",
+        "qa_decision": "REVIEW",
+        "review_trigger_reason": "UNCERTAINTY_BAND",
+        "quality_flags": {
+          "flow_bytes_s_invalid": false,
+          "flow_packets_s_invalid": false,
+          "init_win_fwd_missing": false,
+          "init_win_bwd_missing": true
+        },
+        "quality_reason_codes": [
+          "SENTINEL:init_win_bytes_backward"
+        ],
+        "features": {
+          "destination_port": 80,
+          "flow_duration": 6000277,
+          "total_fwd_packets": 7,
+          "total_backward_packets": 0,
+          "total_length_of_fwd_packets": 42,
+          "total_length_of_bwd_packets": 0,
+          "flow_bytes_s": 6.999676848,
+          "flow_packets_s": 1.166612808,
+          "flow_iat_mean": 1000046.167,
+          "flow_iat_std": 34.4000969,
+          "min_packet_length": 6.0,
+          "max_packet_length": 6.0,
+          "packet_length_mean": 6.0,
+          "packet_length_std": 0.0,
+          "fin_flag_count": 0,
+          "syn_flag_count": 0,
+          "rst_flag_count": 0,
+          "psh_flag_count": 0,
+          "ack_flag_count": 1,
+          "init_win_bytes_forward": 256,
+          "init_win_bytes_backward": null
+        }
+      },
+      {
+        "example_category": "REVIEW",
+        "source_file": "Tuesday-WorkingHours.pcap_ISCX.csv",
+        "label_original": "FTP-Patator",
+        "label_binary": 1.0,
+        "actual_class": "ATTACK",
+        "p_attack": 0.723624,
+        "baseline_prediction": "ATTACK",
+        "qa_decision": "REVIEW",
+        "review_trigger_reason": "QUALITY_FLAG_AND_UNCERTAINTY",
+        "quality_flags": {
+          "flow_bytes_s_invalid": true,
+          "flow_packets_s_invalid": true,
+          "init_win_fwd_missing": false,
+          "init_win_bwd_missing": true
+        },
+        "quality_reason_codes": [
+          "INFINITY:flow_bytes_s",
+          "INFINITY:flow_packets_s",
+          "SENTINEL:init_win_bytes_backward"
+        ],
+        "features": {
+          "destination_port": 21,
+          "flow_duration": 0,
+          "total_fwd_packets": 2,
+          "total_backward_packets": 0,
+          "total_length_of_fwd_packets": 14,
+          "total_length_of_bwd_packets": 0,
+          "flow_bytes_s": null,
+          "flow_packets_s": null,
+          "flow_iat_mean": 0.0,
+          "flow_iat_std": 0.0,
+          "min_packet_length": 0.0,
+          "max_packet_length": 14.0,
+          "packet_length_mean": 9.333333333,
+          "packet_length_std": 8.082903769,
+          "fin_flag_count": 0,
+          "syn_flag_count": 1,
+          "rst_flag_count": 0,
+          "psh_flag_count": 0,
+          "ack_flag_count": 1,
+          "init_win_bytes_forward": 229,
+          "init_win_bytes_backward": null
+        }
+      },
+      {
+        "example_category": "REVIEW",
+        "source_file": "Monday-WorkingHours.pcap_ISCX.csv",
+        "label_original": "BENIGN",
+        "label_binary": 0.0,
+        "actual_class": "BENIGN",
+        "p_attack": 0.109659,
+        "baseline_prediction": "BENIGN",
+        "qa_decision": "REVIEW",
+        "review_trigger_reason": "QUALITY_FLAG",
+        "quality_flags": {
+          "flow_bytes_s_invalid": true,
+          "flow_packets_s_invalid": true,
+          "init_win_fwd_missing": false,
+          "init_win_bwd_missing": false
+        },
+        "quality_reason_codes": [
+          "NAN:flow_bytes_s",
+          "INFINITY:flow_packets_s"
+        ],
+        "features": {
+          "destination_port": 21,
+          "flow_duration": 0,
+          "total_fwd_packets": 1,
+          "total_backward_packets": 1,
+          "total_length_of_fwd_packets": 0,
+          "total_length_of_bwd_packets": 0,
+          "flow_bytes_s": null,
+          "flow_packets_s": null,
+          "flow_iat_mean": 0.0,
+          "flow_iat_std": 0.0,
+          "min_packet_length": 0.0,
+          "max_packet_length": 0.0,
+          "packet_length_mean": 0.0,
+          "packet_length_std": 0.0,
+          "fin_flag_count": 0,
+          "syn_flag_count": 0,
+          "rst_flag_count": 0,
+          "psh_flag_count": 0,
+          "ack_flag_count": 1,
+          "init_win_bytes_forward": 229,
+          "init_win_bytes_backward": 227
+        }
+      },
+      {
+        "example_category": "REVIEW",
+        "source_file": "Wednesday-workingHours.pcap_ISCX.csv",
+        "label_original": "BENIGN",
+        "label_binary": 0.0,
+        "actual_class": "BENIGN",
+        "p_attack": 0.499745,
+        "baseline_prediction": "BENIGN",
+        "qa_decision": "REVIEW",
+        "review_trigger_reason": "UNCERTAINTY_BAND",
+        "quality_flags": {
+          "flow_bytes_s_invalid": false,
+          "flow_packets_s_invalid": false,
+          "init_win_fwd_missing": false,
+          "init_win_bwd_missing": true
+        },
+        "quality_reason_codes": [
+          "SENTINEL:init_win_bytes_backward"
+        ],
+        "features": {
+          "destination_port": 80,
+          "flow_duration": 8049510,
+          "total_fwd_packets": 9,
+          "total_backward_packets": 0,
+          "total_length_of_fwd_packets": 54,
+          "total_length_of_bwd_packets": 0,
+          "flow_bytes_s": 6.708482877,
+          "flow_packets_s": 1.118080479,
+          "flow_iat_mean": 1006188.75,
+          "flow_iat_std": 8373.340906,
+          "min_packet_length": 6.0,
+          "max_packet_length": 6.0,
+          "packet_length_mean": 6.0,
+          "packet_length_std": 0.0,
+          "fin_flag_count": 0,
+          "syn_flag_count": 0,
+          "rst_flag_count": 0,
+          "psh_flag_count": 0,
+          "ack_flag_count": 1,
+          "init_win_bytes_forward": 256,
+          "init_win_bytes_backward": null
+        }
+      },
+      {
+        "example_category": "REVIEW",
+        "source_file": "Tuesday-WorkingHours.pcap_ISCX.csv",
+        "label_original": "BENIGN",
+        "label_binary": 0.0,
+        "actual_class": "BENIGN",
+        "p_attack": 0.09351,
+        "baseline_prediction": "BENIGN",
+        "qa_decision": "REVIEW",
+        "review_trigger_reason": "QUALITY_FLAG",
+        "quality_flags": {
+          "flow_bytes_s_invalid": true,
+          "flow_packets_s_invalid": true,
+          "init_win_fwd_missing": false,
+          "init_win_bwd_missing": false
+        },
+        "quality_reason_codes": [
+          "NAN:flow_bytes_s",
+          "INFINITY:flow_packets_s"
+        ],
+        "features": {
+          "destination_port": 22,
+          "flow_duration": 0,
+          "total_fwd_packets": 1,
+          "total_backward_packets": 1,
+          "total_length_of_fwd_packets": 0,
+          "total_length_of_bwd_packets": 0,
+          "flow_bytes_s": null,
+          "flow_packets_s": null,
+          "flow_iat_mean": 0.0,
+          "flow_iat_std": 0.0,
+          "min_packet_length": 0.0,
+          "max_packet_length": 0.0,
+          "packet_length_mean": 0.0,
+          "packet_length_std": 0.0,
+          "fin_flag_count": 0,
+          "syn_flag_count": 0,
+          "rst_flag_count": 0,
+          "psh_flag_count": 0,
+          "ack_flag_count": 1,
+          "init_win_bytes_forward": 256,
+          "init_win_bytes_backward": 245
+        }
+      }
+    ]
+  },
+  "timings_seconds": {
+    "load_and_validate_valid_parquet": 25.0669,
+    "deduplication_and_labeling": 61.1508,
+    "stratified_split_and_leakage_check": 86.4017,
+    "baseline_rf_training": 91.9303,
+    "validation_inference": 6.6275,
+    "validation_threshold_selection": 5.9549,
+    "test_inference": 4.9366,
+    "test_evaluation": 3.3388,
+    "test_example_extraction": 4.2098,
+    "total_pipeline_seconds": 289.6176
+  }
+}

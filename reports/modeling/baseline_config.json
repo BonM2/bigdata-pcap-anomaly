@@ -1,0 +1,256 @@
+{
+  "generated_at_utc": "2026-11-20T17:34:18.879409+00:00",
+  "modeling_pipeline_version": "1.0.0",
+  "data_source": {
+    "cleaned_uri": "s3a://bigdata-network/cleaned/flows/cicids2017_valid_v1",
+    "quality_report_uri": "s3a://bigdata-network/reports/data_quality/cicids2017_valid_v1",
+    "schema_version": "v2.3.0",
+    "contract_version": "2.3.0",
+    "batch_verification": {
+      "batch_id": "cicids2017_valid_v1",
+      "marker_status": "COMPLETE",
+      "quality_report_uri": "s3a://bigdata-network/reports/data_quality/cicids2017_valid_v1/quality.json",
+      "schema_version": "v2.3.0",
+      "pipeline_version": "0.1.0",
+      "etl_input_records": 2830743,
+      "etl_valid_records": 2830628,
+      "etl_quarantined_records": 115,
+      "etl_rejected_records": 0,
+      "source_file_count": 8
+    },
+    "non_valid_records_included": 0,
+    "synthetic_records_included": 0
+  },
+  "feature_columns": [
+    "destination_port",
+    "flow_duration",
+    "total_fwd_packets",
+    "total_backward_packets",
+    "total_length_of_fwd_packets",
+    "total_length_of_bwd_packets",
+    "flow_bytes_s",
+    "flow_packets_s",
+    "flow_iat_mean",
+    "flow_iat_std",
+    "min_packet_length",
+    "max_packet_length",
+    "packet_length_mean",
+    "packet_length_std",
+    "fin_flag_count",
+    "syn_flag_count",
+    "rst_flag_count",
+    "psh_flag_count",
+    "ack_flag_count",
+    "init_win_bytes_forward",
+    "init_win_bytes_backward"
+  ],
+  "feature_count": 21,
+  "nullable_feature_columns": [
+    "flow_bytes_s",
+    "flow_packets_s",
+    "init_win_bytes_forward",
+    "init_win_bytes_backward"
+  ],
+  "excluded_quality_and_metadata_columns": [
+    "source_file",
+    "source_dataset",
+    "batch_id",
+    "pipeline_version",
+    "schema_version",
+    "processed_at",
+    "quality_status",
+    "quality_reason_codes",
+    "flow_bytes_s_invalid",
+    "flow_packets_s_invalid",
+    "init_win_fwd_missing",
+    "init_win_bwd_missing"
+  ],
+  "preprocessing": {
+    "fitted_on": "train_only",
+    "imputer_strategy": "median",
+    "imputer_input_columns": [
+      "flow_bytes_s",
+      "flow_packets_s",
+      "init_win_bytes_forward",
+      "init_win_bytes_backward"
+    ],
+    "imputer_surrogate_values_from_train": {
+      "flow_bytes_s": 3427.049327,
+      "flow_packets_s": 65.75918985,
+      "init_win_bytes_forward": 1024.0,
+      "init_win_bytes_backward": 235.0
+    },
+    "scaler": null,
+    "scaler_note": "Tree-based Random Forest splits are invariant to monotonic feature scaling."
+  },
+  "label_config": {
+    "original_label_column": "label",
+    "binary_label_column": "label_binary",
+    "positive_class": "ATTACK (1.0)",
+    "negative_class": "BENIGN (0.0)",
+    "benign_label_exact": "BENIGN",
+    "label_mapping": {
+      "BENIGN": {
+        "label_binary": 0.0,
+        "class_name": "BENIGN"
+      },
+      "DoS Hulk": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "DDoS": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "PortScan": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "DoS GoldenEye": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "FTP-Patator": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "DoS slowloris": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "DoS Slowhttptest": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "SSH-Patator": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "Bot": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "Web Attack � Brute Force": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "Web Attack � XSS": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "Infiltration": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "Web Attack � Sql Injection": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      },
+      "Heartbleed": {
+        "label_binary": 1.0,
+        "class_name": "ATTACK"
+      }
+    }
+  },
+  "split_config": {
+    "dedup_before_split": true,
+    "dedup_subset": [
+      "destination_port",
+      "flow_duration",
+      "total_fwd_packets",
+      "total_backward_packets",
+      "total_length_of_fwd_packets",
+      "total_length_of_bwd_packets",
+      "flow_bytes_s",
+      "flow_packets_s",
+      "flow_iat_mean",
+      "flow_iat_std",
+      "min_packet_length",
+      "max_packet_length",
+      "packet_length_mean",
+      "packet_length_std",
+      "fin_flag_count",
+      "syn_flag_count",
+      "rst_flag_count",
+      "psh_flag_count",
+      "ack_flag_count",
+      "init_win_bytes_forward",
+      "init_win_bytes_backward",
+      "label"
+    ],
+    "stratify_by": "label",
+    "ratios": {
+      "train": 0.7,
+      "val": 0.15,
+      "test": 0.15
+    },
+    "seed": 42
+  },
+  "model_type": "PySpark MLlib RandomForestClassifier",
+  "seed": 42,
+  "hyperparameters": {
+    "numTrees": 50,
+    "maxDepth": 10,
+    "maxBins": 32,
+    "featureSubsetStrategy": "sqrt",
+    "impurity": "gini",
+    "subsamplingRate": 1.0,
+    "minInstancesPerNode": 1,
+    "maxMemoryInMB": 256,
+    "seed": 42,
+    "decision_threshold": 0.5
+  },
+  "quality_aware_config": {
+    "primary_flag_columns": [
+      "flow_bytes_s_invalid",
+      "flow_packets_s_invalid"
+    ],
+    "sensitivity_flag_columns": [
+      "flow_bytes_s_invalid",
+      "flow_packets_s_invalid",
+      "init_win_fwd_missing",
+      "init_win_bwd_missing"
+    ],
+    "excluded_leaky_reason_codes": [
+      "LABEL_ENCODING_REPLACEMENT"
+    ],
+    "validation_threshold_grid": [
+      [
+        0.45,
+        0.55
+      ],
+      [
+        0.4,
+        0.6
+      ],
+      [
+        0.35,
+        0.65
+      ],
+      [
+        0.3,
+        0.7
+      ],
+      [
+        0.25,
+        0.75
+      ],
+      [
+        0.2,
+        0.8
+      ]
+    ],
+    "max_review_rate_budget": 0.05,
+    "review_cost_weight": 0.05
+  },
+  "spark_environment": {
+    "spark_version": "3.5.0",
+    "python_version": "3.8.10",
+    "spark_master": "spark://spark-master:7077",
+    "spark_app_id": "app-20261120173417-0001",
+    "executor_cores": "2",
+    "executor_memory": "2g",
+    "shuffle_partitions": 32,
+    "storage_level": "DISK_ONLY"
+  }
+}
