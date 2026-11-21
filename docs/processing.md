@@ -233,6 +233,74 @@ nguồn được giữ; `post_cleaning_validation.error_counts` mới là vi ph�
 đếm mỗi cell một lần dù cell vi phạm nhiều quy tắc miền. Label giữ nguyên,
 bao gồm khoảng trắng và ký tự thay thế Unicode.
 
+<a id="zeek-json"></a>
+
+## Nguồn Zeek JSON Lines trên MinIO
+
+`processing.zeek_ingestion` nhận một object `conn.log` của Zeek với mỗi kết nối trên một dòng JSON.
+Đặt file nguồn ở `data/raw/zeek/` trên máy để quản lý bản gốc. Sau khi upload bằng MinIO Console,
+dùng `--input` với đúng bucket và key trong Console. Ví dụ dưới đây dùng object mẫu 813 byte
+được tạo từ `quickstart.pcap` của Zeek và lưu tại `zeek/conn.log` trong bucket `bigdata-network`.
+Chạy các lệnh từ thư mục gốc repository, sau khi Spark và MinIO đã khởi động.
+
+```powershell
+docker compose --env-file docker/.env -f docker/docker-compose.yml exec -T spark-master python3 -m processing.zeek_ingestion --input 's3a://bigdata-network/zeek/conn.log'
+```
+
+Lệnh kiểm tra trả `VALIDATED_NO_OUTPUT`, số dòng và tối đa 20 nhóm giao thức/cổng đích.
+Mẫu có 2 dòng hợp lệ trong nhóm `tcp`, cổng `80`. Nếu Spark báo thiếu object, đối chiếu URI
+và dung lượng file trong Console. Nếu JSON sai hoặc có dòng vi phạm schema/miền giá trị,
+lệnh làm cả batch thất bại và trả exit code khác 0.
+
+**Lệnh sau ghi Parquet Snappy lên MinIO.** `--execute` tạo batch mới theo mặc định, dưới
+`processed/zeek/connections/<batch_id>/`. Có thể đặt `--output` thành một prefix mới và tách
+biệt, ví dụ `s3a://bigdata-network/smoke/zeek/my-run`. CLI từ chối prefix đã tồn tại, prefix
+`raw/` và đường dẫn chồng lên nguồn.
+
+```powershell
+docker compose --env-file docker/.env -f docker/docker-compose.yml exec -T spark-master python3 -m processing.zeek_ingestion --input 's3a://bigdata-network/zeek/conn.log' --execute
+```
+
+Chỉ dùng batch khi kết quả trả `run_status: VERIFIED`, `output.read_back_status: PASS` và
+`output.records` khớp `input_records`. Mở `output.path` trong MinIO Console để xem Parquet.
+
+Lần kiểm thử ngày 21/11/2026 đọc 2 dòng từ `zeek/conn.log`, xác nhận cả 2 hợp lệ và đọc lại đủ
+2 bản ghi Parquet Snappy từ `s3a://bigdata-network/smoke/zeek/verify-20261121132738-374736`.
+
+Schema Zeek giữ `uid`, `proto`, IP/cổng hai đầu, `service`, số gói và payload bytes theo
+hai hướng. `ts` được lưu thành `connection_start_epoch_seconds`, `duration` thành
+`duration_seconds`. Payload bytes, số gói, service và duration có thể thiếu và được lưu là
+NULL. `destination_port` ánh xạ từ `id.resp_p`. Với ICMP, Zeek dùng trường này cho mã ICMP.
+Trường `source_path` và `source_dataset` giữ thông tin truy vết. CICIDS2017 tiếp tục chạy
+qua `processing.main` với Data Contract CSV riêng. Hai nguồn có thể được thống kê ở mức
+phù hợp với schema của từng nguồn. [Tài liệu schema Zeek](https://docs.zeek.org/en/current/scripts/base/protocols/conn/main.zeek.html#type-Conn::Info).
+
+### Demo Variety với 360 dòng Zeek
+
+Fixture [`conn.demo.jsonl`](../data/sample/zeek/conn.demo.jsonl) do Zeek sinh ra khi đọc PCAP
+tổng hợp offline, gồm 180 TCP, 120 UDP và 60 ICMP. Mẫu có 200 dòng thiếu trường `service` để
+minh họa việc đọc trường tùy chọn. Dùng mẫu này để demo định dạng và schema, cùng với CSV CICIDS2017.
+
+Nếu chạy trên MinIO mới, dùng Console tại `http://localhost:9001` để upload fixture vào bucket
+`bigdata-network` với key `smoke/zeek/variety-demo/conn.demo.jsonl`. Từ thư mục gốc repository,
+chạy lệnh đọc và kiểm tra sau. Kết quả mong đợi là `VALIDATED_NO_OUTPUT` và `valid_records` bằng 360.
+
+```powershell
+$demoInput = 's3a://bigdata-network/smoke/zeek/variety-demo/conn.demo.jsonl'
+docker compose --env-file docker/.env -f docker/docker-compose.yml exec -T spark-master python3 -m processing.zeek_ingestion --input $demoInput
+```
+
+**Lệnh sau ghi Parquet Snappy lên MinIO vào một prefix demo mới.** Spark đọc lại và trả `VERIFIED`
+cùng số bản ghi trong `output.records`.
+
+```powershell
+$demoOutput = 's3a://bigdata-network/smoke/zeek/variety-demo/outputs/run-' + [guid]::NewGuid().ToString('N')
+docker compose --env-file docker/.env -f docker/docker-compose.yml exec -T spark-master python3 -m processing.zeek_ingestion --input $demoInput --execute --output $demoOutput
+```
+
+Lần chạy ngày 21/11/2026 nhận đủ 360 dòng hợp lệ, ghi Parquet Snappy và đọc lại đủ 360 bản ghi.
+Prefix kiểm thử là `smoke/zeek/variety-demo/outputs/run-20261121-204158-597504/`.
+
 ## Benchmark có số liệu thực
 
 Hướng dẫn mới cho **size, 1/2 workers và 4/8/16/32 partitions**, warmup, speedup,
