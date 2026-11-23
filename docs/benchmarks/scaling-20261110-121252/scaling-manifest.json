@@ -1,0 +1,33 @@
+{
+  "dataset_kind": "synthetic",
+  "synthetic_scaling": true,
+  "limitation": "Replicated test fixture, low entropy; for load only, never attack detection quality",
+  "fixture_sha256": "86ec9a2d63eda2a8c07bfbdc49af923d49ab5ba8dc9f40fadbb0356157cce6e7",
+  "files": [
+    {
+      "key": "smoke/benchmark-scaling/v1/copies-1000/synthetic.csv",
+      "uri": "s3a://bigdata-network/smoke/benchmark-scaling/v1/copies-1000/synthetic.csv",
+      "copies": 1000,
+      "input_records": 12000,
+      "input_bytes": 2035373,
+      "sha256": "aa2c730b3cb0c1be90d862b388e02a3be9edaf2c8ba4d3f30d22439cbcf5d04a"
+    },
+    {
+      "key": "smoke/benchmark-scaling/v1/copies-5000/synthetic.csv",
+      "uri": "s3a://bigdata-network/smoke/benchmark-scaling/v1/copies-5000/synthetic.csv",
+      "copies": 5000,
+      "input_records": 60000,
+      "input_bytes": 10171373,
+      "sha256": "6e88af4f50af88e74232c327778d0078da9ebaaa7ef7a8cc984c420e0ec3c35d"
+    },
+    {
+      "key": "smoke/benchmark-scaling/v1/copies-10000/synthetic.csv",
+      "uri": "s3a://bigdata-network/smoke/benchmark-scaling/v1/copies-10000/synthetic.csv",
+      "copies": 10000,
+      "input_records": 120000,
+      "input_bytes": 20341373,
+      "sha256": "c6cc0d71de23c8bb2a747f35fe5032daf11d7a3f4cc3b94aa10ccd7a9b6d61aa"
+    }
+  ],
+  "run_status": "READY"
+}

@@ -1,0 +1,145 @@
+{
+  "timestamp_utc": "2026-11-10T05:55:16.875498+00:00",
+  "host_platform": "Windows-10-10.0.19045-SP0",
+  "host_python": "3.13.14",
+  "docker": {
+    "ServerVersion": "29.9.3",
+    "OperatingSystem": "Docker Desktop",
+    "OSType": "linux",
+    "Architecture": "x86_64",
+    "KernelVersion": "6.18.40.1-microsoft-standard-WSL2",
+    "NCPU": 6,
+    "MemTotal": 10406912000,
+    "Driver": "overlayfs"
+  },
+  "git_commit": "981665e5a1d306761432828734f6dd16804093ec",
+  "initial_topology": {
+    "url": "spark://spark-master:7077",
+    "workers": [
+      {
+        "id": "worker-20261110053256-172.18.0.4-41853",
+        "host": "172.18.0.4",
+        "port": 41853,
+        "webuiaddress": "http://172.18.0.4:8081",
+        "cores": 2,
+        "coresused": 0,
+        "coresfree": 2,
+        "memory": 2048,
+        "memoryused": 0,
+        "memoryfree": 2048,
+        "resources": {},
+        "resourcesused": {},
+        "resourcesfree": {},
+        "state": "ALIVE",
+        "lastheartbeat": 1794290111839
+      },
+      {
+        "id": "worker-20261110051055-172.18.0.5-32793",
+        "host": "172.18.0.5",
+        "port": 32793,
+        "webuiaddress": "http://172.18.0.5:8081",
+        "cores": 2,
+        "coresused": 0,
+        "coresfree": 2,
+        "memory": 2048,
+        "memoryused": 0,
+        "memoryfree": 2048,
+        "resources": {},
+        "resourcesused": {},
+        "resourcesfree": {},
+        "state": "ALIVE",
+        "lastheartbeat": 1794290111531
+      }
+    ],
+    "aliveworkers": 2,
+    "cores": 4,
+    "coresused": 0,
+    "memory": 4096,
+    "memoryused": 0,
+    "resources": [
+      {},
+      {}
+    ],
+    "resourcesused": [
+      {},
+      {}
+    ],
+    "activeapps": [],
+    "completedapps": [
+      {
+        "id": "app-20261110051126-0000",
+        "starttime": 1794287486392,
+        "name": "cicids2017-processing",
+        "cores": 4,
+        "user": "spark",
+        "memoryperexecutor": 1024,
+        "memoryperslave": 1024,
+        "resourcesperexecutor": [],
+        "resourcesperslave": [],
+        "submitdate": "Tue Nov 10 05:11:26 UTC 2026",
+        "state": "FINISHED",
+        "duration": 49981
+      },
+      {
+        "id": "app-20261110051315-0001",
+        "starttime": 1794287595120,
+        "name": "cicids2017-processing",
+        "cores": 4,
+        "user": "spark",
+        "memoryperexecutor": 2048,
+        "memoryperslave": 2048,
+        "resourcesperexecutor": [],
+        "resourcesperslave": [],
+        "submitdate": "Tue Nov 10 05:13:15 UTC 2026",
+        "state": "FINISHED",
+        "duration": 339553
+      },
+      {
+        "id": "app-20261110051933-0002",
+        "starttime": 1794287973249,
+        "name": "cicids2017-processing",
+        "cores": 4,
+        "user": "spark",
+        "memoryperexecutor": 2048,
+        "memoryperslave": 2048,
+        "resourcesperexecutor": [],
+        "resourcesperslave": [],
+        "submitdate": "Tue Nov 10 05:19:33 UTC 2026",
+        "state": "FINISHED",
+        "duration": 565864
+      },
+      {
+        "id": "app-20261110052955-0003",
+        "starttime": 1794288595022,
+        "name": "cicids2017-processing",
+        "cores": 2,
+        "user": "spark",
+        "memoryperexecutor": 2048,
+        "memoryperslave": 2048,
+        "resourcesperexecutor": [],
+        "resourcesperslave": [],
+        "submitdate": "Tue Nov 10 05:29:55 UTC 2026",
+        "state": "FINISHED",
+        "duration": 161958
+      },
+      {
+        "id": "app-20261110053315-0004",
+        "starttime": 1794288795380,
+        "name": "cicids2017-processing",
+        "cores": 4,
+        "user": "spark",
+        "memoryperexecutor": 2048,
+        "memoryperslave": 2048,
+        "resourcesperexecutor": [],
+        "resourcesperslave": [],
+        "submitdate": "Tue Nov 10 05:33:15 UTC 2026",
+        "state": "FINISHED",
+        "duration": 218240
+      }
+    ],
+    "activedrivers": [],
+    "completeddrivers": [],
+    "status": "ALIVE"
+  },
+  "selection_note": "Nested original files: Friday Morning; all Friday; all eight CSVs. Label mix changes with size."
+}

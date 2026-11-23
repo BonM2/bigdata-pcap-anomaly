@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "scope": "Re-hash local original CSV files after completed real benchmark and compare with pre-run audit",
+  "files": [
+    {
+      "file": "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+      "unchanged": true
+    },
+    {
+      "file": "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+      "unchanged": true
+    },
+    {
+      "file": "Friday-WorkingHours-Morning.pcap_ISCX.csv",
+      "unchanged": true
+    },
+    {
+      "file": "Monday-WorkingHours.pcap_ISCX.csv",
+      "unchanged": true
+    },
+    {
+      "file": "Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+      "unchanged": true
+    },
+    {
+      "file": "Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
+      "unchanged": true
+    },
+    {
+      "file": "Tuesday-WorkingHours.pcap_ISCX.csv",
+      "unchanged": true
+    },
+    {
+      "file": "Wednesday-workingHours.pcap_ISCX.csv",
+      "unchanged": true
+    }
+  ]
+}

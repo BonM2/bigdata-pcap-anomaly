@@ -10,6 +10,8 @@ venv/
 env/
 
 # DỮ LIỆU LỚN - TUYỆT ĐỐI KHÔNG PUSH LÊN GITHUB
+/79rows/
+/84row/
 *.pcap
 *.pcapng
 *.cap
@@ -36,6 +38,7 @@ minio_data/
 .vscode/
 .idea/
 .DS_Store
+~$*
 .env
 **/.env
 

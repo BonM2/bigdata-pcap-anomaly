@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "smoke_pipeline": {
+    "status": "VERIFIED",
+    "input_records": 12,
+    "valid_records": 4,
+    "quarantined_records": 6,
+    "rejected_records": 2
+  },
+  "host_benchmark_helpers": {
+    "status": "PASS",
+    "tests_run": 7,
+    "failures": 0,
+    "errors": 0,
+    "log": "host-benchmark-tests.log"
+  },
+  "container_suite": {
+    "status": "PASS",
+    "tests_run": 36,
+    "duration_seconds": 129.938,
+    "failures": 0,
+    "errors": 0,
+    "log": "container-tests.log",
+    "note": "Expected injected pipeline failures and PySpark ResourceWarning messages are preserved in the log; unittest ended OK with exit code 0."
+  },
+  "minio_audit": {
+    "status": "PASS",
+    "batch_count": 31,
+    "parquet_outputs": 155,
+    "report": "minio-audit.json"
+  }
+}

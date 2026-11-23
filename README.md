@@ -4,7 +4,7 @@
 
 Hệ thống đọc CSV, chuẩn hóa và làm sạch dữ liệu, tạo đặc trưng, tổng hợp và lưu kết quả dưới dạng **Parquet + Snappy**.
 
-Pipeline đã được kiểm chứng end-to-end với dữ liệu **synthetic**. Với 8 CSV thật, hồ sơ thực nghiệm hiện có xác nhận xử lý ở chế độ **chỉ đọc**; chưa có bằng chứng nghiệm thu việc ghi output thật lên MinIO.
+Pipeline đã được kiểm chứng end-to-end với dữ liệu **synthetic** và **8 CSV CICIDS2017 thật**. Đợt ngày 10/11/2026 đã upload nguồn, chạy benchmark gồm ghi và đọc lại Parquet trên MinIO, với 1 warmup mỗi invocation và 3 lần đo mỗi cấu hình. Xem [báo cáo benchmark dữ liệu thật](docs/benchmarks/real-20261110-141211/README.md); hồ sơ chỉ đọc trước đây vẫn được giữ nguyên theo thời điểm thực nghiệm.
 
 ## 1. Yêu cầu môi trường
 
