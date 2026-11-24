@@ -217,6 +217,55 @@ Không gọi `docker compose down -v`; MinIO source/output nằm ở volume. Dri
 sẽ không còn khi app dừng. Repository hiện chưa có History Server/event log để
 khôi phục timeline sau đó.
 
+
+<a id="value-top-labels"></a>
+
+### B3. Value từ bảng tổng hợp của 8 CSV thật
+
+Nhãn nào có tổng payload byte cao nhất trong batch CICIDS2017?
+
+Từ thư mục gốc repository, mở PowerShell khi `spark-master` đang chạy. Lệnh đọc bảng tổng hợp Parquet và lấy năm nhãn có tổng byte lớn nhất. Bộ lọc `grouping = 'label'` chọn đúng cấp tổng hợp theo nhãn. `valid_records` đếm flow hợp lệ và `total_bytes_sum` cộng payload forward và backward của các flow đó theo Data Contract. [Định nghĩa chỉ số](../../processing/features.py#L30)
+
+```powershell
+$aggregateUri = 'file:///workspace/docs/evidence/local/value-demo-20261124-0mfq26/aggregates'
+@'
+import sys
+from dataclasses import replace
+from pyspark.sql import functions as F
+from processing.config import ProcessingConfig, create_spark_session
+
+uri = sys.argv[1]
+config = ProcessingConfig.from_env()
+local_input = uri.startswith('file:')
+if local_input:
+    config = replace(config, spark_master='local[2]')
+
+spark = create_spark_session(config, enable_minio=not local_input)
+try:
+    (spark.read.parquet(uri)
+     .where("grouping = 'label' AND valid_records > 0")
+     .select('label', 'valid_records', 'total_bytes_sum')
+     .orderBy(F.desc('total_bytes_sum'), F.asc('label'))
+     .show(5, truncate=False))
+finally:
+    spark.stop()
+'@ | docker compose --env-file docker/.env -f docker/docker-compose.yml exec -T spark-master python3 -B - $aggregateUri
+```
+
+Bảng demo cục bộ nằm trong `docs/evidence/local/`. Với một batch thật khác, đặt `$aggregateUri` thành `outputs.aggregates_path.path` trong `quality.json` của batch đã hoàn tất. Lệnh cũng đọc được URI `s3a://` từ MinIO. [Hướng dẫn tạo batch thật](../../README.md#5-chạy-với-8-csv-cicids2017-thật)
+
+Ngày 24/11/2026, Spark 3.5.0 tái tạo bảng demo từ 8 CSV cục bộ có SHA-256 khớp hồ sơ nguồn. Batch đối soát **2.830.743 đầu vào = 2.830.628 VALID + 115 QUARANTINED + 0 REJECTED**. Bảng Parquet Snappy có **46 dòng tổng hợp** và đạt kiểm tra schema, số dòng khi đọc lại. [Hồ sơ checksum nguồn](../benchmarks/real-20261110-141211/source-files.csv)
+
+| Hạng | Nhãn | Flow `VALID` | Tổng payload (byte) |
+|---:|---|---:|---:|
+| 1 | BENIGN | 2.272.982 | 44.289.575.301 |
+| 2 | DoS Hulk | 231.073 | 1.860.611.318 |
+| 3 | DDoS | 128.027 | 948.109.530 |
+| 4 | Heartbleed | 11 | 80.177.574 |
+| 5 | DoS GoldenEye | 10.293 | 71.842.537 |
+
+`Heartbleed` đứng thứ tư theo tổng payload dù chỉ có **11 flow**. Bảng tổng hợp cho phép so sánh cả số flow lẫn lượng dữ liệu theo nhãn nguồn.
+
 ## 5. MinIO Console: chỉ đúng objects và report
 
 Đăng nhập bằng thông tin đã được người vận hành quản lý; không chiếu hoặc chép
