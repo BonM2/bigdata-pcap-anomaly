@@ -63,21 +63,20 @@ def classify_and_group(paths, fields, chunk_size):
                     soft |= label.str.contains("\ufffd", regex=False, na=False).to_numpy()
                     continue
 
-                _, value, missing, cast_failure, special_nan = numeric_values(chunk[name])
-                finite_values = value.to_numpy(dtype=float, na_value=np.nan)
-                infinity = np.isinf(finite_values)
+                kind = item["cleaned_target_type"]
+                _, value, missing, cast_failure, nan = numeric_values(chunk[name], kind)
                 negative = value.lt(0).fillna(False).to_numpy()
                 base_invalid = missing.to_numpy() | cast_failure.to_numpy()
 
-                if name in RATES:
-                    invalid = base_invalid | special_nan.to_numpy() | infinity | negative
-                    soft |= invalid
-                    cleaned_null |= invalid
-                    continue
-
+                if kind == "double":
+                    non_finite = nan.to_numpy() | np.isinf(value.to_numpy(dtype=float, na_value=np.nan))
+                    if name in RATES:
+                        invalid = base_invalid | non_finite | negative
+                        soft |= invalid
+                        cleaned_null |= invalid
+                        continue
+                    hard |= non_finite
                 hard |= base_invalid
-                if item["cleaned_target_type"] == "double":
-                    hard |= special_nan.to_numpy() | infinity
                 if name in WINDOWS:
                     sentinel = value.eq(-1).fillna(False).to_numpy()
                     hard |= negative & ~sentinel
@@ -123,7 +122,8 @@ def duplicate_stats(paths):
             next(stream)
             for line in stream:
                 values.append(fingerprint(line))
-        array = np.asarray(values, dtype="S16")
+        # A fixed-width binary value preserves trailing zero bytes in each digest.
+        array = np.asarray(values, dtype="V16")
         unique, counts = np.unique(array, return_counts=True)
         repeated = counts[counts > 1]
         per_file[path.name] = {
@@ -138,7 +138,7 @@ def duplicate_stats(paths):
     repeated_mask = counts > 1
     repeated_keys = unique[repeated_mask]
     repeated_counts = counts[repeated_mask]
-    repeated = {key.tobytes(): int(count) for key, count in zip(repeated_keys, repeated_counts)}
+    repeated = {key.tobytes() for key in repeated_keys}
 
     labels = Counter()
     label_groups = Counter()
@@ -148,8 +148,7 @@ def duplicate_stats(paths):
             next(stream)
             for raw_line in stream:
                 key = fingerprint(raw_line)
-                count = repeated.get(key)
-                if count is None:
+                if key not in repeated:
                     continue
                 line = raw_line.decode("utf-8", errors="replace")
                 row = next(csv.reader([line], strict=True))
@@ -159,14 +158,19 @@ def duplicate_stats(paths):
                     label_groups[label] += 1
                     seen.add(key)
 
+    dataset = {
+        "duplicate_groups": int(len(repeated_counts)),
+        "records_in_duplicate_groups": int(repeated_counts.sum()),
+        "excess_duplicate_records": int((repeated_counts - 1).sum()),
+    }
+    if (sum(label_groups.values()) != dataset["duplicate_groups"]
+            or sum(labels.values()) != dataset["records_in_duplicate_groups"]):
+        raise ValueError("Duplicate counts by label do not match dataset totals")
+
     return {
         "criterion": "byte-identical physical CSV record, excluding CR/LF; BLAKE2b-128 fingerprint",
         "hash_collision_note": "Fingerprint survey; no automatic deletion is authorized.",
-        "dataset": {
-            "duplicate_groups": int(len(repeated_counts)),
-            "records_in_duplicate_groups": int(repeated_counts.sum()),
-            "excess_duplicate_records": int((repeated_counts - 1).sum()),
-        },
+        "dataset": dataset,
         "per_file": per_file,
         "affected_records_by_label": dict(labels),
         "duplicate_groups_by_label": dict(label_groups),
@@ -366,6 +370,7 @@ def generate_markdown(source, readiness, contract, labels, file_labels, files, d
     duplicate_label_rows = []
     for label, count in sorted(duplicates["affected_records_by_label"].items(), key=lambda x: (-x[1], x[0])):
         duplicate_label_rows.append((label, f"{duplicates['duplicate_groups_by_label'][label]:,}", f"{count:,}"))
+    duplicate_label_rows.append(("TOÀN BỘ", f"{d['duplicate_groups']:,}", f"{d['records_in_duplicate_groups']:,}"))
     lines += [md_table(("Nhãn", "Nhóm trùng", "Dòng thuộc nhóm trùng"), duplicate_label_rows), ""]
 
     lines += [

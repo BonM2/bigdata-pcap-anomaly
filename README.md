@@ -163,6 +163,13 @@ docker compose --env-file docker/.env -f docker/docker-compose.yml exec -T spark
 
 Kết quả mong đợi: `OK` và exit code `0`. Bộ kiểm thử không tự upload 8 CSV thật.
 
+Hai nhóm test phân tích Veracity dùng Pandas và Matplotlib. Chạy các lệnh sau trực tiếp trong PowerShell để kiểm tra các test được báo `skipped` trong image Spark mặc định.
+
+```powershell
+python -m pip install pandas matplotlib
+python -m unittest tests.test_data_quality_audit tests.test_label_classification -v
+```
+
 **Tài liệu chi tiết:** [Hướng dẫn xử lý](docs/processing.md) · [Chạy nguồn Zeek JSON Lines](docs/processing.md#zeek-json) · [Data Contract](data/schemas/feature_dictionary.md) · [Benchmark](docs/benchmark-guide.md) · [Hồ sơ kiểm chứng](docs/reports/pipeline-validation.md).
 
 **Báo cáo 5V:** [Velocity](docs/reports/velocity-report.md) · [Veracity](docs/reports/veracity-report.md) ([bản Word](docs/reports/veracity-report.docx)). Báo cáo Veracity có bảng lỗi, phân loại, hậu kiểm và minh chứng ghi/đọc lại trên 8 CSV thật; tạo lại bằng `python -m experiments.build_veracity_report --docx` (cần `matplotlib` và `python-docx`).

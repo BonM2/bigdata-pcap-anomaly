@@ -1,4 +1,8 @@
+from importlib.util import find_spec
 import unittest
+
+if any(find_spec(dependency) is None for dependency in ("numpy", "pandas", "matplotlib")):
+    raise unittest.SkipTest("Run the Veracity experiment tests on the host with pandas and matplotlib installed")
 
 from experiments.classify_labels import classify_label, group_counts
 

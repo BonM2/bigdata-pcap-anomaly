@@ -3,6 +3,7 @@
 import argparse
 import csv
 import json
+import re
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
@@ -17,6 +18,9 @@ import pandas as pd
 RATES = {"flow_bytes_s", "flow_packets_s"}
 WINDOWS = {"init_win_bytes_forward", "init_win_bytes_backward"}
 TCP_FLAGS = {"fin_flag_count", "syn_flag_count", "rst_flag_count", "psh_flag_count", "ack_flag_count"}
+INTEGER_LIMITS = {"integer": (-(2**31), 2**31 - 1), "long": (-(2**63), 2**63 - 1)}
+# Spark's Java regex accepts a final CR, LF or CRLF, which try_cast trims.
+INTEGER_TOKEN = re.compile(r"([+-]?)([0-9]+)(?:\r\n?|\n)?")
 
 
 def load_core_fields(contract_path):
@@ -27,10 +31,35 @@ def load_core_fields(contract_path):
     )
 
 
-def numeric_values(raw):
-    token = raw.astype("string").fillna("").str.strip()
-    value = pd.to_numeric(token, errors="coerce")
-    special_nan = token.str.casefold().isin({"nan", "+nan", "-nan"})
+def integer_values(tokens, target_type):
+    minimum, maximum = INTEGER_LIMITS[target_type]
+    max_digits = len(str(maximum))
+
+    def parse(token):
+        match = INTEGER_TOKEN.fullmatch(token)
+        if match is None:
+            return None
+        sign, digits = match.groups()
+        digits = digits.lstrip("0") or "0"
+        if len(digits) > max_digits:
+            return None
+        value = int(sign + digits)
+        return value if minimum <= value <= maximum else None
+
+    values = pd.array([parse(token) for token in tokens], dtype="Int64")
+    return pd.Series(values, index=tokens.index)
+
+
+def numeric_values(raw, target_type):
+    token = raw.astype("string").fillna("")
+    if target_type in INTEGER_LIMITS:
+        token = token.str.strip(" ")
+        value = integer_values(token, target_type)
+        special_nan = pd.Series(False, index=token.index)
+    else:
+        token = token.str.strip()
+        value = pd.to_numeric(token, errors="coerce")
+        special_nan = token.str.casefold().isin({"nan", "+nan", "-nan"})
     missing = token.eq("")
     cast_failure = ~missing & value.isna() & ~special_nan
     return token, value, missing, cast_failure, special_nan
@@ -72,25 +101,24 @@ def analyze_paths(paths, fields, chunk_size):
                     issue_cells["label_encoding_replacement"] += int(encoding.sum())
                     continue
 
-                token, value, missing, cast_failure, nan = numeric_values(chunk[name])
-                infinity = np.isinf(value.to_numpy(dtype=float, na_value=np.nan))
+                kind = item["cleaned_target_type"]
+                _, value, missing, cast_failure, nan = numeric_values(chunk[name], kind)
                 negative = value.lt(0).fillna(False).to_numpy()
                 base_invalid = missing.to_numpy() | cast_failure.to_numpy()
 
-                if name in RATES:
-                    invalid = base_invalid | nan.to_numpy() | infinity | negative
-                    soft |= invalid
-                    cleaned_null |= invalid
-                    issue_cells[f"{name}_invalid"] += int(invalid.sum())
-                    cleaned_null_cells[name] += int(invalid.sum())
-                    continue
-
-                hard |= base_invalid
-                issue_cells[f"{name}_missing_or_cast_failure"] += int(base_invalid.sum())
-                if item["cleaned_target_type"] == "double":
-                    non_finite = nan.to_numpy() | infinity
+                if kind == "double":
+                    non_finite = nan.to_numpy() | np.isinf(value.to_numpy(dtype=float, na_value=np.nan))
+                    if name in RATES:
+                        invalid = base_invalid | non_finite | negative
+                        soft |= invalid
+                        cleaned_null |= invalid
+                        issue_cells[f"{name}_invalid"] += int(invalid.sum())
+                        cleaned_null_cells[name] += int(invalid.sum())
+                        continue
                     hard |= non_finite
                     issue_cells[f"{name}_non_finite"] += int(non_finite.sum())
+                hard |= base_invalid
+                issue_cells[f"{name}_missing_or_cast_failure"] += int(base_invalid.sum())
 
                 if name in WINDOWS:
                     sentinel = value.eq(-1).fillna(False).to_numpy()

@@ -1,6 +1,6 @@
 # Báo cáo kiểm tra chất lượng dữ liệu CICIDS2017
 
-> Tạo lúc `2026-11-09T14:32:49.162945+00:00` từ 8 CSV cục bộ. Đây là kiểm toán chỉ đọc và mô phỏng chính sách contract; nguồn CSV không bị sửa hay xóa.
+> Tạo lúc `2026-11-24T11:57:26.518595+00:00` từ 8 CSV cục bộ. Đây là kiểm toán chỉ đọc và mô phỏng chính sách contract; nguồn CSV không bị sửa hay xóa.
 
 ## Kết luận điều hành
 
@@ -28,7 +28,7 @@ Nguồn được khai báo là [CIC-IDS2017 của Canadian Institute for Cyberse
 - Raw ingestion: 79 vị trí được đọc dạng chuỗi để tránh suy luận kiểu làm mất dữ liệu. Cleaned core: 22 trường = 6 integer, 7 long, 8 double và 1 string.
 - Tên canonical sau mapping là duy nhất. Header nguồn có một tên trùng: `Fwd Header Length` tại vị trí 35 và 56 (đếm từ 1). Contract giữ thành `fwd_header_length` và `fwd_header_length_repeat_2`.
 - Số dòng hai cột trùng tên có giá trị khác nhau: **0**. Dù bằng nhau trong bộ này, không được tự bỏ một cột vì chưa có bằng chứng ngữ nghĩa rằng chúng luôn tương đương.
-- SHA-256 schema: `6c62f9be0652df15f61e1975ecb111010a5b9b1dd6ea87936de88e400fefc648`; SHA-256 data contract: `7d8e9b16d1717f8977e9c9a94f7a2bf6b5ed751ad07bf113d59258b4be6059a1`.
+- SHA-256 schema: `eb52b4a524f9478bcf56919ae8477028027c8f2c97c7145c96b612917f0e953b`; SHA-256 data contract: `ae77a691252d42edb4a92c95df55af70154e0b27b6fcc0109bac29983190277e`.
 
 ## 2. Lỗi quan sát được và quy tắc xử lý
 
@@ -141,17 +141,18 @@ Tiêu chí: **byte-identical physical CSV record, excluding CR/LF; BLAKE2b-128 f
 
 | Nhãn | Nhóm trùng | Dòng thuộc nhóm trùng |
 |---|---|---|
-| BENIGN | 59,412 | 235,495 |
-| PortScan | 33,253 | 101,051 |
-| DoS Hulk | 1,331 | 59,502 |
+| BENIGN | 59,644 | 236,257 |
+| PortScan | 33,390 | 101,501 |
+| DoS Hulk | 1,340 | 59,564 |
 | SSH-Patator | 148 | 2,826 |
-| FTP-Patator | 445 | 2,434 |
-| DoS slowloris | 95 | 501 |
+| FTP-Patator | 452 | 2,457 |
+| DoS slowloris | 96 | 507 |
 | DoS Slowhttptest | 52 | 323 |
 | Web Attack � Brute Force | 25 | 62 |
 | DDoS | 9 | 20 |
 | Bot | 6 | 19 |
 | DoS GoldenEye | 7 | 14 |
+| TOÀN BỘ | 95,169 | 403,550 |
 
 ## 6. Cờ chất lượng, mã lý do và truy vết
 
