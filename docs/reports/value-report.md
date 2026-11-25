@@ -24,7 +24,7 @@ Thay vì buộc người dùng sau phải đọc lại toàn bộ **8 file CSV t
 - **`processed/derived_features/` (38 cột, 2.830.628 dòng `VALID`):** bổ sung 4 đặc trưng dẫn xuất có định nghĩa tường minh (`total_packets`, `total_bytes` dùng `Decimal(20,0)` chống tràn số nguyên 64-bit, `fwd_packet_ratio`, `bwd_packet_ratio` có bảo vệ chia cho 0). Lưu ý `total_bytes` là tổng payload byte theo định nghĩa nguồn, không phải wire bytes [A7].
 - **`processed/aggregates/` (13 cột, 46 dòng tổng hợp):** gom sẵn 4 cấp (`1` dòng `batch`, `15` dòng `label`, `8` dòng `source_file`, `22` dòng `source_file_label`), tách bạch số đếm toàn đầu vào (`flow_count`, `valid_ratio`, `error_ratio`) với chỉ số lưu lượng chỉ tính trên `VALID` (`total_packets_sum`, `total_bytes_sum`, `avg_flow_duration`) [A7].
 
-**Trạng thái live snapshot MinIO:** **CHƯA CHẠY**. Báo cáo này được tạo offline. Làm theo mục 6.1 để chụp snapshot của batch hoàn tất, sao chép JSON ra máy và tạo lại báo cáo.
+**Lần xác minh trực tiếp mới trên MinIO với đủ 8 CSV:** **CHƯA CHẠY**. Việc ghi và đọc lại Parquet của cả 8 CSV trên MinIO đã được ghi nhận trong thực nghiệm ngày **10/11/2026** [A2–A3]. Bảng Q.2 lấy từ truy vấn Spark ngày **24/11/2026** trên Parquet tạo cục bộ từ 8 CSV thật. Mục 6.1 hướng dẫn chụp snapshot mới khi có batch hoàn tất trên MinIO.
 
 **Bảng Q.2. Tham chiếu truy vấn Value cục bộ ngày 24/11/2026 từ kịch bản bảo vệ (không thay thế live snapshot MinIO mới) [A6].**
 
@@ -133,7 +133,6 @@ Các hạn chế dưới đây được rút trực tiếp từ trạng thái m�
 
 ### Ghi nhận đối soát chéo giữa artifact JSON/CSV và văn bản Markdown
 
-- **QUALITY_EXAMPLE_DIMENSION_PROSE:** Chuẩn artifact gốc: `quality-example.json` (`batch_id=bench-2881df4faa004204ba22d3e620fd800c`) thực tế thuộc nhóm `size.json` lượt 1 (Friday Morning, 191.033 flow), được xác nhận trong `runs.csv` và `size.json`. Văn bản báo cáo cũ: `docs/benchmarks/real-20261110-141211/README.md` mô tả `quality-example.json` là ví dụ 'trong nhóm partition'. Cách xử lý: Lấy artifact JSON/CSV gốc (`size.json`, `runs.csv`) làm chuẩn.
 - **SCHEMA_CONTRACT_SHA256_EOL:** Chuẩn artifact gốc: `source-audit.json` ghi SHA-256 dạng CRLF/CRLF (`6c62f9be0652...` / `7d8e9b16d171...`). Văn bản báo cáo cũ: `cicids2017-data-quality-audit.md` ghi SHA-256 dạng LF/LF (`eb52b4a524f9...` / `ae77a691252d...`). Cách xử lý: Cả hai cặp hash đều khớp cùng nội dung file trên đĩa, chỉ khác ký tự xuống dòng LF/CRLF khi checkout Git.
 
 ## 5. Tổng hợp chuỗi 5V của báo cáo nhóm
@@ -161,7 +160,7 @@ Toàn bộ 5 đặc tính Big Data của đồ án được tổng hợp nhất 
 | Đối soát `summary.csv` vs `runs.csv` (Velocity) | PASS | 9 cấu hình, 27 lượt đo + 4 warmup khớp trung vị, min–max, throughput và speedup |
 | Đối soát tỷ lệ giữ dữ liệu (`VALID` + cờ vs `dropna()`) | PASS | 2.830.628 = 1.442.539 (có NULL hợp lệ) + 1.388.089 (complete-case) |
 | Mẫu demo Variety Zeek JSONL trên đĩa | PASS | 360 dòng hợp lệ (180 TCP / 120 UDP / 60 ICMP; 200 dòng thiếu `service`) |
-| Live snapshot MinIO (`--value-snapshot`) | CHƯA CHẠY | Chạy offline; không bịa bảng mẫu live |
+| Xác minh trực tiếp mới trên MinIO (`--value-snapshot`) | CHƯA CHẠY | Tổng hợp từ hồ sơ lịch sử và truy vấn Parquet cục bộ |
 
 ## 6. Tái lập báo cáo và tài liệu minh chứng
 

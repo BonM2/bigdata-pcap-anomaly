@@ -103,8 +103,10 @@ Audit chỉ đọc đã tải lại marker cuối, quality JSON và performance 
 **31 batch**, kết quả **PASS**. Nó đối chiếu bằng chứng read-back **155 output
 Parquet** đã thực hiện trong pipeline, không tự chạy lại 155 lần đọc Parquet.
 Xem [minio-audit.json](minio-audit.json). [quality-example.json](quality-example.json)
-là ví dụ thực từ Friday Morning trong nhóm partition; số liệu toàn bộ 8 CSV nằm
-trong `size.json` và các quality report trỏ tới trong đó.
+chứa số liệu trước và sau làm sạch của **191.033 flow Friday Morning**, từ lượt
+đo đầu tiên ở mức nhỏ trong thí nghiệm **size** (`bench-2881df4faa004204ba22d3e620fd800c`).
+`size.json` và `runs.csv` xác định nhóm thí nghiệm theo batch ID. Số liệu toàn bộ
+8 CSV nằm trong `size.json` và các quality report được dẫn từ đó.
 
 ## Phân tích và giới hạn
 
@@ -142,6 +144,9 @@ mới; không gộp số đo từ đợt gián đoạn. Xem [ghi nhận gián đ
 exit code. Các file `*.log` lưu raw output của từng lệnh; chúng được Git ignore,
 nên cần sao lưu riêng cùng thư mục khi nộp minh chứng. Không chạy lại script vào
 cùng experiment ID: nó từ chối ghi đè execution record và result/log cũ.
+
+[Manifest SHA-256](artifact-sha256.csv) ghi checksum tại thời điểm lưu hồ sơ.
+Checksum của `README.md` trong manifest ứng với bản trước khi sửa mô tả nguồn `quality-example.json`.
 
 Sau đợt này: MinIO healthy, 2 worker ALIVE, không còn app Spark đang chạy. Không
 thay mã `processing/`, `storage/`, `experiments/`, schema hoặc CSV nguồn.

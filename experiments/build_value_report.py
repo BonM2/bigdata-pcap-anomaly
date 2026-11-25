@@ -906,7 +906,7 @@ def _render_live_snapshot_block(evidence: Mapping[str, Any]) -> str:
     )
 
     if not live["attached"]:
-        return f"""**Trạng thái live snapshot MinIO:** **CHƯA CHẠY**. Báo cáo này được tạo offline. Làm theo mục 6.1 để chụp snapshot của batch hoàn tất, sao chép JSON ra máy và tạo lại báo cáo.
+        return f"""**Lần xác minh trực tiếp mới trên MinIO với đủ 8 CSV:** **CHƯA CHẠY**. Việc ghi và đọc lại Parquet của cả 8 CSV trên MinIO đã được ghi nhận trong thực nghiệm ngày **10/11/2026** [A2–A3]. Bảng Q.2 lấy từ truy vấn Spark ngày **24/11/2026** trên Parquet tạo cục bộ từ 8 CSV thật. Mục 6.1 hướng dẫn chụp snapshot mới khi có batch hoàn tất trên MinIO.
 
 **Bảng Q.2. Tham chiếu truy vấn Value cục bộ ngày 24/11/2026 từ kịch bản bảo vệ (không thay thế live snapshot MinIO mới) [A6].**
 
@@ -1275,11 +1275,11 @@ def build_markdown(evidence: Mapping[str, Any]) -> str:
                 f"{zeek['records']} dòng hợp lệ ({zeek['protocols'].get('tcp', 0)} TCP / {zeek['protocols'].get('udp', 0)} UDP / {zeek['protocols'].get('icmp', 0)} ICMP; {zeek['missing_service_records']} dòng thiếu `service`)",
             ],
             [
-                "Live snapshot MinIO (`--value-snapshot`)",
+                "Xác minh trực tiếp mới trên MinIO (`--value-snapshot`)",
                 "PASS" if evidence["value"]["live_snapshot"]["attached"] else "CHƯA CHẠY",
                 f"Batch `{evidence['value']['live_snapshot']['batch_id']}`"
                 if evidence["value"]["live_snapshot"]["attached"]
-                else "Chạy offline; không bịa bảng mẫu live",
+                else "Tổng hợp từ hồ sơ lịch sử và truy vấn Parquet cục bộ",
             ],
         ],
     )
