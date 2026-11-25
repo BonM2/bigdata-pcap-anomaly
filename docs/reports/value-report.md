@@ -24,7 +24,7 @@ Thay vì buộc người dùng sau phải đọc lại toàn bộ **8 file CSV t
 - **`processed/derived_features/` (38 cột, 2.830.628 dòng `VALID`):** bổ sung 4 đặc trưng dẫn xuất có định nghĩa tường minh (`total_packets`, `total_bytes` dùng `Decimal(20,0)` chống tràn số nguyên 64-bit, `fwd_packet_ratio`, `bwd_packet_ratio` có bảo vệ chia cho 0). Lưu ý `total_bytes` là tổng payload byte theo định nghĩa nguồn, không phải wire bytes [A7].
 - **`processed/aggregates/` (13 cột, 46 dòng tổng hợp):** gom sẵn 4 cấp (`1` dòng `batch`, `15` dòng `label`, `8` dòng `source_file`, `22` dòng `source_file_label`), tách bạch số đếm toàn đầu vào (`flow_count`, `valid_ratio`, `error_ratio`) với chỉ số lưu lượng chỉ tính trên `VALID` (`total_packets_sum`, `total_bytes_sum`, `avg_flow_duration`) [A7].
 
-**Trạng thái live snapshot MinIO:** **CHƯA CHẠY** (không truyền `--value-snapshot` trong lần tổng hợp offline này). Để tuân thủ nguyên tắc không bịa số liệu, báo cáo **không** tạo bảng mẫu 5 dòng hay ảnh chụp MinIO giả lập; để nhúng bảng truy vấn trực tiếp từ MinIO, chạy `experiments/verify_value_outputs.py` khi Docker Spark–MinIO đang bật rồi chạy lại `experiments/build_value_report.py --value-snapshot docs/evidence/local/value-minio-snapshot.json --docx`.
+**Trạng thái live snapshot MinIO:** **CHƯA CHẠY**. Báo cáo này được tạo offline. Làm theo mục 6.1 để chụp snapshot của batch hoàn tất, sao chép JSON ra máy và tạo lại báo cáo.
 
 **Bảng Q.2. Tham chiếu truy vấn Value cục bộ ngày 24/11/2026 từ kịch bản bảo vệ (không thay thế live snapshot MinIO mới) [A6].**
 
@@ -174,12 +174,26 @@ python -m experiments.build_value_report
 python -m experiments.build_value_report --docx
 ```
 
-Khi máy đang chạy Docker Spark–MinIO và đã có batch CICIDS2017 hoàn tất (`_SUCCESS.json` có `run_status: COMPLETE`), chạy thêm lệnh chụp bằng chứng live rồi tái tạo báo cáo để tự động nhúng bảng xếp hạng nhãn và 5 dòng mẫu thực tế:
+Từ thư mục gốc repo, dùng PowerShell khi Docker Spark–MinIO đang chạy và batch CICIDS2017 đã có `_SUCCESS.json` với `run_status` là `COMPLETE`. Spark ghi snapshot vào `/tmp` trong container. `docker cp` sao chép JSON về máy để trình sinh báo cáo đọc được.
 
 ```powershell
-docker compose --env-file docker/.env -f docker/docker-compose.yml exec -T spark-master python3 -m experiments.verify_value_outputs --batch-id <BATCH_ID>
-python -m experiments.build_value_report --value-snapshot docs/evidence/local/value-minio-snapshot.json --docx
+$batchId = Read-Host 'Nhập batch ID đã COMPLETE'
+$composeArgs = @('--env-file', 'docker/.env', '-f', 'docker/docker-compose.yml')
+$fileName = 'value-minio-' + [guid]::NewGuid().ToString('N') + '.json'
+$containerSnapshot = "/tmp/$fileName"
+$localDir = 'docs/evidence/local'
+$localSnapshot = Join-Path $localDir $fileName
+
+docker compose @composeArgs exec -T spark-master `
+  python3 -m experiments.verify_value_outputs --batch-id $batchId --output $containerSnapshot
+if ($LASTEXITCODE -ne 0) { throw 'Chụp snapshot thất bại' }
+New-Item -ItemType Directory -Path $localDir -Force | Out-Null
+docker cp "spark-master:$containerSnapshot" $localSnapshot
+if ($LASTEXITCODE -ne 0) { throw 'Sao chép snapshot thất bại' }
+python -m experiments.build_value_report --value-snapshot $localSnapshot --docx
 ```
+
+Với batch đã ghi bằng `--output-prefix`, truyền cùng prefix vào lệnh `verify_value_outputs`. Ví dụ, batch benchmark dữ liệu thật dùng `--output-prefix 's3a://bigdata-network/benchmarks/real-20261110-141211'`.
 
 Chạy bộ kiểm thử tự động xác minh logic đối soát 5V, phát hiện sai lệch và kiểm tra đầu ra:
 

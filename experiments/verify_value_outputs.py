@@ -2,7 +2,8 @@
 
 Run inside the Spark container when Docker (Spark + MinIO) is running:
     docker compose --env-file docker/.env -f docker/docker-compose.yml exec -T spark-master \\
-        python3 -m experiments.verify_value_outputs --batch-id <BATCH_ID>
+        python3 -m experiments.verify_value_outputs --batch-id <BATCH_ID> --output /tmp/value-snapshot.json
+    docker cp spark-master:/tmp/value-snapshot.json ./value-snapshot.json
 
 Dry-run plan without connecting to MinIO or starting Spark:
     python -m experiments.verify_value_outputs --batch-id <BATCH_ID> --dry-run
@@ -614,7 +615,7 @@ def run_live_verification(
         raise RuntimeError(
             "PySpark is not installed in this Python environment. Run inside Docker spark-master:\n"
             "  docker compose --env-file docker/.env -f docker/docker-compose.yml exec -T spark-master "
-            "python3 -m experiments.verify_value_outputs --batch-id <BATCH_ID>"
+            "python3 -m experiments.verify_value_outputs --batch-id <BATCH_ID> --output /tmp/value-snapshot.json"
         ) from exc
 
     contract = load_contract(config.schema_path)

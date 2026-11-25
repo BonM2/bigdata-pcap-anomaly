@@ -287,6 +287,11 @@ class RealEvidenceCrossCheckTests(unittest.TestCase):
         # Must honestly state offline status when no live snapshot is provided.
         self.assertIn("CHƯA CHẠY", markdown)
         self.assertNotIn("Bảng Q.2a. Xác minh trực tiếp 5 dataset Parquet trên MinIO", markdown)
+        self.assertIn('$containerSnapshot = "/tmp/$fileName"', markdown)
+        self.assertIn('--output $containerSnapshot', markdown)
+        copy_command = 'docker cp "spark-master:$containerSnapshot" $localSnapshot'
+        report_command = 'python -m experiments.build_value_report --value-snapshot $localSnapshot'
+        self.assertLess(markdown.index(copy_command), markdown.index(report_command))
 
         # Guardrails from 5v-big-data-note.md and course scope.
         self.assertIn("884,65 MB", markdown)
